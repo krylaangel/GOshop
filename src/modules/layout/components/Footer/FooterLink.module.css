@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@tailwind utilities;
+.mainTitle{
+    @apply font-bold text-xl sm:text-[32px] leading-[140%] py-3 sm:py-8;
+}
+.goSpan{
+    @apply text-[32px] font-bold text-[var(--stateActive)];
+}
+.textParagraph{
+    @apply text-lg font-light leading-[140%] text-[var(--baseColorText)];
+}
+.listSpan{
+    @apply font-normal text-lg text-[var(--stateActive)];
+}
+.sizeSVG{
+    @apply h-[80px] w-[90px] sm:h-[51px] sm:w-[114px] ;
+}

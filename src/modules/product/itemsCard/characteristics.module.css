@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@tailwind utilities;
+
+.nameItemsColumBlock {
+  @apply flex col-span-1 row-span-1 pr-6 font-medium text-base leading-[140%];
+}
+
+.borderColum {
+  @apply col-span-1 row-span-1 w-full border-b border-[var(--baseColorText)] h-6 border-dashed;
+}
+.valueItemColumBlock {
+  @apply whitespace-nowrap col-span-1 row-span-1 w-[150px] leading-[140%] space-y-2 font-light text-sm text-[var(--secondarColorMenu)] pl-6 pb-6;
+}

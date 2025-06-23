@@ -1,0 +1,79 @@
+@import "tailwindcss";
+@tailwind utilities;
+.button {
+  @apply cursor-pointer rounded-xl flex items-center justify-center transition-colors whitespace-nowrap;
+}
+
+/*==========================*/
+.primary {
+  @apply text-white bg-[var(--buttonColor)] border-white border-[1px] h-10 text-sm text-center;
+}
+
+.primary:disabled {
+  @apply bg-[var(--inputField)] border-white border-[1px] cursor-not-allowed;
+  pointer-events: none;
+}
+
+.primary:hover {
+  @apply bg-[var(--hoverColor)] border-white border-[1px];
+}
+
+.primary:active {
+  @apply bg-[var(--stateActive)] border-white border-[1px];
+}
+
+/*==========================*/
+.secondary {
+  @apply text-[var(--buttonColor)] bg-white border-[var(--buttonColor)] border-[1px] h-10 text-sm text-center;
+}
+
+.secondary:disabled {
+  @apply text-[var(--inputField)] border-[var(--inputField)] border-[1px] cursor-not-allowed;
+  pointer-events: none;
+}
+
+.secondary:hover {
+  @apply bg-[var(--hoverColor)] border-white border-[1px] text-white;
+}
+
+.secondary:active {
+  @apply bg-[var(--stateActive)] border-white border-[1px] text-white;
+}
+
+/*==========================*/
+.tertiary-dark {
+  @apply text-[var(--buttonColor)];
+}
+
+.tertiary-dark:disabled {
+  @apply text-[var(--inputField)];
+  pointer-events: none;
+}
+
+.tertiary-dark:hover {
+  @apply text-[var(--colorMenu)];
+}
+
+.tertiary-dark:active {
+  @apply text-[var(--stateActive)];
+}
+
+/*==========================*/
+.tertiary-light {
+  @apply text-white;
+}
+
+.tertiary-light:disabled {
+  @apply text-[var(--stateInactive)];
+  pointer-events: none;
+}
+
+.tertiary-light:hover {
+  @apply text-[var(--hoverBorder)];
+}
+
+.tertiary-light:active {
+  @apply text-[var(--stateInactive)];
+}
+
+/*==========================*/

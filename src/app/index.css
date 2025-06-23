@@ -1,0 +1,214 @@
+@import "tailwindcss";
+@tailwind utilities;
+
+@layer utilities {
+  .clamp {
+    padding-right: clamp(16px, 15vw, 200px);
+    padding-left: clamp(16px, 15vw, 200px);
+  }
+
+  .top-menu {
+    top: calc(136px - 1px);
+  }
+}
+@media (max-width: 1260px) {
+  .clamp {
+    padding-right: clamp(2px, 8vw, 100px);
+    padding-left: clamp(2px, 8vw, 100px);
+  }
+}
+@media (max-width: 480px) {
+  .clamp {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+}
+
+@layer base {
+  @font-face {
+    font-family: "roboto";
+    src: url("../assets/fonts/Roboto-VariableFont_wdth,wght.ttf")
+      format("truetype");
+  }
+}
+
+* {
+  font-family: "roboto", serif;
+}
+
+.hero-section {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+@media (min-width: 1024px) {
+  .hero-section {
+    height: 600px;
+  }
+}
+@media (max-width: 374px) {
+  .breakpoints-product {
+    justify-content: space-between;
+  }
+}
+.icons__states {
+  @apply text-[var(--baseColorText)] cursor-pointer stroke-[0.1] hover:stroke-[var(--colorMenu)] active:stroke-[var(--stateActive)] transition-colors ease-in-out duration-700;
+}
+
+.header__icons {
+  @apply w-7 h-7 sm:w-9 sm:h-9;
+}
+
+.menu {
+  @apply border-b-2 border-transparent;
+}
+
+.menu:hover {
+  @apply hover:text-[var(--hoverColor)]  hover:border-[var(--hoverColor)];
+}
+
+.menu__active {
+  @apply text-[var(--hoverColor)] border-b-2 border-[var(--hoverColor)];
+}
+
+@media (min-width: 1024px) {
+  .menu-header-lg {
+    @apply border-b-2 border-transparent;
+  }
+
+  .menu-header-lg:hover {
+    @apply hover:text-[var(--hoverColor)]  hover:border-[var(--hoverColor)];
+  }
+
+  .menu-header-lg__active {
+    @apply text-[var(--hoverColor)] border-b-2 border-[var(--hoverColor)];
+  }
+}
+
+.img-style {
+  @apply h-full w-full object-cover rounded-[10px];
+}
+
+.flex-center {
+  @apply flex text-center justify-center items-center;
+}
+
+.footer-text {
+  @apply font-medium text-white leading-[25.2px] text-left;
+}
+
+.button__auth {
+  @apply w-full my-[30px];
+}
+
+.error__auth {
+  @apply text-[var(--errorFieldAuth)] text-xs px-2 font-light mt-1 bg-[var(--errorLabel)] h-[28px] flex items-center rounded-[6px];
+}
+
+.error__field {
+  @apply border border-[var(--error)] text-[var(--error)] placeholder-[var(--error)] bg-white;
+}
+
+.input-field-styles {
+  @apply bg-white text-[var(--colorMenu)]
+  focus:text-[var(--baseColorText)] focus:bg-white
+  placeholder-shown:text-[var(--inputField)] placeholder-shown:bg-white focus:ring-0 focus:border-transparent;
+}
+
+.input-field-base {
+  @apply w-full h-full text-left px-2 py-3 text-sm leading-[140%] rounded-xl outline-none font-bold;
+}
+
+.input-field {
+  @apply text-[var(--inputField)] rounded-xl w-full;
+}
+
+input:-webkit-autofill {
+  background-color: white !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+.product-items {
+  @apply h-10 w-12 sm:w-[50px] rounded-[10px] border border-[var(--buttonColor)];
+}
+.product-items__text {
+  @apply text-[var(--buttonColor)] font-medium text-sm leading-[140%] tracking-normal flex text-center justify-center items-center;
+}
+.product-pay {
+  @apply tracking-wide font-light text-sm leading-[140%];
+}
+.product-delivery {
+  @apply tracking-wide font-light text-[14px] leading-[140%];
+}
+.swiper-pagination-bullet {
+  width: 10px; /* w-2 */
+  height: 10px; /* h-2 */
+  background-color: var(--inputField);
+  opacity: 1;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: var(--hoverColor);
+}
+.mySwiper .swiper-button-prev,
+.mySwiper .swiper-button-next {
+  border-radius: 100px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-color: var(--baseColorText);
+  border: 1px solid var(--baseColorText);
+}
+.mySwiper {
+  --swiper-navigation-color: --baseColorText;
+  --swiper-pagination-color: --baseColorText;
+}
+.mySwiper .swiper-button-next::after,
+.mySwiper .swiper-button-prev::after {
+  font-size: 12px;
+}
+.table-size__item {
+  @apply border border-[var(--hoverBorder)] p-2 uppercase text-center;
+}
+.scroll-size__item {
+  @apply sticky left-0 z-10 bg-[var(--hoverBorder)] border border-white;
+}
+.measure {
+  @apply text-sm font-light leading-[140%];
+}
+.measure span {
+  @apply text-base font-medium;
+}
+
+/*=================================================*/
+.benefits-item{
+  @apply flex-col p-5 flex text-center justify-center items-center
+}
+
+:root {
+  --baseColorText: #636f7b;
+  --buttonColor: #586994;
+  --secondaryBgColor: #f2f4f8;
+  --hoverColor: #5d79be;
+  --secondaryColorText: #adadad;
+  --colorButtonGray: #b7b7b7;
+  --hoverBorder: #cbd8fb;
+  --colorMenu: #0e0e0e;
+  --colorTextOther: #21272A;
+  --secondarColorMenu: #3c3c3c;
+  --inputField: #c4c4c4;
+  --errorFieldAuth: #ffbdbd;
+  --errorLabel: #FF292999;
+  --stateActive: #445d9c;
+  --stateInactive: #f5f5f5;
+  --stateDissable: #b5b6ba;
+  --error: #ff0004;
+  --colorItemBlack: #000000;
+  --colorItemWhite: #ffffff;
+  --colorItemRed: #d60000;
+  --colorItemBlue: #008cd1;
+  --colorItemGreen: #34a400;
+  --colorItemPurple: #d402b8;
+}

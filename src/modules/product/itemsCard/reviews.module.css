@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@tailwind utilities;
+
+.textReviews{
+    @apply text-sm font-light text-[var(--secondarColorMenu)] leading-[140%]
+}
