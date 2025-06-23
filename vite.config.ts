@@ -26,9 +26,9 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    IconSpritePlugin({
-      iconsDir: 'public/icons',
-      outDir: 'src/assets/',
-    }),
+    // IconSpritePlugin({
+    //   iconsDir: 'public/icons',
+    //   outDir: 'src/assets/',
+    // }),
   ],
 })
