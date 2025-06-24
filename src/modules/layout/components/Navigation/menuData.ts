@@ -8,7 +8,7 @@ export const menuData = [
         submenu: [
           { label: 'Черевики', href: '#' },
           { label: 'Кеди', href: '#' },
-          { label: 'Кросівки', href: '#' },
+          { label: 'Кросівки', href: '/' },
         ],
       },
       {

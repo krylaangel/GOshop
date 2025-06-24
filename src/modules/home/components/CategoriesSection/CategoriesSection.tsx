@@ -4,9 +4,9 @@ function CategoriesSection() {
   return (
     <section className="clamp">
       <div className="grid grid-cols-3 gap-4 rounded-[10px] py-5 sm:py-12">
-        <Card imgURL="categoriesSection/1.png" text="Для неї"></Card>
-        <Card imgURL="categoriesSection/2.png" text="Для нього"></Card>
-        <Card imgURL="categoriesSection/3.png" text="Аксесуари"></Card>
+        <Card imgURL="categoriesSection/ForHere.png" text="Для неї"></Card>
+        <Card imgURL="categoriesSection/ForHim.png" text="Для нього"></Card>
+        <Card imgURL="categoriesSection/Accessories.png" text="Аксесуари"></Card>
       </div>
     </section>
   )

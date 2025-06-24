@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import Icons from '../../../../assets/images/icon-sprite.svg'
+import React from "react";
 
 interface NavigationItemProps {
   label: string
@@ -24,6 +25,12 @@ function NavigationItem({
 }: NavigationItemProps) {
   const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 1024
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (!isDesktop) {
+      e.preventDefault()
+      onClick()
+    }
+  }
   return (
     <li
       className={`relative w-full lg:px-6 static lg:h-[136px] items-center lg:flex border-b-2 border-[var(--hoverBorder)] lg:border-b-0 `}
@@ -32,9 +39,9 @@ function NavigationItem({
     >
       <NavLink
         to={href}
-        onClick={() => {
-          onClick()
-        }}
+        onClick={
+            handleClick
+          }
         className={({ isActive: isCurrent }) =>
           `block flex items-center justify-between w-full text-[var(--baseColorText)] uppercase text-lg menu-header-lg ${isActive || isCurrent ? 'menu-header-lg__active' : ''
           } ${isMenuOpen ? 'border-b-2 border-[var(--hoverBorder)] pt-[7px] lg:pt-0 pb-[7px] lg:pb-0' : ''}`}
