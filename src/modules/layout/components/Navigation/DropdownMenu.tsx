@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { NavLink } from 'react-router-dom'
-import { animated, useSpring } from 'react-spring'
+import { animated } from 'react-spring'
+import {useAnimatedHeight} from "~/hooks/useAnimatedHeight";
 
 interface DropdownMenuProps {
   submenu: { heading: string, submenu: { label: string, href: string }[] }[]
@@ -11,19 +12,7 @@ interface DropdownMenuProps {
 
 function DropdownMenu({ isMenuOpen, submenu, onMouseLeave, onMouseEnter }: DropdownMenuProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const [contentHeight, setContentHeight] = useState(0)
-
-  useEffect(() => {
-    if (ref.current) {
-      setContentHeight(ref.current.scrollHeight)
-    }
-  }, [submenu, isMenuOpen])
-
-  const styles = useSpring({
-    opacity: isMenuOpen ? 1 : 0,
-    height: isMenuOpen ? contentHeight : 0,
-    config: { tension: 180, friction: 25 },
-  })
+  const styles = useAnimatedHeight({ ref, isMenuOpen, deps: [submenu] })
 
   return (
     <animated.div

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import DropdownMenu from './DropdownMenu'
 import { menuData } from './menuData'
 import NavigationItem from './NavigationItem'
+import {useWindowsSize} from "~/hooks/useWindowsSize";
 
 interface NavigationProps {
   isOpen: boolean
@@ -13,20 +14,16 @@ const NavigationComponent: React.FC<NavigationProps> = ({ isOpen }) => {
   const [activeIndex, setActiveIndex] = useState <number | null> (null)
   const [isDesktop, setIsDesktop] = useState <boolean> (window.innerWidth >= 1024)
   const [openMobileIndex, setOpenMobileIndex] = useState <number | null> (null)
-
+  const { width } = useWindowsSize()
   useEffect(() => {
     const index = menuData.findIndex(menu => location.pathname.startsWith(menu.href))
     setActiveIndex(index !== -1 ? index : null)
   }, [location.pathname])
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024)
-      setOpenMobileIndex(null)
-    }
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+    setIsDesktop(width >= 1024)
+    setOpenMobileIndex(null)
+  }, [width])
 
   return (
     <nav
