@@ -20,7 +20,7 @@ function HeaderComponent() {
           id="burgerButton"
           className={`h-9 w-9 lg:hidden flex items-center justify-center ${
             isNavOpen
-              ? 'absolute right-[clamp(20px,8vw,200px)] order-last ml-auto'
+              ? 'absolute right-4 [@media(min-width:480px)]:right-[clamp(20px,8vw,200px)] order-last ml-auto'
               : ''
           }`}
           onClick={() => setIsNavOpen(prev => !prev)}

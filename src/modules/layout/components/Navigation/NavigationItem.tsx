@@ -60,9 +60,9 @@ function NavigationItem({
       </NavLink>
 
       {!isDesktop && (
-          <animated.div style={styles} ref={ref} className="bg-white pb-2">
+          <animated.div style={styles} ref={ref} className="bg-white pb-1">
             {isMenuOpen && children.map((category, idx) => (
-                <div key={idx} className="mt-2 lg:mt-4 space-y-2">
+                <div key={idx} className="mt-4 space-y-2">
                   {category.heading && (
                       <h3 className="font-normal uppercase text-[var(--hoverColor)]">{category.heading}</h3>
                   )}

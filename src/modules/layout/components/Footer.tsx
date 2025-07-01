@@ -23,13 +23,13 @@ function FooterComponent() {
         </svg>
 
         <div className="font-medium col-span-2 md:col-span-1 justify-self-start">
-          <h4 className="font-medium footer-text pb-3 pt-6 sm:pt-0 sm:pb-4 text-sm sm:text-lg">
+          <h4 className="font-medium footer-text pb-3 pt-6 sm:pt-0 sm:pb-4 text-sm md:text-lg">
             Інформація для покупців
           </h4>
 
           <Button
             variant="tertiary_light"
-            className="footer-text text-sm sm:text-base py-2"
+            className="footer-text text-sm md:text-base py-2"
             onClick={() => navigate('/about')}
           >
             Про компанію
@@ -37,21 +37,21 @@ function FooterComponent() {
 
           <Button
             variant="tertiary_light"
-            className="footer-text text-sm sm:text-base py-2"
+            className="footer-text text-sm md:text-base py-2"
             onClick={() => navigate('/deliveryAndPayment')}
           >
             Оплата і доставка
           </Button>
           <Button
             variant="tertiary_light"
-            className="footer-text text-sm sm:text-base py-2"
+            className="footer-text text-sm md:text-base py-2"
             onClick={() => navigate('/returnOfGoods')}
           >
             Повернення товару
           </Button>
           <Button
             variant="tertiary_light"
-            className="footer-text text-sm sm:text-base py-2"
+            className="footer-text text-sm md:text-base py-2"
             onClick={() => navigate('/')}
           >
             Як обрати розмір
@@ -59,7 +59,7 @@ function FooterComponent() {
 
           <Button
             variant="tertiary_light"
-            className="footer-text text-sm sm:text-base py-2"
+            className="footer-text text-sm md:text-base py-2"
             onClick={() => navigate('/userAgreement')}
           >
             Угода користувача
@@ -67,14 +67,14 @@ function FooterComponent() {
 
           <Button
             variant="tertiary_light"
-            className="footer-text text-sm sm:text-base py-2"
+            className="footer-text text-sm md:text-base py-2"
             onClick={() => navigate('/privacyPolicy')}
           >
             Політика конфіденційності
           </Button>
         </div>
         <div className="font-medium col-span-1 justify-self-start md:justify-self-end">
-          <h4 className="footer-text text-sm sm:text-lg pb-4 sm:pb-7 pt-4 sm:pt-0">
+          <h4 className="footer-text text-sm md:text-lg pb-4 sm:pb-7 pt-4 sm:pt-0">
             Гаряча лінія
           </h4>
           <div className="flex items-center text-center gap-4">
@@ -83,12 +83,12 @@ function FooterComponent() {
             </svg>
             <a
               href="tel:+380674478103"
-              className="footer-text text-sm sm:text-lg whitespace-nowrap"
+              className="footer-text text-sm md:text-lg whitespace-nowrap"
             >
               +38(067) 000-00-00
             </a>
           </div>
-          <h4 className="footer-text text-sm sm:text-lg pt-4 sm:pt-[34px] pb-5">
+          <h4 className="footer-text text-sm md:text-lg pt-4 sm:pt-[34px] pb-5 whitespace-nowrap">
             Ми у соціальних мережах
           </h4>
           <div className="flex flex-row gap-x-5">
