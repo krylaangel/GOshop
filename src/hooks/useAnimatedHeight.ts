@@ -1,5 +1,7 @@
-import {RefObject, useEffect, useState} from 'react'
-import {SpringValue, useSpring} from 'react-spring'
+import type { RefObject } from 'react'
+import type { SpringValue } from 'react-spring'
+import { useEffect, useState } from 'react'
+import { useSpring } from 'react-spring'
 
 interface UseAnimatedHeightProps {
   ref: RefObject<HTMLElement | null>
@@ -13,11 +15,21 @@ interface AnimatedStyles {
 }
 
 export function useAnimatedHeight({
-                                    ref,
-                                    deps = [],
-                                    isMenuOpen,
-                                  }: UseAnimatedHeightProps): AnimatedStyles {
+  ref,
+  deps = [],
+  isMenuOpen,
+}: UseAnimatedHeightProps): AnimatedStyles {
   const [contentHeight, setContentHeight] = useState(0)
+
+  useEffect(() => {
+    const element = ref.current
+    if (!element)
+      return
+
+    if (isMenuOpen) {
+      setContentHeight(element.scrollHeight)
+    }
+  }, [isMenuOpen, ...deps])
 
   useEffect(() => {
     if (ref.current) {
@@ -25,9 +37,15 @@ export function useAnimatedHeight({
     }
   }, [isMenuOpen, ...deps])
 
+  useEffect(() => {
+    if (!isMenuOpen) {
+      setContentHeight(0)
+    }
+  }, [isMenuOpen])
+
   return useSpring({
     opacity: isMenuOpen ? 1 : 0,
     height: isMenuOpen ? `${contentHeight}px` : '0px',
-    config: {tension: 180, friction: 25},
+    config: { tension: 120, friction: 25 },
   })
 }

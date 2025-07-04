@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useWindowsSize } from '~/hooks/useWindowsSize'
 import DropdownMenu from './DropdownMenu'
 import { menuData } from './menuData'
 import NavigationItem from './NavigationItem'
-import {useWindowsSize} from "~/hooks/useWindowsSize";
 
 interface NavigationProps {
   isOpen: boolean
@@ -27,7 +27,12 @@ const NavigationComponent: React.FC<NavigationProps> = ({ isOpen }) => {
 
   return (
     <nav
-      className={`left-0 z-10 top-full w-full absolute lg:static lg:flex justify-center ${isOpen ? 'block' : 'hidden'
+      className={`left-0 z-10 top-full w-full absolute lg:static lg:flex justify-center transition-all duration-500 ease-in-out ${
+        !isDesktop
+          ? isOpen
+            ? 'opacity-100 pointer-events-auto'
+            : 'opacity-0 pointer-events-none'
+          : 'opacity-100 pointer-events-auto'
       }`}
     >
       <ul

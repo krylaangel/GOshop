@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 import { animated } from 'react-spring'
-import {useAnimatedHeight} from "~/hooks/useAnimatedHeight";
+import { useAnimatedHeight } from '~/hooks/useAnimatedHeight'
 
 interface DropdownMenuProps {
   submenu: { heading: string, submenu: { label: string, href: string }[] }[]

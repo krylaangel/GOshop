@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
+
 interface WindowSizeProps {
   width: number
   height: number
 }
 export function useWindowsSize(): WindowSizeProps {
   const isClient = typeof window === 'object'
-
 
   function getSize(): WindowSizeProps {
     return {
@@ -16,7 +16,8 @@ export function useWindowsSize(): WindowSizeProps {
   const [windowSize, setWindowSize] = useState<WindowSizeProps>(getSize)
 
   useEffect(() => {
-    if (!isClient) return
+    if (!isClient)
+      return
 
     const handleResize = () => {
       setWindowSize(getSize())
@@ -24,8 +25,7 @@ export function useWindowsSize(): WindowSizeProps {
 
     window.addEventListener('resize', handleResize)
 
-   return () => window.removeEventListener('resize', handleResize)
-
+    return () => window.removeEventListener('resize', handleResize)
   }, [isClient])
   return windowSize
 }

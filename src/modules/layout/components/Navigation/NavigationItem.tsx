@@ -1,8 +1,8 @@
-import React, {useRef} from 'react'
+import React, { useRef } from 'react'
 import { NavLink } from 'react-router-dom'
+import { animated } from 'react-spring'
+import { useAnimatedHeight } from '~/hooks/useAnimatedHeight'
 import Icons from '../../../../assets/images/icon-sprite.svg'
-import {useAnimatedHeight} from "~/hooks/useAnimatedHeight";
-import { animated } from 'react-spring';
 
 interface NavigationItemProps {
   label: string
@@ -48,8 +48,9 @@ function NavigationItem({
           handleClick
         }
         className={({ isActive: isCurrent }) =>
-          `block flex items-center justify-between w-full text-[var(--baseColorText)] uppercase text-lg menu-header-lg ${isActive || isCurrent ? 'menu-header-lg__active' : ''
-          } ${isMenuOpen ? 'border-b-2 border-[var(--hoverBorder)] pt-[7px] lg:pt-0 pb-[7px] lg:pb-0' : ''}`}
+          `z-100 block flex items-center justify-between w-full text-[var(--baseColorText)] uppercase text-lg menu-header-lg 
+          ${isActive || isCurrent ? 'menu-header-lg__active' : ''
+    } ${isMenuOpen ? 'border-b-2 border-[var(--hoverBorder)] pt-[7px] lg:pt-0 pb-[7px] lg:pb-0' : ''}`}
       >
         <span>{label}</span>
         <span className="lg:hidden ml-2 w-8 h-8 flex items-center justify-center">
@@ -60,27 +61,27 @@ function NavigationItem({
       </NavLink>
 
       {!isDesktop && (
-          <animated.div style={styles} ref={ref} className="bg-white pb-1">
-            {isMenuOpen && children.map((category, idx) => (
-                <div key={idx} className="mt-4 space-y-2">
-                  {category.heading && (
-                      <h3 className="font-normal uppercase text-[var(--hoverColor)]">{category.heading}</h3>
-                  )}
-                  <ul className="w-full lg:grid grid-flow-col auto-rows-auto grid-rows-3 gap-x-8 gap-y-2">
-                    {category.submenu.map((item, subIdx) => (
-                        <li key={subIdx}>
-                          <NavLink
-                              to={item.href}
-                              className="font-light hover:text-[var(--hoverColor)]"
-                          >
-                            {item.label}
-                          </NavLink>
-                        </li>
-                    ))}
-                  </ul>
-                </div>
-            ))}
-          </animated.div>
+        <animated.div style={{ ...styles, overflow: 'hidden' }} ref={ref} className="bg-white pb-1">
+          {isMenuOpen && children.map((category, idx) => (
+            <div key={idx} className="mt-4 space-y-2">
+              {category.heading && (
+                <h3 className="font-normal uppercase text-[var(--hoverColor)]">{category.heading}</h3>
+              )}
+              <ul className="w-full lg:grid grid-flow-col auto-rows-auto grid-rows-3 gap-x-8 gap-y-2">
+                {category.submenu.map((item, subIdx) => (
+                  <li key={subIdx}>
+                    <NavLink
+                      to={item.href}
+                      className="font-light hover:text-[var(--hoverColor)]"
+                    >
+                      {item.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </animated.div>
       )}
 
     </li>
