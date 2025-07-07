@@ -5,19 +5,19 @@ export const productService = {
   getAll: async (): Promise<ApiResponse<ProductSummary[]>> =>
     handleResponse('/Product/GetAll'),
 
-  getById: async (productId: string): Promise<ApiResponse<Product>> =>
-    handleResponse(`/Product/GetById?productId=${encodeURIComponent(productId)}`),
+  getById: async (productId: UUID): Promise<ApiResponse<Product>> =>
+    handleResponse(`/Product/${productId}`),
 
-  getByBrandId: async (brandId: string): Promise<ApiResponse<Product[]>> =>
+  getByBrandId: async (brandId: UUID): Promise<ApiResponse<Product[]>> =>
     handleResponse(`/Product/GetByBrandId?brandId=${encodeURIComponent(brandId)}`),
 
-  getByCategoryId: async (categoryId: string): Promise<ApiResponse<Product[]>> =>
+  getByCategoryId: async (categoryId: UUID): Promise<ApiResponse<Product[]>> =>
     handleResponse(`/Product/GetByCategoryId?categoryId=${encodeURIComponent(categoryId)}`),
 
   getByName: async (name: string): Promise<ApiResponse<Product[]>> =>
     handleResponse(`/Product/GetByName?name=${encodeURIComponent(name)}`),
 
-  getSimilar: async (productId: string): Promise<ApiResponse<Product[]>> =>
+  getSimilar: async (productId: UUID): Promise<ApiResponse<Product[]>> =>
     handleResponse(`/Product/GetSimilar?productId=${encodeURIComponent(productId)}`),
 
   add: async (productData: CreateProduct): Promise<ApiResponse<Product>> =>
@@ -43,7 +43,7 @@ export const productAttributesService = {
     handleResponse('/ProductAttributes/GetAll'),
 
   getById: async (id: UUID): Promise<ApiResponse<ProductAttribute[]>> =>
-    handleResponse(`/ProductAttributes/GetById?id=${encodeURIComponent(id)}`),
+    handleResponse(`/ProductAttributes/${id}`),
 
   add: async (attributeData: CreateAttribute): Promise<ApiResponse<ProductAttribute>> =>
     handleResponse('/ProductAttributes/Add', {

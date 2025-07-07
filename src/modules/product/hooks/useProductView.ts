@@ -1,14 +1,19 @@
-import type { Product, ProductAttribute } from '~/api/types'
+import type { Product, ProductAttribute, UUID } from '~/api/types'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { brandService } from '~/api/services/brandService'
-import { productAttributesService, productAttributeValuesService, productService } from '~/api/services/productService'
+import {
+  productAttributesService,
+  productAttributeValuesService,
+  productService,
+} from '~/api/services/productService'
 
 interface ProductViewState {
   product: Product | null
   isLoading: boolean
   error: string | null
 }
+
 interface ProductAttributeState {
   colorOptions?: string[]
   sizeOptions?: string[]
@@ -16,75 +21,99 @@ interface ProductAttributeState {
   selectedSize?: string
 }
 
-function useProductView(isFetchProductAttributes: boolean = false) {
-  const { id } = useParams()
+function useProductView(
+  isFetchProductAttributes = false,
+  isFetchBrandName = false,
+  isFetchSimilarProducts = false,
+) {
+  const { id } = useParams() as { id: UUID }
   const [productViewState, setProductViewState] = useState<ProductViewState>({
     product: null,
     isLoading: true,
     error: null,
   })
+
+  const [brandName, setBrandName] = useState<string>('Невідомий бренд')
   const [attributes, setProductAttributes] = useState<ProductAttributeState>({
     colorOptions: [],
     sizeOptions: [],
     selectedColor: '',
     selectedSize: '',
   })
-  async function fetchProduct() {
-    if (id === undefined) {
-      setProductViewState(prev => ({
-        ...prev,
+
+  const [similarProducts, setSimilarProducts] = useState<Product[]>([])
+
+  useEffect(() => {
+    if (!id) {
+      setProductViewState({
+        product: null,
         isLoading: false,
         error: 'Product ID is missing',
-      }))
+      })
       return
     }
-    try {
-      const response = await productService.getById(id)
-      if (response.isError) {
-        throw new Error(response.errorMessage || 'Failed to fetch product')
+
+    async function fetchAll() {
+      try {
+        const response = await productService.getById(id)
+        if (response.isError) {
+          throw new Error(response.errorMessage || 'Failed to fetch product')
+        }
+
+        const product = response.data
+        setProductViewState({
+          product,
+          isLoading: false,
+          error: null,
+        })
+
+        if (isFetchProductAttributes) {
+          fetchProductAttributes(product.id)
+        }
+
+        if (isFetchBrandName) {
+          getBrandName(product.brandId)
+        }
+
+        if (isFetchSimilarProducts) {
+          getSimilarProducts(product.id)
+        }
       }
-      const product = response.data
-      setProductViewState({
-        product,
-        isLoading: false,
-        error: null,
-      })
+      catch (error: any) {
+        setProductViewState({
+          product: null,
+          isLoading: false,
+          error: error.message || 'Something went wrong',
+        })
+      }
     }
-    catch (error: any) {
-      setProductViewState(prev => ({
-        ...prev,
-        isLoading: false,
-        error: error.message || 'Something went wrong',
-      }))
-    }
-  }
-  async function fetchProductAttributes() {
-    if (!productViewState.product?.id) {
-      throw new Error('Product ID is missing')
-    }
-    const attributesResponse = await productAttributesService.getById(productViewState.product.id)
+
+    fetchAll()
+  }, [id])
+
+  async function fetchProductAttributes(productId: UUID) {
+    const attributesResponse = await productAttributesService.getById(productId)
     if (attributesResponse.isError) {
       throw new Error(attributesResponse.errorMessage || 'Failed to fetch attributes')
     }
+
     const attributes: ProductAttribute[] = attributesResponse.data
+    const colorAttr = attributes.find(attr => attr.name === 'color')
+    const sizeAttr = attributes.find(attr => attr.name === 'size')
 
-    const colorAttribute = attributes.find(attr => attr.name === 'color')
-    const sizeAttribute = attributes.find(attr => attr.name === 'size')
-    if (!colorAttribute || !sizeAttribute) {
-      throw new Error('Color or size attribute is missing for this product')
-    }
-    const colorOptionsResponse = await productAttributeValuesService.getById(colorAttribute.id)
-    const sizeOptionsResponse = await productAttributeValuesService.getById(sizeAttribute.id)
-
-    if (colorOptionsResponse.isError || sizeOptionsResponse.isError) {
-      throw new Error(colorOptionsResponse.errorMessage || sizeOptionsResponse.errorMessage || 'Failed to fetch attribute values')
-    }
-    if (!colorOptionsResponse.data.value || !sizeOptionsResponse.data.value) {
-      throw new Error('Color or size options are not available for this product')
+    if (!colorAttr || !sizeAttr) {
+      throw new Error('Color or size attribute is missing')
     }
 
-    const colorOptions = Object.values(colorOptionsResponse.data.value)
-    const sizeOptions = Object.values(sizeOptionsResponse.data.value)
+    const colorRes = await productAttributeValuesService.getById(colorAttr.id)
+    const sizeRes = await productAttributeValuesService.getById(sizeAttr.id)
+
+    if (colorRes.isError || sizeRes.isError) {
+      throw new Error(colorRes.errorMessage || sizeRes.errorMessage || 'Failed to fetch attribute values')
+    }
+
+    const colorOptions = Object.values(colorRes.data.value ?? {})
+    const sizeOptions = Object.values(sizeRes.data.value ?? {})
 
     setProductAttributes({
       colorOptions,
@@ -93,33 +122,27 @@ function useProductView(isFetchProductAttributes: boolean = false) {
       selectedSize: sizeOptions[0],
     })
   }
-  async function getBrandName() {
-    const brandId = productViewState.product?.brandId
+
+  async function getBrandName(brandId: UUID | null) {
     if (!brandId) {
-      throw new Error('Brand ID is missing')
+      setBrandName('Невідомий бренд')
+      return
     }
     const response = await brandService.getById(brandId)
-    if (response.isError || !response.data || !response.data.name) {
+    if (response.isError || !response.data?.name) {
       throw new Error(response.errorMessage || 'Failed to fetch brand name')
     }
-    return response.data.name
+    setBrandName(response.data.name)
   }
-  useEffect(() => {
-    fetchProduct()
-    if (isFetchProductAttributes) {
-      fetchProductAttributes()
-    }
-  }, [id])
-  async function getSimilarProducts() {
-    if (!productViewState.product?.id) {
-      throw new Error('Product ID is missing for similar products')
-    }
-    const response = await productService.getSimilar(productViewState.product.id)
+
+  async function getSimilarProducts(productId: UUID) {
+    const response = await productService.getSimilar(productId)
     if (response.isError) {
       throw new Error(response.errorMessage || 'Failed to fetch similar products')
     }
-    return response.data
+    setSimilarProducts(response.data)
   }
+
   const handleColorChange = (color: string) => {
     setProductAttributes(prev => ({ ...prev, selectedColor: color }))
   }
@@ -132,9 +155,9 @@ function useProductView(isFetchProductAttributes: boolean = false) {
     ...productViewState,
     handleColorChange,
     handleSizeChange,
-    getBrandName,
+    brandName,
     attributes,
-    getSimilarProducts,
+    similarProducts,
   }
 }
 

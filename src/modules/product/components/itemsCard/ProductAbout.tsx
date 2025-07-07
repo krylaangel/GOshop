@@ -20,7 +20,7 @@ export default function ProductAbout({
 }: ProductAboutProps): JSX.Element {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
-      <ImageSlider imageUrl={imageUrl} brandName={brandName} />
+      <ImageSlider imageUrls={[imageUrl]} brandName={brandName} />
       <ProductDetails
         brandName={brandName}
         price={price}

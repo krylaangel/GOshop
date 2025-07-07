@@ -131,25 +131,21 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onNavigate }) => {
         onChange={handleChange}
         error={errors.confirmPassword}
       />
-      <div>
-        {' '}
-        <label className="font-light text-[10px] flex gap-2">
+      <div className="">
+        <label className="font-light text-[9px] sm:text-[10px] flex gap-1 text-left py-1 justify-start">
           <input
-            className="h-[16px] w-[16px]"
+            className="mt-1 appearance-none checked:appearance-auto h-[16px] w-[16px] min-h-[16px] min-w-[16px] block m-0 border border-gray-300 rounded-sm accent-black bg-white"
             name="termsAccepted"
             type="checkbox"
             checked={formData.termsAccepted}
             onChange={handleChange}
           />
-          {' '}
           <p>
             Я погоджуюся з
-            {' '}
             {' '}
             <span className="underline">Політикою конфіденційності</span>
             {' '}
             та
-            {' '}
             {' '}
             <span
               className="underline"
@@ -158,7 +154,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onNavigate }) => {
             </span>
           </p>
         </label>
-        {errors.termsAccepted && <p className="ml-[23px] h-[14px] bg-[var(--errorLabel)] text-[10px] font-light">{errors.termsAccepted}</p>}
+        {errors.termsAccepted && <p className="text-left p-1 mt-1 sm:mt-0 ml-4 min-h-[14px] bg-[var(--errorLabel)] text-[10px] font-light">{errors.termsAccepted}</p>}
       </div>
 
       <Button

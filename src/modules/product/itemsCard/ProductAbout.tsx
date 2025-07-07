@@ -3,7 +3,7 @@ import ImageSlider from '../components/itemsCard/ImageSlider'
 import ProductDetails from '../components/ProductDetails/ProductDetails'
 
 interface ProductAboutProps {
-  imageUrl: string
+  imageUrls: (string | null)[] | undefined
   brandName: string
   price: number
   salePrice: number
@@ -11,7 +11,7 @@ interface ProductAboutProps {
   isFavorite: boolean
 }
 export default function ProductAbout({
-  imageUrl,
+  imageUrls,
   brandName,
   price,
   salePrice,
@@ -20,7 +20,7 @@ export default function ProductAbout({
 }: ProductAboutProps): JSX.Element {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
-      <ImageSlider imageUrl={imageUrl} brandName={brandName} />
+      <ImageSlider imageUrls={imageUrls} brandName={brandName} />
       <ProductDetails
         brandName={brandName}
         price={price}

@@ -6,7 +6,7 @@ export const brandService = {
     return handleResponse((`/Brand/GetAll`))
   },
   getById: async (id: UUID): Promise<ApiResponse<Brand>> => {
-    return handleResponse(`/Brand/GetById?id=${encodeURIComponent(id)}`)
+    return handleResponse(`/Brand/${encodeURIComponent(id)}`)
   },
   add: async (brandData: Brand): Promise<ApiResponse<Brand>> => {
     return handleResponse(

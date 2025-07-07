@@ -96,7 +96,6 @@ export async function handleResponse<T>(
           mode: options.mode,
           signal: options.signal,
         })
-
         if (!res.ok) {
           throw new ApiError(`HTTP ${res.status}`, { status: res.status, response: res })
         }
@@ -114,6 +113,7 @@ export async function handleResponse<T>(
         },
       },
     )
+
     const responseJson = await response.json()
     if (responseJson.error) {
       throw new ApiError(responseJson.error.message, {
@@ -123,7 +123,7 @@ export async function handleResponse<T>(
       })
     }
     else {
-      const data = responseJson.data as T
+      const data = responseJson.data as T || responseJson as T
       return {
         isError: false,
         data,
@@ -148,7 +148,6 @@ export async function handleResponse<T>(
 
     const { errorCode, errorMessage, status } = await resolveErrorDetails(error)
     console.error(`API Error: ${errorMessage}`, { status, errorCode, error })
-
     return {
       isError: true,
       data: null as T,

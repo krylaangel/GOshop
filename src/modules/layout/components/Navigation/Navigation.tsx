@@ -1,6 +1,6 @@
+import { useWindowsSize } from '@layout/components/Navigation/hooks/useWindowsSize'
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useWindowsSize } from '~/hooks/useWindowsSize'
 import DropdownMenu from './DropdownMenu'
 import { menuData } from './menuData'
 import NavigationItem from './NavigationItem'

@@ -32,6 +32,7 @@ interface ProductSectionProps {
 
 import type { UUID } from '~/api/types'
 import { useEffect } from 'react'
+import getImageURL from '~/shared/utils/imageUtils'
 
 function ProductSectionComponent({
   title,
@@ -43,50 +44,52 @@ function ProductSectionComponent({
     Category.WOMEN,
   )
   const [categories, setCategories] = useState<Categories>(initialCategories)
-
-  useEffect(() => {
-    async function fetchProducts() {
-      const womenResponse = await productService.getByCategoryId(forHerId)
-      const menResponse = await productService.getByCategoryId(forHimId)
-      const accessoriesResponse
+  async function fetchProducts() {
+    const womenResponse = await productService.getByCategoryId(forHerId)
+    const menResponse = await productService.getByCategoryId(forHimId)
+    const accessoriesResponse
         = await productService.getByCategoryId(accessoriesId)
-      const isFavorite = () => {
-        return Boolean(Math.random() > 0.5)
-      }
-      // #TODO handle isFavorite
-      setCategories(prev => ({
-        ...prev,
-        [Category.WOMEN]: (womenResponse.data ?? []).map(product => ({
-          id: product.id,
-          imageUrl: product.images?.[0]?.imageUrl ?? '',
-          brandName: product.name ?? '',
-          price: product.price,
-          salePrice: product.salePrice,
-          averageRating: product.averageRating,
-          isFavorite: isFavorite(),
-        })),
-        [Category.MEN]: (menResponse.data ?? []).map(product => ({
-          id: product.id,
-          imageUrl: product.images?.[0]?.imageUrl ?? '',
-          brandName: product.name ?? '',
-          price: product.price,
-          salePrice: product.salePrice,
-          averageRating: product.averageRating,
-          isFavorite: isFavorite(),
-        })),
-        [Category.ACCESSORIES]: (accessoriesResponse.data ?? []).map(
-          product => ({
-            id: product.id,
-            imageUrl: product.images?.[0]?.imageUrl ?? '',
-            brandName: product.name ?? '',
-            price: product.price,
-            salePrice: product.salePrice,
-            averageRating: product.averageRating,
-            isFavorite: isFavorite(),
-          }),
-        ),
-      }))
+    const isFavorite = () => {
+      return Boolean(Math.random() > 0.5)
     }
+
+    setCategories(prev => ({
+      ...prev,
+      [Category.WOMEN]: (womenResponse.data ?? []).map((product) => {
+        return {
+          id: product.id,
+          imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
+          brandName: product.name ?? '',
+          price: product.price,
+          salePrice: product.salePrice,
+          averageRating: product.averageRating,
+          isFavorite: isFavorite(),
+        }
+      }),
+      [Category.MEN]: (menResponse.data ?? []).map(product => ({
+        id: product.id,
+        imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
+        brandName: product.name ?? '',
+        price: product.price,
+        salePrice: product.salePrice,
+        averageRating: product.averageRating,
+        isFavorite: isFavorite(),
+      })),
+      [Category.ACCESSORIES]: (accessoriesResponse.data ?? []).map(
+        product => ({
+          id: product.id,
+          imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
+          brandName: product.name ?? '',
+          price: product.price,
+          salePrice: product.salePrice,
+          averageRating: product.averageRating,
+          isFavorite: isFavorite(),
+        }),
+      ),
+    }))
+    // #TODO handle isFavorite
+  }
+  useEffect(() => {
     fetchProducts()
   }, [])
 
@@ -108,7 +111,7 @@ function ProductSectionComponent({
       </div>
       <Swiper
         spaceBetween={16}
-        slidesPerView={1.75}
+        slidesPerView={1.25}
         breakpoints={{
           480: { slidesPerView: 2.25 },
           768: { slidesPerView: 3.25 },

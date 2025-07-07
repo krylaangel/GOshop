@@ -46,6 +46,8 @@ export function useAnimatedHeight({
   return useSpring({
     opacity: isMenuOpen ? 1 : 0,
     height: isMenuOpen ? `${contentHeight}px` : '0px',
-    config: { tension: 120, friction: 25 },
+    config: isMenuOpen
+      ? { tension: 200, friction: 28 }
+      : { tension: 150, friction: 20 },
   })
 }

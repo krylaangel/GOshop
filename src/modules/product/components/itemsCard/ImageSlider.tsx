@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FreeMode, Navigation, Pagination, Thumbs } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
+import getImageURL from '~/shared/utils/imageUtils'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/free-mode'
@@ -8,13 +9,16 @@ import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
 
 interface ImageSliderProps {
-  imageUrl: string
+  imageUrls: (string | null)[] | undefined
   brandName: string
 }
 
-export default function ImageSlider({ imageUrl, brandName }: ImageSliderProps) {
+export default function ImageSlider({ imageUrls, brandName }: ImageSliderProps) {
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null)
-
+  const defaultImage = getImageURL('default-product-card.png')
+  if (!imageUrls || imageUrls.length === 0) {
+    imageUrls = [defaultImage]
+  }
   return (
     <div className="col-span-1 gap-y-2 flex flex-col w-full">
       <div
@@ -28,11 +32,11 @@ export default function ImageSlider({ imageUrl, brandName }: ImageSliderProps) {
           modules={[FreeMode, Navigation, Thumbs]}
           className="w-full max-h-[762px] mySwiper"
         >
-          {[...Array.from({ length: 6 })].map((_, index) => (
+          {imageUrls.map((url, index) => (
             <SwiperSlide key={index}>
               <img
                 className="img-style w-full h-auto object-cover rounded-[10px]"
-                src={imageUrl}
+                src={url ?? defaultImage}
                 alt={brandName}
               />
             </SwiperSlide>
@@ -51,11 +55,11 @@ export default function ImageSlider({ imageUrl, brandName }: ImageSliderProps) {
           }}
           className="w-full"
         >
-          {[...Array.from({ length: 6 })].map((_, index) => (
+          {imageUrls.map((url, index) => (
             <SwiperSlide key={index}>
               <img
                 className="h-[104px] object-cover rounded-[10px] cursor-pointer w-full"
-                src={imageUrl}
+                src={url ?? defaultImage}
                 alt={`${brandName}-${index}`}
               />
             </SwiperSlide>
@@ -69,11 +73,11 @@ export default function ImageSlider({ imageUrl, brandName }: ImageSliderProps) {
           pagination={{ clickable: true }}
           modules={[Pagination]}
         >
-          {[...Array.from({ length: 7 })].map((_, index) => (
+          {imageUrls.map((url, index) => (
             <SwiperSlide key={index}>
               <img
                 className="w-full h-[429px] object-cover rounded-[10px]"
-                src={imageUrl}
+                src={url ?? defaultImage}
                 alt={`${brandName}-${index}`}
               />
             </SwiperSlide>

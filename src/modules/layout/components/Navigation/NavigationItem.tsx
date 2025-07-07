@@ -1,7 +1,7 @@
+import { useAnimatedHeight } from '@layout/components/Navigation/hooks/useAnimatedHeight'
 import React, { useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 import { animated } from 'react-spring'
-import { useAnimatedHeight } from '~/hooks/useAnimatedHeight'
 import Icons from '../../../../assets/images/icon-sprite.svg'
 
 interface NavigationItemProps {
