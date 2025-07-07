@@ -23,14 +23,14 @@ export default function ImageSlider({ imageUrls, brandName }: ImageSliderProps) 
     <div className="col-span-1 gap-y-2 flex flex-col w-full">
       <div
         style={{ position: 'sticky', top: '0', bottom: '20px' }}
-        className="hidden col-span-1 gap-y-4 md:flex flex-col"
+        className="hidden col-span-1 gap-y-4 lg:flex flex-col"
       >
         <Swiper
           spaceBetween={10}
           navigation={true}
           thumbs={{ swiper: thumbsSwiper }}
           modules={[FreeMode, Navigation, Thumbs]}
-          className="w-full max-h-[762px] mySwiper"
+          className="w-full h-[clamp(429px,100vh,762px)] mySwiper"
         >
           {imageUrls.map((url, index) => (
             <SwiperSlide key={index}>
@@ -66,7 +66,7 @@ export default function ImageSlider({ imageUrls, brandName }: ImageSliderProps) 
           ))}
         </Swiper>
       </div>
-      <div style={{ position: 'sticky', top: '0' }} className="md:hidden w-full">
+      <div style={{ position: 'sticky', top: '0' }} className="lg:hidden w-full">
         <Swiper
           slidesPerView={1}
           spaceBetween={10}
