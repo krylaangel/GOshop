@@ -12,7 +12,7 @@ function AuthContainer({ children }: { children: React.ReactNode }) {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
         }}
-        className="w-[480px] text-white flex-center p-8 sm:p-15 m-5"
+        className="w-[480px] text-white flex-center p-8 sm:px-15 sm:pb-15 sm:pt-20 m-5"
       >
         {children}
       </div>

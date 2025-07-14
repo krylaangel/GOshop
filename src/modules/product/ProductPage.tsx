@@ -1,3 +1,4 @@
+import SkeletonProduct from '@product/skeleton/SkeletonProduct'
 import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import Button from '~/shared/components/Button/Button'
@@ -27,7 +28,7 @@ function ProductPage() {
   const [isFavorite] = useState(() => Boolean(Math.random()))
 
   if (isLoading)
-    return <div>Loading...</div>
+    return <SkeletonProduct />
   if (error) {
     return (
       <div>

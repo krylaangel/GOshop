@@ -28,7 +28,7 @@
   @font-face {
     font-family: "roboto";
     src: url("../assets/fonts/Roboto-VariableFont_wdth,wght.ttf")
-      format("truetype");
+    format("truetype");
   }
 }
 
@@ -170,7 +170,7 @@ input:-webkit-autofill {
   font-size: 12px;
 }
 .table-size__item {
-  @apply border border-[var(--hoverBorder)] p-2 uppercase text-center;
+  @apply border border-[var(--hoverBorder)] p-2 uppercase text-center whitespace-nowrap;
 }
 .scroll-size__item {
   @apply sticky left-0 z-10 bg-[var(--hoverBorder)] border border-white;

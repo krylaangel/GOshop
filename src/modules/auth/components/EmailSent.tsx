@@ -1,23 +1,14 @@
 import Button from '@shared/components/Button/Button'
-import getImageURL from '@shared/utils/imageUtils'
 
 function EmailSent({ onNavigate }: { onNavigate: () => void }) {
   return (
     <div
-      style={{
-        backgroundImage: `linear-gradient(to right, rgba(2, 0, 66, 0.1), rgba(2, 0, 66, 0.3)),
-            url(${getImageURL('aut-img.png')})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-      }}
-      className="w-[480px] text-white flex-center p-8 sm:p-15 mb-10"
+      className="flex flex-col"
     >
-      <p className="text-base font-normal">
-        Електронний лист надіслано на вашу адресу email@domain.com. Перевірте
-        наявність електронного листа.
+      <p className="text-lg font-light leading-[140%]">
+        Лист було надіслано на вашу електронну адресу. Будь ласка, перевірте пошту для підтвердження реєстрації.
       </p>
-      <Button className="button__auth" onClick={onNavigate}>
+      <Button className="button__auth px-4 py-2" onClick={onNavigate}>
         Повернутись на головну
       </Button>
     </div>

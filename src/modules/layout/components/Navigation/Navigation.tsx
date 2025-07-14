@@ -7,23 +7,25 @@ import NavigationItem from './NavigationItem'
 
 interface NavigationProps {
   isOpen: boolean
+  onCloseMenu: () => void
 }
 
-const NavigationComponent: React.FC<NavigationProps> = ({ isOpen }) => {
+const NavigationComponent: React.FC<NavigationProps> = ({ isOpen, onCloseMenu }) => {
   const location = useLocation()
   const [activeIndex, setActiveIndex] = useState <number | null> (null)
-  const [isDesktop, setIsDesktop] = useState <boolean> (window.innerWidth >= 1024)
   const [openMobileIndex, setOpenMobileIndex] = useState <number | null> (null)
   const { width } = useWindowsSize()
+  const isDesktop = width >= 1024
   useEffect(() => {
     const index = menuData.findIndex(menu => location.pathname.startsWith(menu.href))
     setActiveIndex(index !== -1 ? index : null)
   }, [location.pathname])
 
   useEffect(() => {
-    setIsDesktop(width >= 1024)
-    setOpenMobileIndex(null)
-  }, [width])
+    if (!isDesktop) {
+      setOpenMobileIndex(null)
+    }
+  }, [location.pathname])
 
   return (
     <nav
@@ -41,23 +43,32 @@ const NavigationComponent: React.FC<NavigationProps> = ({ isOpen }) => {
           flex-col bg-white z-10
           lg:flex bg-[var(--secondaryBgColor)]`}
       >
-        {menuData.map(({ label, href, children }, index) => (
-          <NavigationItem
-            key={href}
-            label={label}
-            href={href}
-            children={children}
-            isActive={isDesktop ? activeIndex === index : openMobileIndex === index}
-            isMenuOpen={!isDesktop && openMobileIndex === index}
-            onClick={() => {
-              if (isDesktop)
-                return
-              setOpenMobileIndex(prev => (prev === index ? null : index))
-            }}
-            onMouseEnter={() => isDesktop && setActiveIndex(index)}
-            onMouseLeave={() => isDesktop && setActiveIndex(null)}
-          />
-        ))}
+        {menuData.map(({ label, href, children }, index) => {
+          const isFirst = index === 0
+          const isLast = index === menuData.length - 1
+
+          return (
+            <NavigationItem
+              key={href}
+              label={label}
+              href={href}
+              children={children}
+              isActive={isDesktop ? activeIndex === index : openMobileIndex === index}
+              isMenuOpen={!isDesktop && openMobileIndex === index}
+              isFirst={isFirst}
+              isLast={isLast}
+              onClick={() => {
+                if (isDesktop)
+                  return
+                setOpenMobileIndex(prev => (prev === index ? null : index))
+              }}
+              onMouseEnter={() => isDesktop && setActiveIndex(index)}
+              onMouseLeave={() => isDesktop && setActiveIndex(null)}
+              toggleMobileMenu={() => onCloseMenu()}
+
+            />
+          )
+        })}
       </ul>
 
       {isDesktop && (

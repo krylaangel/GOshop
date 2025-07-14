@@ -1,5 +1,5 @@
+import type { UUID } from '@api/types'
 import type { ProductMiniCardProps } from './ProductMiniCard'
-import type { UUID } from '~/api/types/index'
 import Icons from '~/assets/images/icon-sprite.svg'
 import Button from '~/shared/components/Button/Button'
 import ProductMiniCard from './ProductMiniCard'
@@ -10,7 +10,7 @@ export interface ReviewsProps {
 }
 export default function Reviews({ product }: ReviewsProps) {
   return (
-    <div className="flex justify-between gap-x-[100px] pt-6">
+    <div className="flex justify-between gap-x-6 lg:gap-x-[100px] pt-6">
       <div className="flex flex-col gap-y-4">
         <ReviewsCard
           id={'' as UUID}

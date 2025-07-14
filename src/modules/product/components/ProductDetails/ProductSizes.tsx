@@ -19,7 +19,7 @@ export default function ProductSizes({
         Розміри:
       </h2>
       <div className="flex gap-x-2">
-        <div className="flex gap-x-2 gap-y-2 flex-wrap breakpoints-product">
+        <div className="flex gap-x-2 gap-y-2 flex-wrap breakpoints-product w-full">
           {sizeOptions.map(size => (
             <Button
               key={size}
@@ -33,7 +33,7 @@ export default function ProductSizes({
           ))}
           <div
             onClick={() => setIsModalOpen(true)}
-            className="flex-center max-w-[152px] group cursor-pointer gap-x-2"
+            className="flex-center max-w-[152px] group cursor-pointer gap-x-2 [@media(min-width:1186px)]:ml-auto"
           >
             <svg className="h-[11px] w-[19px] stroke-[var(--hoverColor)] group-hover:stroke-black">
               <use href={`${Icons}#product_size-table`} />

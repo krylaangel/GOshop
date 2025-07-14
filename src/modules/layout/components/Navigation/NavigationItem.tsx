@@ -11,8 +11,11 @@ interface NavigationItemProps {
   onClick: () => void
   onMouseEnter: () => void
   onMouseLeave: () => void
+  toggleMobileMenu?: () => void
   isActive?: boolean
   isMenuOpen?: boolean
+  isFirst?: boolean
+  isLast?: boolean
 }
 
 function NavigationItem({
@@ -22,8 +25,11 @@ function NavigationItem({
   onClick,
   onMouseEnter,
   onMouseLeave,
+  toggleMobileMenu,
   isActive,
   isMenuOpen = false,
+  isFirst = false,
+  isLast = false,
 }: NavigationItemProps) {
   const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 1024
 
@@ -44,20 +50,27 @@ function NavigationItem({
     >
       <NavLink
         to={href}
-        onClick={
-          handleClick
-        }
-        className={({ isActive: isCurrent }) =>
-          `z-100 block flex items-center justify-between w-full text-[var(--baseColorText)] uppercase text-lg menu-header-lg 
-          ${isActive || isCurrent ? 'menu-header-lg__active' : ''
-    } ${isMenuOpen ? 'border-b-2 border-[var(--hoverBorder)] pt-[7px] lg:pt-0 pb-[7px] lg:pb-0' : ''}`}
+        onClick={handleClick}
       >
-        <span>{label}</span>
-        <span className="lg:hidden ml-2 w-8 h-8 flex items-center justify-center">
-          <svg className="h-[13px] sm:h-[20px] w-[13px] sm:w-[20px]">
-            <use href={`${Icons}#${isMenuOpen ? 'header_arrow-close' : 'header_arrow-open'}`} />
-          </svg>
-        </span>
+        {({ isActive: isCurrent }) => (
+          <div
+            className={`
+        z-100 block flex items-center justify-between w-full text-[var(--baseColorText)] uppercase text-lg
+        ${isFirst ? 'lg:pl-20 [@media(min-width:1193px)]:pl-[clamp(20px,100vw,150px)]' : ''}
+        ${isLast ? 'lg:pr-20 [@media(min-width:1193px)]:pr-[clamp(20px,100vw,150px)]' : ''}
+        ${isMenuOpen ? 'border-b-2 border-[var(--hoverBorder)] pt-[7px] lg:pt-0 pb-[7px] lg:pb-0' : ''}
+      `}
+          >
+            <span className={`menu-header-lg w-fit ${isCurrent || isActive ? 'menu-header-lg__active' : ''}`}>
+              {label}
+            </span>
+            <span className="lg:hidden ml-2 w-8 h-8 flex items-center justify-center">
+              <svg className="h-[13px] sm:h-[20px] w-[13px] sm:w-[20px]">
+                <use href={`${Icons}#${isMenuOpen ? 'header_arrow-close' : 'header_arrow-open'}`} />
+              </svg>
+            </span>
+          </div>
+        )}
       </NavLink>
 
       {!isDesktop && (
@@ -73,6 +86,10 @@ function NavigationItem({
                     <NavLink
                       to={item.href}
                       className="font-light hover:text-[var(--hoverColor)]"
+                      onClick={() => {
+                        if (isMenuOpen && toggleMobileMenu)
+                          toggleMobileMenu()
+                      }}
                     >
                       {item.label}
                     </NavLink>

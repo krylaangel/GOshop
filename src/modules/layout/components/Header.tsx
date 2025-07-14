@@ -12,6 +12,9 @@ function HeaderComponent() {
     else {
       document.body.classList.remove('overflow-hidden')
     }
+    return () => {
+      document.body.classList.remove('overflow-hidden')
+    }
   }, [isNavOpen])
   return (
     <header className="h-[68px] sm:h-[136px] items-center clamp relative flex justify-between">
@@ -38,7 +41,7 @@ function HeaderComponent() {
           </svg>
         </a>
       </div>
-      <NavigationComponent isOpen={isNavOpen} />
+      <NavigationComponent isOpen={isNavOpen} onCloseMenu={() => setIsNavOpen(false)} />
       <div
         className={`py-1 gap-2 whitespace-nowrap
         ${isNavOpen ? 'hidden lg:flex' : 'flex'}`}
