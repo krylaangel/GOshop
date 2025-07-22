@@ -1,16 +1,10 @@
+import { useProductContext } from '@product/ProductContext'
 import Expanded from '@shared/components/Expanded'
 import Icons from '~/assets/images/icon-sprite.svg'
 
 export default function ProductDescription() {
-  const description = ' Спортивний костюм від бренду Puma відтворює новий погляд на розкішний\n'
-    + '          одяг для відпочинку, поєднуючи в собі стиль, комфорт та\n'
-    + '          універсальність. Вона виготовлена з м\'якого мікрофлісу, який у\n'
-    + '          поєднанні з технологією Therma-Fit контролюватиме природним теплом\n'
-    + '          Вашого тіла, даруючи відчуття даруючи відчуття комфорту навіть у прохолодні дні.\n'
-    + '          Костюм ідеально підходить як для активного способу життя, так і для затишного відпочинку вдома.\n'
-    + '          Його сучасний крій, еластичні манжети та продуманий дизайн підкреслюють силует, а класичне брендоване лого\n'
-    + '          Puma додає стильного акценту.\n'
-    + '          Цей костюм стане незамінним елементом Вашого гардеробу в будь-яку пору року.'
+  const { product } = useProductContext()
+  const description = product.description
   return (
     <div className="col-span-1 flex flex-col gap-y-6">
       <div className="flex flex-col gap-y-2">
@@ -18,7 +12,7 @@ export default function ProductDescription() {
           Опис товару
         </h2>
 
-        <Expanded className="tracking-wide font-light text-sm leading-[140%]">
+        <Expanded variant="tertiary_light" classNameButton="cursor-pointer font-light text-sm leading-[140%] text-[var(--baseColorText)]! mt-1" className="tracking-wide font-light text-sm leading-[140%]">
           {description}
         </Expanded>
       </div>

@@ -20,7 +20,7 @@ function HeroSection({
             linear-gradient(to right, rgba(2, 0, 66, 0.3), rgba(2, 0, 66, 0.3)),
             url(${getImageURL(backgroundImageURL)})`,
       }}
-      className="h-[400px] sm:h-[580px] hero-section"
+      className="h-[400px] sm:h-[580px] [@media(min-width:1700px)]:h-[800px]! [@media(min-width:2200px)]:h-[1000px]! [@media(min-width:2600px)]:h-[1500px]! hero-section"
     >
       <div className="clamp flex w-full h-full max-w-full aspect-[16/9]">
         <div className="max-w-[446px] flex mt-[148px] sm:mt-0 sm:justify-center flex-col items-center">

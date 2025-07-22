@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react'
+import type { ButtonVariant } from '~/shared/components/Button/Button'
+import Button from '@shared/components/Button/Button'
 import { useExpandableSpring } from '@shared/hooks/useExpandableSpring'
 import { useRef, useState } from 'react'
 import { animated } from 'react-spring'
@@ -6,9 +8,11 @@ import { animated } from 'react-spring'
 interface ExpandedProps {
   children: ReactNode
   className?: string
+  variant?: ButtonVariant
+  classNameButton?: string
 }
 
-export default function Expanded({ children, className = '' }: ExpandedProps) {
+export default function Expanded({ children, variant, classNameButton = '', className = '' }: ExpandedProps) {
   const [expanded, setExpanded] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const lineHeight = 20
@@ -22,13 +26,16 @@ export default function Expanded({ children, className = '' }: ExpandedProps) {
           {children}
         </div>
       </animated.div>
+      <div className="w-full flex justify-end">
+        <Button
+          variant={variant}
+          onClick={() => setExpanded(prev => !prev)}
+          className={classNameButton}
+        >
+          {expanded ? 'Згорнути' : 'Показати весь'}
+        </Button>
+      </div>
 
-      <button
-        onClick={() => setExpanded(prev => !prev)}
-        className="cursor-pointer w-full text-right font-light text-sm leading-[140%] text-[var(--baseColorText)] mt-1"
-      >
-        {expanded ? 'Згорнути' : 'Показати весь'}
-      </button>
     </div>
   )
 }

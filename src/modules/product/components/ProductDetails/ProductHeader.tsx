@@ -1,11 +1,14 @@
+import { useProductContext } from '@product/ProductContext'
 import RatingStars from '~/shared/components/RatingStars'
 
 interface ProductHeaderProps {
   brandName: string
-  averageRating: number
 }
 
-export default function ProductHeader({ brandName, averageRating }: ProductHeaderProps) {
+export default function ProductHeader({ brandName }: ProductHeaderProps) {
+  const { product, reviewCount } = useProductContext()
+  const averageRating = product.averageRating
+  const skuCode = product.skuCode
   return (
     <>
       <h2 className="font-bold text-4xl leading-[140%] tracking-normal text-black">
@@ -14,12 +17,13 @@ export default function ProductHeader({ brandName, averageRating }: ProductHeade
       <div className="flex justify-between whitespace-wrap gap-x-6 w-full">
         <RatingStars
           average={averageRating}
-          reviews={15}
+          reviews={reviewCount}
           interactive
           onRate={r => console.warn('#Todo: Оцінка', r)}
         />
         <p className="pt-1 font-light text-[14px] leading-[140%] items-center tracking-normal text-[var(--baseColorText)] whitespace-nowrap">
-          Код: 000000000
+          Код: $
+          {skuCode}
         </p>
       </div>
     </>

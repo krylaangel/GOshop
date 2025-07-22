@@ -1,11 +1,9 @@
+import { useProductContext } from '@product/ProductContext'
 import Icons from '~/assets/images/icon-sprite.svg'
 import Button from '~/shared/components/Button/Button'
 
-interface ProductActionsProps {
-  isFavorite: boolean
-}
-
-export default function ProductActions({ isFavorite }: ProductActionsProps) {
+export default function ProductActions() {
+  const { isFavorite } = useProductContext()
   return (
     <div className="flex gap-x-4">
       <Button className="w-full px-11 button">Купити</Button>

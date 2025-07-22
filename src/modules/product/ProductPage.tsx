@@ -1,4 +1,6 @@
+import { ProductContext } from '@product/ProductContext'
 import SkeletonProduct from '@product/skeleton/SkeletonProduct'
+import Breadcrumbs from '@shared/components/Breadcrumbs'
 import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import Button from '~/shared/components/Button/Button'
@@ -39,9 +41,17 @@ function ProductPage() {
   }
   if (!product)
     return <div>Product not found</div>
+  const reviewCount = product.reviews?.length ?? 0
+
+  const tabLabels = {
+    [Category.ABOUT]: 'Усе про товар',
+    [Category.CHARACTERISTICS]: 'Характеристики',
+    [Category.REVIEWS]: `Відгуки${reviewCount > 0 ? ` (${reviewCount})` : ''}`,
+  }
 
   return (
     <div className="clamp">
+      <Breadcrumbs />
       <div className="h-15 items-center flex">
         <div className="text-black font-light flex justify-start gap-x-2 sm:gap-x-4 md:gap-x-6">
           {Object.values(Category).map(category => (
@@ -50,47 +60,39 @@ function ProductPage() {
               className={`${category === activeCategory ? 'menu__active' : ''} menu cursor-pointer whitespace-nowrap text-xs md:text-sm`}
               onClick={() => setActiveCategory(category)}
             >
-              {category}
+              {tabLabels[category]}
             </div>
           ))}
         </div>
       </div>
+      <ProductContext.Provider value={{ product, isFavorite, reviewCount }}>
+        {activeCategory === Category.ABOUT && (
+          <ProductAbout brandName={brandName} />
+        )}
 
-      {activeCategory === Category.ABOUT && (
-        <ProductAbout
-          imageUrls={product.images?.map(image => image.imageUrl)}
-          brandName={brandName}
-          price={product.price}
-          salePrice={product.salePrice}
-          averageRating={product.averageRating}
-          isFavorite={isFavorite}
-        />
-      )}
+        {activeCategory === Category.CHARACTERISTICS && (
+          <Characteristics brandName={brandName} />
+        )}
 
-      {activeCategory === Category.CHARACTERISTICS && (
-        <Characteristics product={{ price: product.price, salePrice: product.salePrice, isFavorite }} />
-      )}
-
-      {activeCategory === Category.REVIEWS && (
-        <Reviews product={{ price: product.price, salePrice: product.salePrice, isFavorite }} />
-      )}
-
+        {activeCategory === Category.REVIEWS && (
+          <Reviews brandName={brandName} />
+        )}
+      </ProductContext.Provider>
       <h2 className="font-medium text-[36px] leading-[140%] tracking-[0.1em] text-center pt-10">
         Схожі товари
       </h2>
 
       <Swiper
-        spaceBetween={16}
-        slidesPerView={1.75}
+        slidesPerView={1.25}
         breakpoints={{
-          480: { slidesPerView: 2.25 },
-          768: { slidesPerView: 3.25 },
-          1024: { slidesPerView: 4 },
+          480: { slidesPerView: 2.25, spaceBetween: 4 },
+          768: { slidesPerView: 3, spaceBetween: 8 },
+          1024: { slidesPerView: 4, spaceBetween: 16 },
         }}
-        className="w-full mt-9"
+        className="w-full mt-5"
       >
         {similarProducts.map(similar => (
-          <SwiperSlide key={similar.id} className="w-full">
+          <SwiperSlide key={similar.id} className="">
             <ProductCardComponent
               id={similar.id}
               imageUrl={similar.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png')}

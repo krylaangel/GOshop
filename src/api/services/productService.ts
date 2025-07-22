@@ -11,9 +11,6 @@ export const productService = {
   getByBrandId: async (brandId: UUID): Promise<ApiResponse<Product[]>> =>
     handleResponse(`/Product/GetByBrandId?brandId=${encodeURIComponent(brandId)}`),
 
-  getByCategoryId: async (categoryId: UUID): Promise<ApiResponse<Product[]>> =>
-    handleResponse(`/Product/GetByCategoryId?categoryId=${encodeURIComponent(categoryId)}`),
-
   getByName: async (name: string): Promise<ApiResponse<Product[]>> =>
     handleResponse(`/Product/GetByName?name=${encodeURIComponent(name)}`),
 

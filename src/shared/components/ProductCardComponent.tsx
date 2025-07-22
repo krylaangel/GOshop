@@ -31,8 +31,8 @@ function ProductCardComponent({
   }
 
   return (
-    <div className="h-[clamp(321px,100vh,527px)] w-full flex flex-col align-middle justify-center gap-y-[10px] sm:gap-y-4">
-      <img className="img-style" src={imageUrl} alt={brandName} />
+    <div className="h-[clamp(321px,100vh,547px)] w-full flex flex-col align-middle justify-center gap-y-[10px] sm:gap-y-4">
+      <div className="h-[369px]"><img className="h-full w-full object-cover rounded-[10px]" src={imageUrl} alt={brandName} /></div>
       <p className="font-medium text-left text-sm sm:text-base leading-[22.4px] w-full tracking-normal overflow-hidden text-ellipsis whitespace-nowrap pb-5 h-5">
         {brandName}
       </p>

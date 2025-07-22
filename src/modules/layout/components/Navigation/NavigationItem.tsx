@@ -40,7 +40,7 @@ function NavigationItem({
     }
   }
   const ref = useRef<HTMLDivElement>(null)
-  const styles = useAnimatedHeight({ ref, isMenuOpen, deps: [children] })
+  const styles = useAnimatedHeight({ ref, open: isMenuOpen, deps: [children] })
 
   return (
     <li

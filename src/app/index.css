@@ -3,8 +3,8 @@
 
 @layer utilities {
   .clamp {
-    padding-right: clamp(16px, 15vw, 200px);
-    padding-left: clamp(16px, 15vw, 200px);
+    padding-left: max(16px, calc((100vw - 1040px) / 2));
+    padding-right: max(16px, calc((100vw - 1040px) / 2));
   }
 
   .top-menu {
@@ -38,10 +38,16 @@
 
 .hero-section {
   background-size: cover;
-  background-position: center;
+  background-position: center 30%;
   background-repeat: no-repeat;
 }
+@media (max-width: 2000px) {
+  .hero-section {
+  background-position: center;
+    background-size: cover;
+  }
 
+}
 @media (min-width: 1024px) {
   .hero-section {
     height: 600px;

@@ -25,16 +25,16 @@ function HomePage() {
       <BrandsSection />
       <CategoriesSection />
       <ProductSectionComponent
-        forHerId={'38041709-5590-41da-888b-f0ff5b59319c' as UUID}
-        forHimId={'a1351a42-1cbd-4a1e-aa2e-f4f53081ff77' as UUID}
-        accessoriesId={'b1902fc6-bd4e-4a86-8db1-b44cbd1807b8' as UUID}
+        forHerId={'5582d88b-cf73-41ad-9b96-2505c7ae674a' as UUID}
+        forHimId={'c209f70d-3d66-4a79-8724-7309726eba25' as UUID}
+        accessoriesId={'8dad40f8-af15-4478-a60e-22f6ffc6717e' as UUID}
         title="Обирай новинки"
       />
       <Banner imageUrl={getImageURL('banner.jpg')} />
       <ProductSectionComponent
-        forHerId={'0241c91a-b336-4dbb-817d-7915b8da7941' as UUID}
-        forHimId={'7c513ee0-956c-4b98-92ce-f6db8cf2a7be' as UUID}
-        accessoriesId={'55e8195e-2de2-4238-9745-cec29f270bf2' as UUID}
+        forHerId={'5582d88b-cf73-41ad-9b96-2505c7ae674a' as UUID}
+        forHimId={'c209f70d-3d66-4a79-8724-7309726eba25' as UUID}
+        accessoriesId={'8dad40f8-af15-4478-a60e-22f6ffc6717e' as UUID}
         title="Популярні товари"
       />
       <BenefitsSection />

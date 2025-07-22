@@ -12,7 +12,7 @@ interface DropdownMenuProps {
 
 function DropdownMenu({ isMenuOpen, submenu, onMouseLeave, onMouseEnter }: DropdownMenuProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const styles = useAnimatedHeight({ ref, isMenuOpen, deps: [submenu] })
+  const styles = useAnimatedHeight({ ref, open: isMenuOpen, deps: [submenu] })
 
   return (
     <animated.div

@@ -1,30 +1,40 @@
+import { useProductContext } from '@product/ProductContext'
 import Icons from '~/assets/images/icon-sprite.svg'
 import Button from '~/shared/components/Button/Button'
+
 import getImageURL from '~/shared/utils/imageUtils'
 
-export interface ProductMiniCardProps {
-  price: number
-  salePrice: number
-  isFavorite: boolean
+interface ProductMiniCardProps {
+  brandName: string
 }
-export default function ProductMiniCard({
-  price,
-  salePrice,
-  isFavorite,
-}: ProductMiniCardProps) {
+export default function ProductMiniCard({ brandName }: ProductMiniCardProps) {
+  const { product, isFavorite } = useProductContext()
+  const defaultImage = getImageURL('default-product-card.png')
+  let imageUrls = product.images?.map(img => img.imageUrl)
+  if (!imageUrls || imageUrls.length === 0) {
+    imageUrls = [defaultImage]
+  }
+
+  const price = product.price
+  const salePrice = product.salePrice
   const hasDiscount = salePrice < price
 
   return (
     <div className="hidden w-[336px] h-[224px] md:flex flex-col p-4 border border-[var(--hoverBorder)] rounded-[12px]">
       <div className="w-full h-full flex">
-        <img
-          className="object-cover w-[92px] h-[136px]"
-          src={getImageURL('testImag.png')}
-          alt="Опис зображення"
-        />
+        {imageUrls.length > 0 && (
+          <div className="w-[92px] h-[136px]">
+            <img
+              className="img-style object-cover rounded-[10px]"
+              src={imageUrls[0] ?? defaultImage}
+              alt={brandName}
+            />
+          </div>
+        )}
+
         <div className="flex flex-col justify-center gap-x-[10px] pl-[10px]">
           <p className="whitespace-nowrap text-base font-medium leading-[140%] w-[204px]">
-            Спортивний костюм Puma
+            {product.name}
           </p>
           <p className="whitespace-nowrap font-bold text-xl leading-[140%] tracking-normal">
             {hasDiscount

@@ -1,3 +1,4 @@
+import { useProductContext } from '@product/ProductContext'
 import { useState } from 'react'
 import { FreeMode, Navigation, Pagination, Thumbs } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -9,13 +10,15 @@ import 'swiper/css/navigation'
 import 'swiper/css/thumbs'
 
 interface ImageSliderProps {
-  imageUrls: (string | null)[] | undefined
   brandName: string
 }
 
-export default function ImageSlider({ imageUrls, brandName }: ImageSliderProps) {
+export default function ImageSlider({ brandName }: ImageSliderProps) {
   const [thumbsSwiper, setThumbsSwiper] = useState<any>(null)
   const defaultImage = getImageURL('default-product-card.png')
+  const { product } = useProductContext()
+  let imageUrls = product.images?.map(img => img.imageUrl)
+
   if (!imageUrls || imageUrls.length === 0) {
     imageUrls = [defaultImage]
   }
@@ -35,7 +38,7 @@ export default function ImageSlider({ imageUrls, brandName }: ImageSliderProps) 
           {imageUrls.map((url, index) => (
             <SwiperSlide key={index}>
               <img
-                className="img-style w-full h-auto object-cover rounded-[10px]"
+                className="img-style object-cover rounded-[10px]"
                 src={url ?? defaultImage}
                 alt={brandName}
               />

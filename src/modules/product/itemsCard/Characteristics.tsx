@@ -1,13 +1,11 @@
-import type { ProductMiniCardProps } from './ProductMiniCard'
 import CharacteristicRow from './CharacteristicRow'
 import ProductMiniCard from './ProductMiniCard'
 
-export interface CharacteristicsProps {
-  product: ProductMiniCardProps
+interface CharacteristicsProps {
+  brandName: string
+
 }
-export default function Characteristics({
-  product,
-}: CharacteristicsProps) {
+export default function Characteristics({ brandName }: CharacteristicsProps) {
   return (
     <div className="flex justify-between w-full gap-x-11 pt-6">
       <div className="grid grid-cols-[auto_150px] grid-rows-7 flex-grow">
@@ -28,7 +26,7 @@ export default function Characteristics({
         <CharacteristicRow label="Бренд" values={['Puma']} />
         <CharacteristicRow label="Країна виробник" values={['Китай']} />
       </div>
-      <ProductMiniCard {...product} />
+      <ProductMiniCard brandName={brandName} />
     </div>
   )
 }

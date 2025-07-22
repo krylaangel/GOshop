@@ -2,7 +2,6 @@ import type { ProductCardProps } from '~/shared/components/ProductCardComponent'
 
 import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { productService } from '~/api/services/productService'
 import Button from '~/shared/components/Button/Button'
 import ProductCardComponent from '~/shared/components/ProductCardComponent'
 import 'swiper/css'
@@ -31,6 +30,8 @@ interface ProductSectionProps {
 }
 
 import type { UUID } from '~/api/types'
+import { categoryService } from '@api/services/categoryService'
+import { extractProductsFromTree } from '@home/components/categoryTree'
 import { useEffect } from 'react'
 import getImageURL from '~/shared/utils/imageUtils'
 
@@ -45,17 +46,23 @@ function ProductSectionComponent({
   )
   const [categories, setCategories] = useState<Categories>(initialCategories)
   async function fetchProducts() {
-    const womenResponse = await productService.getByCategoryId(forHerId)
-    const menResponse = await productService.getByCategoryId(forHimId)
+    const womenResponse = await categoryService.getProductByCategoryId(forHerId)
+    const menResponse = await categoryService.getProductByCategoryId(forHimId)
+
     const accessoriesResponse
-        = await productService.getByCategoryId(accessoriesId)
+        = await categoryService.getProductByCategoryId(accessoriesId)
+
+    const womenProducts = extractProductsFromTree(womenResponse.data)
+    const menProducts = extractProductsFromTree(menResponse.data)
+    const accessoriesProducts = extractProductsFromTree(accessoriesResponse.data)
+
     const isFavorite = () => {
       return Boolean(Math.random() > 0.5)
     }
 
     setCategories(prev => ({
       ...prev,
-      [Category.WOMEN]: (womenResponse.data ?? []).map((product) => {
+      [Category.WOMEN]: womenProducts.map((product) => {
         return {
           id: product.id,
           imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
@@ -64,9 +71,12 @@ function ProductSectionComponent({
           salePrice: product.salePrice,
           averageRating: product.averageRating,
           isFavorite: isFavorite(),
+          name: product.name ?? '',
+          categoryId: product.categoryId ?? '',
+          categoryTree: [],
         }
       }),
-      [Category.MEN]: (menResponse.data ?? []).map(product => ({
+      [Category.MEN]: menProducts.map(product => ({
         id: product.id,
         imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
         brandName: product.name ?? '',
@@ -74,8 +84,11 @@ function ProductSectionComponent({
         salePrice: product.salePrice,
         averageRating: product.averageRating,
         isFavorite: isFavorite(),
+        name: product.name ?? '',
+        categoryId: product.categoryId ?? '',
+        categoryTree: [],
       })),
-      [Category.ACCESSORIES]: (accessoriesResponse.data ?? []).map(
+      [Category.ACCESSORIES]: accessoriesProducts.map(
         product => ({
           id: product.id,
           imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
@@ -84,6 +97,9 @@ function ProductSectionComponent({
           salePrice: product.salePrice,
           averageRating: product.averageRating,
           isFavorite: isFavorite(),
+          name: product.name ?? '',
+          categoryId: product.categoryId ?? '',
+          categoryTree: [],
         }),
       ),
     }))
@@ -110,17 +126,18 @@ function ProductSectionComponent({
         ))}
       </div>
       <Swiper
-        spaceBetween={16}
+        spaceBetween={4}
         slidesPerView={1.25}
         breakpoints={{
-          480: { slidesPerView: 2.25 },
-          768: { slidesPerView: 3.25 },
-          1024: { slidesPerView: 4 },
+          480: { slidesPerView: 2.25, spaceBetween: 8,
+          },
+          768: { slidesPerView: 3, spaceBetween: 12 },
+          1024: { slidesPerView: 4, spaceBetween: 16 },
         }}
-        className="w-full mt-9"
+        className="w-full mt-5"
       >
         {categories[activeCategory].map(product => (
-          <SwiperSlide key={product.id} className="w-full">
+          <SwiperSlide key={product.id} className="">
             <ProductCardComponent {...product} />
           </SwiperSlide>
         ))}

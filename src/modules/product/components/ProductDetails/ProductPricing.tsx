@@ -1,9 +1,9 @@
-interface ProductPricingProps {
-  price: number
-  salePrice: number
-}
+import { useProductContext } from '@product/ProductContext'
 
-export default function ProductPricing({ price, salePrice }: ProductPricingProps) {
+export default function ProductPricing() {
+  const { product } = useProductContext()
+  const price = product.price
+  const salePrice = product.salePrice
   const hasDiscount = salePrice < price
 
   return (

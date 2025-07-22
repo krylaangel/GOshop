@@ -6,7 +6,7 @@ import { useSpring } from 'react-spring'
 interface UseAnimatedHeightProps {
   ref: RefObject<HTMLElement | null>
   deps?: unknown[]
-  isMenuOpen: boolean
+  open: boolean
 }
 
 interface AnimatedStyles {
@@ -17,7 +17,7 @@ interface AnimatedStyles {
 export function useAnimatedHeight({
   ref,
   deps = [],
-  isMenuOpen,
+  open,
 }: UseAnimatedHeightProps): AnimatedStyles {
   const [contentHeight, setContentHeight] = useState(0)
 
@@ -25,11 +25,11 @@ export function useAnimatedHeight({
     if (ref.current) {
       setContentHeight(ref.current.scrollHeight)
     }
-  }, [isMenuOpen, ...deps])
+  }, [open, ...deps])
 
   return useSpring({
-    opacity: isMenuOpen ? 1 : 0,
-    height: isMenuOpen ? `${contentHeight}px` : '0px',
+    opacity: open ? 1 : 0,
+    height: open ? `${contentHeight}px` : '0px',
     config: { tension: 180, friction: 25 },
   })
 }

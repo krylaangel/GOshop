@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './Button.module.css'
 
-type ButtonVariant = 'primary' | 'secondary' | 'tertiary_dark' | 'tertiary_light'
+export type ButtonVariant = 'primary' | 'secondary' | 'tertiary_dark' | 'tertiary_light'
 type ButtonState = '' | 'selected'
 type IconPosition = 'left' | 'right' | 'only' | 'none'
 type ButtonSize = 'xs' | 'sm' | 'base' | 'lg' | 'xl'
