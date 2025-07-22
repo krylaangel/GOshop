@@ -9,9 +9,13 @@ export default function ProductHeader({ brandName }: ProductHeaderProps) {
   const { product, reviewCount } = useProductContext()
   const averageRating = product.averageRating
   const skuCode = product.skuCode
+  const name = product.name
   return (
     <>
-      <h2 className="font-bold text-4xl leading-[140%] tracking-normal text-black">
+      <h2 className="font-bold text-xl lg:text-4xl leading-[140%] tracking-normal text-black mt-4 md:mt-0">
+        {name}
+        {' '}
+        —
         {brandName}
       </h2>
       <div className="flex justify-between whitespace-wrap gap-x-6 w-full">

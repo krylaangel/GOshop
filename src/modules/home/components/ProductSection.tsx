@@ -1,6 +1,6 @@
 import type { ProductCardProps } from '~/shared/components/ProductCardComponent'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import Button from '~/shared/components/Button/Button'
 import ProductCardComponent from '~/shared/components/ProductCardComponent'
@@ -45,7 +45,7 @@ function ProductSectionComponent({
     Category.WOMEN,
   )
   const [categories, setCategories] = useState<Categories>(initialCategories)
-  async function fetchProducts() {
+  const fetchProducts = useCallback(async () => {
     const womenResponse = await categoryService.getProductByCategoryId(forHerId)
     const menResponse = await categoryService.getProductByCategoryId(forHimId)
 
@@ -62,7 +62,7 @@ function ProductSectionComponent({
 
     setCategories(prev => ({
       ...prev,
-      [Category.WOMEN]: womenProducts.map((product) => {
+      [Category.WOMEN]: womenProducts.map(({ product, path }) => {
         return {
           id: product.id,
           imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
@@ -73,10 +73,10 @@ function ProductSectionComponent({
           isFavorite: isFavorite(),
           name: product.name ?? '',
           categoryId: product.categoryId ?? '',
-          categoryTree: [],
+          categoryTree: path,
         }
       }),
-      [Category.MEN]: menProducts.map(product => ({
+      [Category.MEN]: menProducts.map(({ product, path }) => ({
         id: product.id,
         imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
         brandName: product.name ?? '',
@@ -86,10 +86,10 @@ function ProductSectionComponent({
         isFavorite: isFavorite(),
         name: product.name ?? '',
         categoryId: product.categoryId ?? '',
-        categoryTree: [],
+        categoryTree: path,
       })),
       [Category.ACCESSORIES]: accessoriesProducts.map(
-        product => ({
+        ({ product, path }) => ({
           id: product.id,
           imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
           brandName: product.name ?? '',
@@ -99,12 +99,13 @@ function ProductSectionComponent({
           isFavorite: isFavorite(),
           name: product.name ?? '',
           categoryId: product.categoryId ?? '',
-          categoryTree: [],
+          categoryTree: path,
         }),
       ),
     }))
     // #TODO handle isFavorite
-  }
+  }, [forHerId, forHimId, accessoriesId])
+
   useEffect(() => {
     fetchProducts()
   }, [])

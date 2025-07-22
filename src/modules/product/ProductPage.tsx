@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import Button from '~/shared/components/Button/Button'
 import ProductCardComponent from '~/shared/components/ProductCardComponent'
 import getImageURL from '~/shared/utils/imageUtils'
+import { useProductStore } from '~/store/useProductStore'
 import useProductView from './hooks/useProductView'
 import Characteristics from './itemsCard/Characteristics'
 import ProductAbout from './itemsCard/ProductAbout'
@@ -25,6 +26,7 @@ function ProductPage() {
     brandName,
     similarProducts,
   } = useProductView(true, true, true)
+  const categoryTree = useProductStore(state => state.categoryTree)
 
   const [activeCategory, setActiveCategory] = useState<Category>(Category.ABOUT)
   const [isFavorite] = useState(() => Boolean(Math.random()))
@@ -48,7 +50,6 @@ function ProductPage() {
     [Category.CHARACTERISTICS]: 'Характеристики',
     [Category.REVIEWS]: `Відгуки${reviewCount > 0 ? ` (${reviewCount})` : ''}`,
   }
-
   return (
     <div className="clamp">
       <Breadcrumbs />
@@ -101,6 +102,8 @@ function ProductPage() {
               salePrice={similar.salePrice}
               averageRating={similar.averageRating}
               isFavorite={isFavorite}
+              categoryTree={categoryTree}
+              name={similar.name ?? ''}
             />
           </SwiperSlide>
         ))}

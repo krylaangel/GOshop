@@ -1,26 +1,28 @@
 import type { Product } from '@api/types'
 import type { CategoryTree } from '@api/types/category'
 
-export function extractProductsFromTree(tree: CategoryTree | CategoryTree[]): Product[] {
-  const result: Product[] = []
+interface ProductWithPath {
+  product: Product
+  path: string[]
+}
+export function extractProductsFromTree(tree: CategoryTree | CategoryTree[]): ProductWithPath[] {
+  const result: ProductWithPath[] = []
 
-  const walk = (node: CategoryTree) => {
-    if (!tree)
-      return null
+  const walk = (node: CategoryTree, path: string[]) => {
+    const newPath = [...path, node.name]
 
-    if (node.products?.length) {
-      result.push(...node.products)
-    }
-    if (node.subCategories?.length) {
-      node.subCategories.forEach(walk)
-    }
+    node.products?.forEach((product) => {
+      result.push({ product, path: newPath })
+    })
+
+    node.subCategories?.forEach(sub => walk(sub, newPath))
   }
 
   if (Array.isArray(tree)) {
-    tree.forEach(walk)
+    tree.forEach(node => walk(node, []))
   }
   else {
-    walk(tree)
+    walk(tree, [])
   }
 
   return result
