@@ -1,38 +1,40 @@
+import type { UUID } from '@api/types'
+import findBreadcrumbPath from '@layout/components/Navigation/findBreadcrumbPath'
+import { categorySlugMap } from '@shared/constants/categoryUUIDMap'
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { useProductStore } from '~/store/useProductStore'
+import { Link } from 'react-router-dom'
 
-function Breadcrumbs() {
-  const location = useLocation()
+interface BreadcrumbProps {
+  categoryId: string
+  productName?: string
+}
+function Breadcrumbs({ categoryId, productName }: BreadcrumbProps) {
+  const categorySlug = categorySlugMap[categoryId as UUID]
+  const breadcrumbs = findBreadcrumbPath(categorySlug) ?? []
 
-  const pathNames = location.pathname.split('/').filter(x => x)
-  const { categoryTree: globalTree, productName: globalName } = useProductStore()
-
-  const state = location.state ?? {}
-  const categoryTree: string[] = state.categoryTree ?? globalTree
-  const productName: string = state.productName ?? globalName
-  const crumbs = categoryTree.length > 0 ? categoryTree : pathNames
+  const capitalizeFirst = (text: string) =>
+    text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
 
   return (
     <nav aria-label="breadcrumb">
-      <ol className="flex h-[25px] gap-x-2 leading-[140%] text-sm font-light text-[var(--baseColorText)]">
+      <ol className="flex flex-wrap h-[25px] gap-x-2 leading-[140%] text-sm font-light text-[var(--baseColorText)]">
         <li>
           <Link to="/">Головна</Link>
-          {(crumbs.length > 0 || productName) && ' / '}
+          {(breadcrumbs.length > 0 || productName) && ' / '}
         </li>
 
-        {crumbs.map((name, index) => {
-          const routeTo = `/${crumbs.slice(0, index + 1).join('/')}`
-          const isLast = index === crumbs.length - 1 && !productName
+        {breadcrumbs.map((crumb, index) => {
+          const isLast = index === breadcrumbs.length - 1 && !productName
           return (
-            <li key={routeTo}>
+            <li key={crumb.href}>
               {isLast
                 ? (
-                    <span>{name}</span>
+                    <span>{capitalizeFirst(crumb.label)}</span>
                   )
                 : (
                     <>
-                      <Link to={routeTo}>{name}</Link>
+                      <Link to={crumb.href}>{capitalizeFirst(crumb.label)}</Link>
+                      {' '}
                       {' '}
                       /
                       {' '}
@@ -41,7 +43,6 @@ function Breadcrumbs() {
             </li>
           )
         })}
-
         {productName && (
           <li>
             <span>{productName}</span>

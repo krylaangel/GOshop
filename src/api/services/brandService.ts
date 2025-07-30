@@ -2,6 +2,24 @@ import type { ApiResponse, Brand, UUID } from '../types'
 import { handleResponse } from '.'
 
 export const brandService = {
+  get: async (Search?: string, Page?: number, PageSize?: number, OrderBy?: string, SortDirection?: 'asc' | 'desc'): Promise<ApiResponse<Brand[]>> => {
+    const query = new URLSearchParams()
+
+    if (Search)
+      query.append('Search', Search)
+    if (Page !== undefined)
+      query.append('Page', Page.toString())
+    if (PageSize !== undefined)
+      query.append('PageSize', PageSize.toString())
+    if (OrderBy)
+      query.append('OrderBy', OrderBy)
+    if (SortDirection)
+      query.append('SortDirection', SortDirection)
+
+    const url = `/Brand?${query.toString()}`
+
+    return handleResponse(url)
+  },
   getAll: async (): Promise<ApiResponse<Brand[]>> => {
     return handleResponse((`/Brand/GetAll`))
   },

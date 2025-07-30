@@ -62,7 +62,7 @@ function ProductSectionComponent({
 
     setCategories(prev => ({
       ...prev,
-      [Category.WOMEN]: womenProducts.map(({ product, path }) => {
+      [Category.WOMEN]: womenProducts.map(({ product }) => {
         return {
           id: product.id,
           imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
@@ -73,10 +73,9 @@ function ProductSectionComponent({
           isFavorite: isFavorite(),
           name: product.name ?? '',
           categoryId: product.categoryId ?? '',
-          categoryTree: path,
         }
       }),
-      [Category.MEN]: menProducts.map(({ product, path }) => ({
+      [Category.MEN]: menProducts.map(({ product }) => ({
         id: product.id,
         imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
         brandName: product.name ?? '',
@@ -86,10 +85,9 @@ function ProductSectionComponent({
         isFavorite: isFavorite(),
         name: product.name ?? '',
         categoryId: product.categoryId ?? '',
-        categoryTree: path,
       })),
       [Category.ACCESSORIES]: accessoriesProducts.map(
-        ({ product, path }) => ({
+        ({ product }) => ({
           id: product.id,
           imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
           brandName: product.name ?? '',
@@ -99,7 +97,6 @@ function ProductSectionComponent({
           isFavorite: isFavorite(),
           name: product.name ?? '',
           categoryId: product.categoryId ?? '',
-          categoryTree: path,
         }),
       ),
     }))
@@ -111,15 +108,15 @@ function ProductSectionComponent({
   }, [])
 
   return (
-    <div className="flex flex-col text-center pb-9 clamp">
-      <h2 className="font-semibold text-2xl sm:text-3xl leading-[50.4px] py-9 tracking-widest">
+    <div className="flex flex-col text-center py-5 sm:py-12 lg:py-20 clamp">
+      <h2 className="font-medium text-2xl sm:text-4xl leading-[140%] tracking-widest my-6">
         {title}
       </h2>
-      <div className="text-[var(--baseColorText)] flex justify-center gap-x-10">
+      <div className="text-[var(--baseColorText)] flex justify-center gap-x-10 mb-8">
         {Object.values(Category).map(category => (
           <span
             key={category}
-            className={`${category === activeCategory ? 'menu__active' : ''} menu cursor-pointer whitespace-nowrap text-sm sm:text-lg`}
+            className={`${category === activeCategory ? 'menu__active' : ''} cursor-pointer whitespace-nowrap text-sm sm:text-lg`}
             onClick={() => setActiveCategory(category)}
           >
             {category}
@@ -135,7 +132,7 @@ function ProductSectionComponent({
           768: { slidesPerView: 3, spaceBetween: 12 },
           1024: { slidesPerView: 4, spaceBetween: 16 },
         }}
-        className="w-full mt-5"
+        className="w-full"
       >
         {categories[activeCategory].map(product => (
           <SwiperSlide key={product.id} className="">
@@ -144,7 +141,7 @@ function ProductSectionComponent({
         ))}
       </Swiper>
       <div className="flex justify-end w-full">
-        <Button className="w-full sm:w-1/2 sm:w-1/4 mt-2 md:mt-6">
+        <Button className="w-full sm:w-1/2 sm:w-1/4 ">
           Переглянути всі
         </Button>
       </div>

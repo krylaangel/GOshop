@@ -1,7 +1,6 @@
 import type { UUID } from '~/api/types'
 import { useNavigate } from 'react-router-dom'
 import Icons from '~/assets/images/icon-sprite.svg'
-import { useProductStore } from '~/store/useProductStore'
 import Button from './Button/Button'
 import RatingStars from './RatingStars'
 
@@ -13,7 +12,6 @@ export interface ProductCardProps {
   salePrice: number
   averageRating: number
   isFavorite: boolean
-  categoryTree?: string[]
   name: string
 }
 
@@ -25,19 +23,12 @@ function ProductCardComponent({
   salePrice,
   averageRating,
   isFavorite,
-  categoryTree,
-  name,
 }: ProductCardProps) {
   const hasDiscount = salePrice !== price
   const navigate = useNavigate()
-  const setCategoryTree = useProductStore(state => state.setCategoryTree)
-  const setProductName = useProductStore(state => state.setProductName)
   const handleBuyClick = () => {
-    setCategoryTree(categoryTree ?? [])
-    setProductName(name)
     navigate(`/product/${id}`)
   }
-
   return (
     <div className="h-[clamp(321px,100vh,547px)] w-full flex flex-col align-middle justify-center gap-y-[10px] sm:gap-y-4">
       <div className="h-[369px]"><img className="h-full w-full object-cover rounded-[10px]" src={imageUrl} alt={brandName} /></div>

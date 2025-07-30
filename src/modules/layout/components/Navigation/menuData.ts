@@ -6,9 +6,9 @@ export const menuData = [
       {
         heading: 'ВЗУТТЯ',
         submenu: [
-          { label: 'Черевики', href: '#' },
-          { label: 'Кеди', href: '#' },
-          { label: 'Кросівки', href: '#' },
+          { label: 'Черевики', href: '/forher/zhinochi-boots' },
+          { label: 'Кеди', href: '/forher/zhinochi-kedi' },
+          { label: 'Кросівки', href: '/forher/zhinochi-krosivki' },
         ],
       },
       {

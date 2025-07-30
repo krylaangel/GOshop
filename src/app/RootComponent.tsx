@@ -1,7 +1,8 @@
+import CategoryPage from '@modules/listProduct/CategoryPage'
+
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AuthPage from '~/modules/auth/AuthPage'
 import { UserProvider } from '~/modules/auth/hooks/useAuth'
-
 import HomePage from '~/modules/home/HomePage'
 import FooterComponent from '~/modules/layout/components/Footer'
 import About from '~/modules/layout/components/Footer/About'
@@ -22,6 +23,10 @@ function RootComponent() {
       <HeaderComponent />
       <UserProvider>
         <Routes>
+          <Route path="/forher/:categoryId" element={<CategoryPage />} />
+          <Route path="/forhim/:categoryId" element={<CategoryPage />} />
+          <Route path="/accessories/:categoryId" element={<CategoryPage />} />
+          <Route path="/:categoryId" element={<CategoryPage />} />
           <Route path="*" element={<NotFoundPage />} />
           <Route path={ROUTES.HOMEPAGE_ROUTE} element={<HomePage />} />
           <Route path={ROUTES.AUTH_ROUTE} element={<AuthPage />} />

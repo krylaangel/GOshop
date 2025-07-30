@@ -56,8 +56,8 @@ function NavigationItem({
           <div
             className={`
         z-100 block flex items-center justify-between w-full text-[var(--baseColorText)] uppercase text-lg
-        ${isFirst ? 'lg:pl-20 [@media(min-width:1193px)]:pl-[clamp(20px,100vw,150px)]' : ''}
-        ${isLast ? 'lg:pr-20 [@media(min-width:1193px)]:pr-[clamp(20px,100vw,150px)]' : ''}
+        ${isFirst ? 'lg:pl-20 [@media(min-width:1193px)]:pl-[clamp(20px,100vw,100px)]' : ''}
+        ${isLast ? 'lg:pr-20 [@media(min-width:1193px)]:pr-[clamp(20px,100vw,100px)]' : ''}
         ${isMenuOpen ? 'border-b-2 border-[var(--hoverBorder)] pt-[7px] lg:pt-0 pb-[7px] lg:pb-0' : ''}
       `}
           >

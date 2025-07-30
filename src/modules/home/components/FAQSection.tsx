@@ -36,11 +36,11 @@ function FAQSection() {
 
   return (
     <section className="clamp">
-      <div className="py-6 md:py-10 sm:py-20 sm:px-20">
+      <div className="pb-5 sm:pb-12 lg:pb-20">
         <h2 className="flex-center font-medium text-2xl md:text-4xl leading-[50.4px] tracking-[2.5] sm:tracking-[3.6px]">
           Питання і відповіді
         </h2>
-        <div className="mt-6 sm:mt-13">
+        <div className="mt-8">
           {faqs.map((faq, index) => (
             <div key={index}>
               <button

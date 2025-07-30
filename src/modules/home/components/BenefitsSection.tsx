@@ -2,7 +2,7 @@ import Icons from '~/assets/images/icon-sprite.svg'
 
 function BenefitsSection() {
   return (
-    <section className="clamp bg-[var(--secondaryBgColor)] flex-center flex-col py-5 sm:py-20 gap-4">
+    <section className="clamp bg-[var(--secondaryBgColor)] flex-center flex-col py-6 lg:py-10 gap-4">
       <h3 className="font-bold text-[var(--colorTextOther)] text-xl text-center sm:text-4xl leading-[50.4px] tracking-normal">
         4 причини замовити у нас
       </h3>

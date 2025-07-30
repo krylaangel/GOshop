@@ -1,4 +1,5 @@
 import { useWindowsSize } from '@layout/components/Navigation/hooks/useWindowsSize'
+import normalizeMenu from '@shared/utils/slug'
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import DropdownMenu from './DropdownMenu'
@@ -16,10 +17,8 @@ const NavigationComponent: React.FC<NavigationProps> = ({ isOpen, onCloseMenu })
   const [openMobileIndex, setOpenMobileIndex] = useState <number | null> (null)
   const { width } = useWindowsSize()
   const isDesktop = width >= 1024
-  useEffect(() => {
-    const index = menuData.findIndex(menu => location.pathname.startsWith(menu.href))
-    setActiveIndex(index !== -1 ? index : null)
-  }, [location.pathname])
+
+  const normalized = normalizeMenu(menuData)
 
   useEffect(() => {
     if (!isDesktop) {

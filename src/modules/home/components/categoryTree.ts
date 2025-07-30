@@ -5,6 +5,7 @@ interface ProductWithPath {
   product: Product
   path: string[]
 }
+
 export function extractProductsFromTree(tree: CategoryTree | CategoryTree[]): ProductWithPath[] {
   const result: ProductWithPath[] = []
 
@@ -26,4 +27,20 @@ export function extractProductsFromTree(tree: CategoryTree | CategoryTree[]): Pr
   }
 
   return result
+}
+
+export function findBreadcrumbsPath(category: CategoryTree, targetId: string, path: { id: string, name: string }[] = []): { id: string, name: string }[] | null {
+  const newPath = [...path, { id: category.id, name: category.name }]
+
+  if (category.id === targetId) {
+    return newPath
+  }
+
+  for (const sub of category.subCategories || []) {
+    const result = findBreadcrumbsPath(sub, targetId, newPath)
+    if (result)
+      return result
+  }
+
+  return null
 }

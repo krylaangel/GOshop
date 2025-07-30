@@ -6,7 +6,6 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import Button from '~/shared/components/Button/Button'
 import ProductCardComponent from '~/shared/components/ProductCardComponent'
 import getImageURL from '~/shared/utils/imageUtils'
-import { useProductStore } from '~/store/useProductStore'
 import useProductView from './hooks/useProductView'
 import Characteristics from './itemsCard/Characteristics'
 import ProductAbout from './itemsCard/ProductAbout'
@@ -26,8 +25,6 @@ function ProductPage() {
     brandName,
     similarProducts,
   } = useProductView(true, true, true)
-  const categoryTree = useProductStore(state => state.categoryTree)
-
   const [activeCategory, setActiveCategory] = useState<Category>(Category.ABOUT)
   const [isFavorite] = useState(() => Boolean(Math.random()))
 
@@ -50,9 +47,10 @@ function ProductPage() {
     [Category.CHARACTERISTICS]: 'Характеристики',
     [Category.REVIEWS]: `Відгуки${reviewCount > 0 ? ` (${reviewCount})` : ''}`,
   }
+
   return (
-    <div className="clamp">
-      <Breadcrumbs />
+    <div className="clamp mt-2">
+      {product.categoryId && <Breadcrumbs categoryId={product.categoryId} productName={product.name ?? undefined} />}
       <div className="h-15 items-center flex">
         <div className="text-black font-light flex justify-start gap-x-2 sm:gap-x-4 md:gap-x-6">
           {Object.values(Category).map(category => (
@@ -102,7 +100,6 @@ function ProductPage() {
               salePrice={similar.salePrice}
               averageRating={similar.averageRating}
               isFavorite={isFavorite}
-              categoryTree={categoryTree}
               name={similar.name ?? ''}
             />
           </SwiperSlide>

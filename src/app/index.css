@@ -35,7 +35,15 @@
 * {
   font-family: "roboto", serif;
 }
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
+.no-spinner[type='number'] {
+  -moz-appearance: textfield;
+}
 .hero-section {
   background-size: cover;
   background-position: center 30%;
