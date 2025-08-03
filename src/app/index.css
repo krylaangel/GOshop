@@ -111,6 +111,12 @@
 .footer-text {
   @apply font-medium text-white leading-[25.2px] text-left;
 }
+.footer-title{
+  @apply text-sm md:text-base lg:text-lg font-medium
+}
+.footer-links{
+  @apply text-xs md:text-sm lg:text-base font-medium;
+}
 
 .button__auth {
   @apply w-full my-[30px];

@@ -16,13 +16,13 @@ export const categoryService = {
     handleResponse(`/Category/${encodeURIComponent(categoryId)}/tree`),
 
   getProductsPaginated: async ({
-                                 categoryId,
-                                 page = 1,
-                                 pageSize = 12,
-                                 search = '',
-                                 orderBy = 'Name',
-                                 sortDirection = 'Asc',
-                               }: {
+    categoryId,
+    page = 1,
+    pageSize = 12,
+    search = '',
+    orderBy = 'Name',
+    sortDirection = 'Asc',
+  }: {
     categoryId: string
     page?: number
     pageSize?: number
@@ -30,7 +30,7 @@ export const categoryService = {
     orderBy?: string
     sortDirection?: 'Asc' | 'Desc'
   }): Promise<ApiResponse<Product[]>> =>
-      handleResponse(
-          `/Product/GetByCategoryId?categoryId=${encodeURIComponent(categoryId)}&page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(search)}&orderBy=${orderBy}&sortDirection=${sortDirection}`
-      ),
+    handleResponse(
+      `/Product/GetByCategoryId?categoryId=${encodeURIComponent(categoryId)}&page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(search)}&orderBy=${orderBy}&sortDirection=${sortDirection}`,
+    ),
 }

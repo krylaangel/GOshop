@@ -2,7 +2,7 @@ import getImageURL from '~/shared/utils/imageUtils'
 
 export function MeasureSize() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[minmax(0,380px)_1fr] h-[402px]">
+    <div className="grid grid-cols-1 md:grid-cols-[minmax(0,380px)_1fr] ">
       <div className="col-span-1">
         <img
           className="cover"

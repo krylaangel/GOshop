@@ -1,7 +1,8 @@
-import {ReactNode, useEffect} from 'react'
+import type { ReactNode } from 'react'
 import type { ButtonVariant } from '~/shared/components/Button/Button'
 import Button from '@shared/components/Button/Button'
 import { useExpandableSpring } from '@shared/hooks/useExpandableSpring'
+import { useEffect } from 'react'
 import { useRef, useState } from 'react'
 import { animated } from 'react-spring'
 
@@ -37,15 +38,15 @@ export default function Expanded({ children, variant, classNameButton = '', clas
         </div>
       </animated.div>
       {shouldShowButton && (
-          <div className="w-full flex justify-end">
-            <Button
-                variant={variant}
-                onClick={() => setExpanded(prev => !prev)}
-                className={classNameButton}
-            >
-              {expanded ? 'Згорнути' : 'Показати весь'}
-            </Button>
-          </div>
+        <div className="w-full flex justify-end">
+          <Button
+            variant={variant}
+            onClick={() => setExpanded(prev => !prev)}
+            className={classNameButton}
+          >
+            {expanded ? 'Згорнути' : 'Показати весь'}
+          </Button>
+        </div>
       )}
 
     </div>

@@ -39,9 +39,14 @@ function BrandFilter() {
       <div className="flex flex-col gap-y-3 mt-2">
         {brands.map(brand => (
           <label key={brand.id} className="block font-light text-lg leading-[1.4] text-[var(--secondarColorMenu)] uppercase">
-            <input onChange={handleChange} checked={selectedBrands.includes(brand.id)} type="checkbox"
-                   className="rounded-[2px] border
-                   mr-[10px] w-4 h-4 border-[var(--hoverBorder)!]" value={brand.id} />
+            <input
+              onChange={handleChange}
+              checked={selectedBrands.includes(brand.id)}
+              type="checkbox"
+              className="rounded-[2px] border
+                   mr-[10px] w-4 h-4 border-[var(--hoverBorder)!]"
+              value={brand.id}
+            />
             {brand.name}
 
           </label>

@@ -1,5 +1,6 @@
-import CategoryPage from '@modules/listProduct/CategoryPage'
+import { ChooseSize } from '@layout/components/Footer/ChooseSize'
 
+import CategoryPage from '@modules/listProduct/CategoryPage'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import AuthPage from '~/modules/auth/AuthPage'
 import { UserProvider } from '~/modules/auth/hooks/useAuth'
@@ -15,7 +16,6 @@ import NotFoundPage from '~/modules/notFound/NotFoundPage'
 import ProductPage from '~/modules/product/ProductPage'
 import { ROUTES } from '~/shared/constants/routes'
 import ScrollToTop from './ScrollToTop'
-import {ChooseSize} from "@layout/components/Footer/ChooseSize";
 
 function RootComponent() {
   return (
@@ -35,7 +35,7 @@ function RootComponent() {
           <Route path="/about" element={<About />} />
           <Route path="/returnOfGoods" element={<ReturnOfGoods />} />
           <Route path="/deliveryAndPayment" element={<DeliveryAndPayment />} />
-            <Route path="/chooseSize" element={<ChooseSize />} />
+          <Route path="/chooseSize" element={<ChooseSize />} />
           <Route path="/userAgreement" element={<UserAgreement />} />
           <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
         </Routes>
