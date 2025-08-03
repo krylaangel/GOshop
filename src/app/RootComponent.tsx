@@ -15,6 +15,7 @@ import NotFoundPage from '~/modules/notFound/NotFoundPage'
 import ProductPage from '~/modules/product/ProductPage'
 import { ROUTES } from '~/shared/constants/routes'
 import ScrollToTop from './ScrollToTop'
+import {ChooseSize} from "@layout/components/Footer/ChooseSize";
 
 function RootComponent() {
   return (
@@ -34,6 +35,7 @@ function RootComponent() {
           <Route path="/about" element={<About />} />
           <Route path="/returnOfGoods" element={<ReturnOfGoods />} />
           <Route path="/deliveryAndPayment" element={<DeliveryAndPayment />} />
+            <Route path="/chooseSize" element={<ChooseSize />} />
           <Route path="/userAgreement" element={<UserAgreement />} />
           <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
         </Routes>

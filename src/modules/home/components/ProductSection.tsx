@@ -109,7 +109,7 @@ function ProductSectionComponent({
 
   return (
     <div className="flex flex-col text-center py-5 sm:py-12 lg:py-20 clamp">
-      <h2 className="font-medium text-2xl sm:text-4xl leading-[140%] tracking-widest my-6">
+      <h2 className="font-medium text-2xl sm:text-4xl leading-[140%] tracking-widest mb-6">
         {title}
       </h2>
       <div className="text-[var(--baseColorText)] flex justify-center gap-x-10 mb-8">

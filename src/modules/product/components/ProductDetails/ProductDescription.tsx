@@ -32,7 +32,7 @@ export default function ProductDescription() {
           Електронні гаманці (PayPal, Apple Pay, Google Pay)
         </p>
         <p className="product-pay">Банківський переказ</p>
-        <p className="product-pay">Оплата при отриманні (п післяплата)</p>
+        <p className="product-pay">Оплата при отриманні (післяплата)</p>
       </div>
       <div className="flex flex-col gap-y-2 justify-end">
         <div className="flex gap-x-2">

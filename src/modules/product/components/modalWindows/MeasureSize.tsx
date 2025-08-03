@@ -2,7 +2,7 @@ import getImageURL from '~/shared/utils/imageUtils'
 
 export function MeasureSize() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[minmax(0,380px)_1fr] h-[402px] mt-10">
+    <div className="grid grid-cols-1 md:grid-cols-[minmax(0,380px)_1fr] h-[402px]">
       <div className="col-span-1">
         <img
           className="cover"
@@ -11,10 +11,10 @@ export function MeasureSize() {
         />
       </div>
       <div className="col-span-1">
-        <h1 className="font-medium text-lg leading-[140%] tracking-normal mt-2">
+        <h1 className="font-medium text-lg leading-[140%] tracking-normal mt-5 mb-7">
           Як правильно знімати мірки
         </h1>
-        <ol className="mt-[10px] list-decimal marker:font-medium list-inside mb-4">
+        <ol className="list-decimal marker:font-medium list-inside mb-4">
           <li className="measure">
             <span>Обхват грудей.</span>
             {' '}

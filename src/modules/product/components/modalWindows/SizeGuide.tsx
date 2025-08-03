@@ -31,7 +31,7 @@ export default function SizeGuide({
             </svg>
           </button>
         </div>
-        <div className="flex gap-x-2 md:gap-x-8">
+        <div className="flex gap-x-2 md:gap-x-8 mb-10">
           <Button
             variant={activeTab === 'size' ? 'primary' : 'secondary'}
             onClick={() => setActiveTab('size')}

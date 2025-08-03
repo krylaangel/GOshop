@@ -108,7 +108,7 @@ export default function CategoryPage() {
       <div className="grid grid-cols-[248px_1fr] w-full">
         <Filters />
 
-        <div className="ms-4 flex gap-x-4 flex-wrap">
+        <div className="ms-4 grid grid-cols-3 gap-x-4">
           {products.map((product, index) => (
             <div key={product.id} className="w-[248px]">
               <ProductCardComponent

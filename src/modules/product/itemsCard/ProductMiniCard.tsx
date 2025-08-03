@@ -33,7 +33,7 @@ export default function ProductMiniCard({ brandName }: ProductMiniCardProps) {
         )}
 
         <div className="flex flex-col justify-center gap-x-[10px] pl-[10px]">
-          <p className="whitespace-nowrap text-base font-medium leading-[140%] w-[204px]">
+          <p className="text-base font-medium leading-[140%] w-[204px] mb-[10px]">
             {product.name}
           </p>
           <p className="whitespace-nowrap font-bold text-xl leading-[140%] tracking-normal">

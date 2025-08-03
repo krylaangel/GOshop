@@ -52,7 +52,7 @@ function FooterComponent() {
           <Button
             variant="tertiary_light"
             className="footer-text text-sm md:text-base py-2"
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/chooseSize')}
           >
             Як обрати розмір
           </Button>

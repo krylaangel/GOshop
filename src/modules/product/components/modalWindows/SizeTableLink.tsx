@@ -2,7 +2,7 @@ export function SizeTable() {
   return (
     <div className="overflow-x-auto">
 
-      <table className="w-full text-lg text-left border mt-10 border-[var(--hoverBorder)] border-separate [@media(min-width:840px)]:border-collapse">
+      <table className="w-full text-lg text-left border border-[var(--hoverBorder)] border-separate [@media(min-width:840px)]:border-collapse">
         <thead>
           <tr>
             <th className="table-size__item scroll-size__item">Розмір виробника</th>
