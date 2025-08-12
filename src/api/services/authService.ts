@@ -44,11 +44,11 @@ export const authService = {
   },
   me: async (userId: string, userToken: string): Promise<ApiResponse<UserProfile>> => {
     return handleResponse<UserProfile>(
-      `/auth/me/${userId}`,
+      `/Auth/Me/${userId}`,
       {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${userToken}`,
+            Authorization: `Bearer ${userToken}`,
         },
       },
     )

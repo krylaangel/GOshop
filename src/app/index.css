@@ -2,6 +2,7 @@
 @tailwind utilities;
 
 @layer utilities {
+
   .clamp {
     padding-left: max(16px, calc((100vw - 1040px) / 2));
     padding-right: max(16px, calc((100vw - 1040px) / 2));

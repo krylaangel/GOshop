@@ -64,16 +64,14 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
   const signIn = useCallback(async (email: string, password: string) => {
     try {
-      console.warn('Attempting to sign in with email:', email)
       const response = await authService.login({ email, password })
-      console.warn('Sign in response:', response)
       if (response.isError) {
         throw new Error(response.errorMessage || 'Login failed')
       }
 
       const user = { id: response.data.id, token: response.data.token }
       setUser(user)
-      await localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('user', JSON.stringify(user))
       await checkAuth()
     }
     catch (error: any) {
