@@ -1,7 +1,8 @@
-import { useAuth } from '@auth/hooks/useAuth'
 import Button from '@shared/components/Button/Button'
 import InputField from '@shared/components/InputField'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuthStore } from '~/store/useAuth'
 
 function LoginForm({
   onNavigate,
@@ -11,27 +12,22 @@ function LoginForm({
   const [formData, setFormData] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const { signIn } = useAuth()
+  const navigate = useNavigate()
+  const { signIn, isLoading } = useAuthStore()
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    setIsSubmitting(true)
-    signIn(formData.email, formData.password)
-      .then()
-      .catch((err) => {
-        if (err) {
-          setError(err.message || 'Помилка авторизації')
-        }
-      })
-      .finally(() => {
-        setIsSubmitting(false)
-      })
+    try {
+      await signIn(formData.email, formData.password)
+      navigate('/')
+    }
+    catch (err: any) {
+      setError(err.message)
+    }
   }
 
   return (

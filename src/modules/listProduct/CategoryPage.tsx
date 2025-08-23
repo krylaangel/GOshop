@@ -1,10 +1,11 @@
 import type { Brand, Product, UUID } from '@api/types'
 import { categoryService } from '@api/services/categoryService'
 import { extractProductsFromTree } from '@home/components/categoryTree'
+import { useWindowsSize } from '@layout/components/Navigation/hooks/useWindowsSize'
 import { ClearBrandFilterButton } from '@modules/listProduct/components/ClearBrandFilterButton'
-import { ClearFiltersButton } from '@modules/listProduct/components/ClearFiltersButton'
 import { Filters } from '@modules/listProduct/components/Filters'
 import Breadcrumbs from '@shared/components/Breadcrumbs'
+import Button from '@shared/components/Button/Button'
 import ProductCardComponent from '@shared/components/ProductCardComponent'
 import { categoryUUIDMap } from '@shared/constants/categoryUUIDMap'
 import { ERROR_MESSAGES } from '@shared/constants/errors'
@@ -26,6 +27,9 @@ export default function CategoryPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const filtersRef = useRef<any>(null)
+  const { width } = useWindowsSize()
+  const isDesktop = width >= 768
+  const [open, setOpen] = useState(false)
 
   const isFavorite = () => {
     return Boolean(Math.random() > 0.5)
@@ -85,6 +89,14 @@ export default function CategoryPage() {
     fetchAllProductsInCategory()
   }, [categoryId])
 
+  useEffect(() => {
+    if (open && !isDesktop) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [open, isDesktop]);
+
   const productCountToShow = isFiltered ? filteredProducts.length : (productCountFromApi ?? 0)
 
   const hasActiveFilters = selectedBrands.length > 0
@@ -104,14 +116,18 @@ export default function CategoryPage() {
 
     return `Знайдено ${count} товарів`
   }
+
   const handleFilterChange = (filtered: ProductWithCategoryTree[]) => {
     setFilteredProducts(filtered)
     setIsFiltered(true)
   }
+
   const handleReset = async () => {
     if (filtersRef.current) {
       filtersRef.current.resetFilters()
     }
+    setSelectedBrands([])
+    setOpen(false);
     await fetchAllProductsInCategory()
   }
 
@@ -125,20 +141,19 @@ export default function CategoryPage() {
       {error && <p className="text-red-500">{error}</p>}
       {!loading && products.length === 0 && <p>Немає продуктів у цій категорії.</p>}
 
-      <div className="h-[49px] w-full">
-
+      <div className="w-full">
+        {!isDesktop && (<Button onClick={()=>setOpen(true)} className="px-6 py-2">Фільтри</Button>
+        )}
       </div>
 
-      <div className="h-[94px]  grid grid-cols-[248px_1fr] w-full">
+      <div className="grid grid-cols-[248px_1fr] w-full">
         <div className="text-xs flex-center font-normal text-[var(--baseColorText)] ">
           {getProductCountLabel(productCountToShow)}
         </div>
-        <div className="flex items-center">
-          <ClearFiltersButton
-            onClear={handleReset}
-            hasActiveFilters={hasActiveFilters}
-          />
-          <ClearBrandFilterButton
+        <div className="flex items-center flex-wrap">
+                  <ClearBrandFilterButton
+              onClear={handleReset}
+              hasActiveFilters={hasActiveFilters}
             selectedBrands={selectedBrandsWithNames}
             onRemoveBrand={(id) => {
               setSelectedBrands(prev => prev.filter(bid => bid !== id))
@@ -146,22 +161,41 @@ export default function CategoryPage() {
           />
         </div>
       </div>
-      <div className="grid grid-cols-[248px_1fr] w-full">
-        <Filters
-          key={categoryUUID}
-          onProductsChange={handleFilterChange}
-          currentCategoryId={categoryUUID}
-          ref={filtersRef}
-          selectedBrands={selectedBrands}
-          onSelectedBrandsChange={setSelectedBrands}
-          setAllBrands={setAllBrands}
-          allBrands={allBrands}
-          onResetFilters={() => fetchAllProductsInCategory().then(() => {})}
-        />
-
-        <div className="pl-1 grid grid-cols-3 gap-x-4">
+      <div className={`grid ${isDesktop ? 'grid-cols-[248px_1fr]' : 'grid-cols-1'} gap-4 relative`}>
+        {(isDesktop || open) &&(
+            <div
+                className={`
+        ${isDesktop ? 'static w-[248px]' : `
+          fixed top-0 left-0 px-4 h-full w-3/4 max-w-xs z-50 bg-white shadow-lg 
+          transform transition-transform duration-300 ease-in-out 
+          ${open ? 'translate-x-0' : '-translate-x-full'}`}  overflow-y-auto
+      `}
+            >
+              <div className="w-full justify-end flex">
+                <button onClick={() => setOpen(false)}
+                        className="w-4! h-4 text-[var(--inputField)] cursor-pointer md:hidden">X
+                </button>
+              </div>
+              <Filters
+                  key={categoryUUID}
+                  onProductsChange={handleFilterChange}
+                  currentCategoryId={categoryUUID}
+                  ref={filtersRef}
+                  selectedBrands={selectedBrands}
+                  onSelectedBrandsChange={setSelectedBrands}
+                  setAllBrands={setAllBrands}
+                  allBrands={allBrands}
+                  onResetFilters={() => fetchAllProductsInCategory().then(() => {})}
+        /></div>)}
+        {!isDesktop && open && (
+            <div
+                className="fixed inset-0 bg-black bg-opacity-50 z-40 overflow-y-auto"
+                onClick={() => setOpen(false)}
+            />
+        )}
+        <div className={`${(isDesktop || open) ? '' : 'pl-0'} grid grid-cols-2 xl:grid-cols-3 gap-x-4`}>
           {filteredProducts.map((product, index) => (
-            <div key={product.id} className="w-[248px]">
+              <div key={product.id} className="w-full">
               <ProductCardComponent
                 id={product.id}
                 imageUrl={product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png')}
@@ -171,6 +205,7 @@ export default function CategoryPage() {
                 averageRating={product.averageRating}
                 isFavorite={isFavorite()}
                 name={product.name ?? ''}
+                product={product}
               />
             </div>
           ))}

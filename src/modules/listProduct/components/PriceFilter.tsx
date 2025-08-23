@@ -79,7 +79,7 @@ function PriceFilter() {
           return (
             <div
               {...rest}
-              className="h-[3px] bg-[var(--hoverBorder)] my-4 cursor-pointer! outline-none
+              className="h-[3px] bg-[var(--hoverBorder)] my-4 cursor-pointer! outline-none mx-4
 "
             >
               {children}

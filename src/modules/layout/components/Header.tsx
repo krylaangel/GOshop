@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Icons from '~/assets/images/icon-sprite.svg'
-import { ROUTES } from '~/shared/constants/routes'
+import { useAuthStore } from '~/store/useAuth'
 import NavigationComponent from './Navigation/Navigation'
 
 function HeaderComponent() {
   const [isNavOpen, setIsNavOpen] = useState(false)
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated)
+  const navigate = useNavigate()
   useEffect(() => {
     if (isNavOpen) {
       document.body.classList.add('overflow-hidden')
@@ -16,6 +19,13 @@ function HeaderComponent() {
       document.body.classList.remove('overflow-hidden')
     }
   }, [isNavOpen])
+
+  const handleProfileClick = () => {
+    navigate(isAuthenticated ? '/profile' : '/auth')
+  }
+  const handleCartClick = () => {
+    navigate('/cart')
+  }
   return (
     <header className="h-[68px] sm:h-[136px] items-center clamp relative flex justify-between">
       <div className="flex">
@@ -51,7 +61,7 @@ function HeaderComponent() {
             <use href={`${Icons}#header_search`} />
           </svg>
         </button>
-        <button>
+        <button onClick={handleCartClick}>
           <svg className="icons__states header__icons">
             <use href={`${Icons}#header_cart`} />
           </svg>
@@ -61,11 +71,11 @@ function HeaderComponent() {
             <use href={`${Icons}#header_heart`} />
           </svg>
         </button>
-        <a href={ROUTES.AUTH_ROUTE}>
+        <button onClick={handleProfileClick}>
           <svg className="icons__states header__icons">
             <use href={`${Icons}#header_profile`} />
           </svg>
-        </a>
+        </button>
       </div>
     </header>
   )

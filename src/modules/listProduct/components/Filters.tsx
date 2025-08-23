@@ -18,8 +18,7 @@ export const Filters = forwardRef(({ setAllBrands, allBrands, onProductsChange, 
     onSelectedBrandsChange([])
     onResetFilters()
   }
-  useEffect(() => {
-  }, [selectedBrands])
+
   useImperativeHandle(ref, () => ({
     resetFilters,
   }))
@@ -39,6 +38,5 @@ export const Filters = forwardRef(({ setAllBrands, allBrands, onProductsChange, 
         />
       )}
     </div>
-
   )
 })

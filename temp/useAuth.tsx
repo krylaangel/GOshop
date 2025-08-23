@@ -1,6 +1,6 @@
 import type { User, UserData } from '@api/types'
 import { authService } from '@api/services/authService'
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 interface AuthContextType {
   user: User | null
@@ -10,6 +10,7 @@ interface AuthContextType {
   signOut: () => Promise<void>
   passwordRecovery: (email: string) => Promise<void>
   isLoading: boolean
+  isAuthenticated: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -140,8 +141,17 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const value = useMemo(
-    () => ({ userData, user, signIn, signUp, signOut, passwordRecovery, isLoading }),
-    [user, userData, signIn, signUp, signOut, passwordRecovery, isLoading],
+      () => ({
+        userData,
+        user,
+        signIn,
+        signUp,
+        signOut,
+        passwordRecovery,
+        isLoading,
+        isAuthenticated: !!user,   // вычисляется по user
+      }),
+      [user, userData, signIn, signUp, signOut, passwordRecovery, isLoading],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

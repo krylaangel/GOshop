@@ -73,6 +73,8 @@ function ProductSectionComponent({
           isFavorite: isFavorite(),
           name: product.name ?? '',
           categoryId: product.categoryId ?? '',
+          product,
+
         }
       }),
       [Category.MEN]: menProducts.map(({ product }) => ({
@@ -85,6 +87,8 @@ function ProductSectionComponent({
         isFavorite: isFavorite(),
         name: product.name ?? '',
         categoryId: product.categoryId ?? '',
+        product,
+
       })),
       [Category.ACCESSORIES]: accessoriesProducts.map(
         ({ product }) => ({
@@ -97,6 +101,7 @@ function ProductSectionComponent({
           isFavorite: isFavorite(),
           name: product.name ?? '',
           categoryId: product.categoryId ?? '',
+          product,
         }),
       ),
     }))

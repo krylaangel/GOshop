@@ -48,6 +48,7 @@ function BrandFilter({ setAllBrands, allBrands, onProductsChange, currentCategor
       setLoading(false)
     }
   }
+
   useEffect(() => {
     setPage(1)
     setHasMore(true)

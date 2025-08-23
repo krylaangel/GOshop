@@ -3,12 +3,15 @@ import Icons from '~/assets/images/icon-sprite.svg'
 import Button from '~/shared/components/Button/Button'
 
 import getImageURL from '~/shared/utils/imageUtils'
+import { useCartStore } from '~/store/useCartStore'
 
 interface ProductMiniCardProps {
   brandName: string
 }
 export default function ProductMiniCard({ brandName }: ProductMiniCardProps) {
   const { product, isFavorite } = useProductContext()
+  const addToCart = useCartStore(state => state.addToCart)
+
   const defaultImage = getImageURL('default-product-card.png')
   let imageUrls = product.images?.map(img => img.imageUrl)
   if (!imageUrls || imageUrls.length === 0) {
@@ -60,7 +63,7 @@ export default function ProductMiniCard({ brandName }: ProductMiniCardProps) {
       </div>
 
       <div className="w-full flex pt-4 gap-x-2">
-        <Button className="w-[240px] px-11 button">Купити</Button>
+        <Button onClick={() => addToCart(product)} className="w-[240px] px-11 button">Купити</Button>
         <Button className="w-[56px] justify-self-end">
           {isFavorite
             ? (

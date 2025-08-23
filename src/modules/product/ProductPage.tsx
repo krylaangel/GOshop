@@ -100,6 +100,7 @@ function ProductPage() {
               salePrice={similar.salePrice}
               averageRating={similar.averageRating}
               isFavorite={isFavorite}
+              product={product}
               name={similar.name ?? ''}
             />
           </SwiperSlide>

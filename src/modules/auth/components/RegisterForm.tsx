@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '~/shared/components/Button/Button'
 import { validateConfirmPassword, validateEmail, validateName, validatePassword, validateSurname } from '~/shared/utils/validators'
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '../../../../temp/useAuth'
 
 interface RegisterFormProps {
   onNavigate: (state: 'login' | 'emailSent') => void

@@ -194,7 +194,7 @@ input:-webkit-autofill {
   @apply border border-[var(--hoverBorder)] p-2 uppercase text-center whitespace-nowrap;
 }
 .scroll-size__item {
-  @apply sticky left-0 z-10 bg-[var(--hoverBorder)] border border-white;
+  @apply sticky left-0  bg-[var(--hoverBorder)] border border-white;
 }
 .measure {
   @apply text-sm font-light leading-[140%];
@@ -232,4 +232,5 @@ input:-webkit-autofill {
   --colorItemBlue: #008cd1;
   --colorItemGreen: #34a400;
   --colorItemPurple: #d402b8;
+  --colorQuantityInput: #E8E8E8;
 }

@@ -37,7 +37,8 @@ const NavigationComponent: React.FC<NavigationProps> = ({ isOpen, onCloseMenu })
       }`}
     >
       <ul
-        className={`${!isDesktop ? 'clamp' : ''} h-screen overflow-y-auto lg:h-auto flex whitespace-nowrap lg:items-center
+        className={`${!isDesktop ? 'clamp' : ''} h-screen overflow-y-auto lg:h-auto flex whitespace-nowrap 
+        lg:items-center
           lg:flex-row lg:static lg:justify-center
           flex-col bg-white z-10
           lg:flex bg-[var(--secondaryBgColor)]`}

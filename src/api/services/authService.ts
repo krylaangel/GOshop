@@ -48,7 +48,7 @@ export const authService = {
       {
         method: 'GET',
         headers: {
-            Authorization: `Bearer ${userToken}`,
+          Authorization: `Bearer ${userToken}`,
         },
       },
     )
@@ -58,6 +58,7 @@ export const authService = {
       `/auth/GetById/${userId}`,
       {
         method: 'GET',
+
       },
     )
   },

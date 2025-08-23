@@ -1,6 +1,6 @@
 import type { JSX } from 'react'
-import ImageSlider from '../components/itemsCard/ImageSlider'
 import ProductDetails from '../components/ProductDetails/ProductDetails'
+import ImageSlider from './ImageSlider'
 
 interface ProductAboutProps {
   brandName: string
