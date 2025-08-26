@@ -2,8 +2,15 @@ import InputField from '@shared/components/InputField'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '~/shared/components/Button/Button'
-import { validateConfirmPassword, validateEmail, validateName, validatePassword, validateSurname } from '~/shared/utils/validators'
-import { useAuth } from '../../../../temp/useAuth'
+import {
+  validateConfirmPassword,
+  validateEmail,
+  validateName,
+  validatePassword,
+  validatePhone,
+  validateSurname,
+} from '~/shared/utils/validators'
+import { useAuthStore } from '~/store/useAuth'
 
 interface RegisterFormProps {
   onNavigate: (state: 'login' | 'emailSent') => void
@@ -17,6 +24,7 @@ interface Errors {
   confirmPassword: string
   termsAccepted: string
   submit?: string
+  phoneNumber?: string
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ onNavigate }) => {
@@ -27,6 +35,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onNavigate }) => {
     password: '',
     confirmPassword: '',
     termsAccepted: false,
+    phoneNumber: '',
   })
 
   const [errors, setErrors] = useState<Errors>({
@@ -37,17 +46,19 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onNavigate }) => {
     confirmPassword: '',
     termsAccepted: '',
     submit: '',
+    phoneNumber: '',
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const navigate = useNavigate()
-  const { signUp } = useAuth()
+  const { signUp, isLoading } = useAuthStore()
   const validateForm = () => {
     const newErrors = {
       email: validateEmail(formData.email),
       name: validateName(formData.name),
       surname: validateSurname(formData.surname),
       password: validatePassword(formData.password),
+      phoneNumber: validatePhone(formData.phoneNumber),
       confirmPassword: validateConfirmPassword(formData.password, formData.confirmPassword),
       termsAccepted: formData.termsAccepted ? '' : 'Ви повинні погодитися з Політикою конфіденційності, щоб продовжити',
     }
@@ -67,7 +78,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onNavigate }) => {
     e.preventDefault()
 
     setIsSubmitting(true)
-    signUp(formData.email, formData.password, formData.name, formData.surname)
+    signUp(formData.email, formData.password, formData.name, formData.surname, formData.phoneNumber)
       .then(() => {
         onNavigate('emailSent')
       })
@@ -114,6 +125,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onNavigate }) => {
         value={formData.surname}
         onChange={handleChange}
         error={errors.surname}
+      />
+      <InputField
+        name="phoneNumber"
+        type="text"
+        placeholder="Телефон*"
+        value={formData.phoneNumber}
+        onChange={handleChange}
+        error={errors.phoneNumber}
       />
 
       <InputField
@@ -166,7 +185,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onNavigate }) => {
 
       <Button
         variant="primary"
-        disabled={isSubmitting && !isFormValid}
+        disabled={isSubmitting || !isFormValid}
         className="button__auth"
       >
         {isSubmitting ? 'Реєстрація...' : 'Зареєструватись'}

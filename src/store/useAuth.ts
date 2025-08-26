@@ -9,7 +9,7 @@ interface AuthState {
   isAuthenticated: boolean
   checkAuth: () => Promise<void>
   signIn: (email: string, password: string) => Promise<void>
-  signUp: (email: string, password: string, firstName: string, lastName: string) => Promise<void>
+  signUp: (email: string, password: string, firstName: string, lastName: string, phoneNumber: string) => Promise<void>
   signOut: () => Promise<void>
   passwordRecovery: (email: string) => Promise<void>
 }
@@ -41,6 +41,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           firstName: response.data.firstName,
           lastName: response.data.lastName,
           createdAt: response.data.createdAt,
+          phoneNumber: response.data.phoneNumber,
         },
         isAuthenticated: true,
         isLoading: false,
@@ -73,10 +74,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
-  signUp: async (email, password, firstName, lastName) => {
+  signUp: async (email, password, firstName, lastName, phoneNumber) => {
     set({ isLoading: true })
     try {
-      const response = await authService.register({ email, password, firstName, lastName })
+      const response = await authService.register({ email, password, firstName, lastName, phoneNumber })
       if (response.isError)
         throw new Error(response.errorMessage || 'Registration failed')
 
@@ -111,7 +112,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const response = await authService.forgotPassword({ email })
       if (response.isError)
         throw new Error(response.errorMessage || 'Password recovery failed')
-      console.log('Recovery email sent')
     }
     catch (err: any) {
       throw new Error(err.message || 'Failed to send recovery email')

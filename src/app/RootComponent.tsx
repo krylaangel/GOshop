@@ -1,8 +1,8 @@
 import { BasketPage } from '@cart/BasketPage'
 
-import { OrderPage } from '@cart/OrderPage'
 import { ChooseSize } from '@layout/components/Footer/ChooseSize'
 import CategoryPage from '@modules/listProduct/CategoryPage'
+import { OrderPage } from '@modules/order/OrderPage'
 import { UserProfile } from '@modules/profile/UserProfile'
 import { RequireAuth } from '@shared/utils/RequireAuth'
 import { useEffect } from 'react'
@@ -49,7 +49,7 @@ function RootComponent() {
         <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
         <Route path="/profile" element={<RequireAuth><UserProfile /></RequireAuth>} />
         <Route path="/cart" element={<BasketPage />} />
-        <Route path="/order" element={<OrderPage />} />
+        <Route path="/order" element={<RequireAuth><OrderPage /></RequireAuth>} />
 
       </Routes>
       <FooterComponent />

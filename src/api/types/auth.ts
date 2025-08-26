@@ -4,6 +4,7 @@ export interface RegisterUser {
   firstName: string
   lastName: string
   email: string
+  phoneNumber: string
   password: string
 }
 
@@ -35,6 +36,7 @@ export interface UserProfile {
   id: UUID
   email: string
   firstName?: string
+  phoneNumber?: string
   lastName?: string
   createdAt?: string
 }

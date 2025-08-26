@@ -3,6 +3,7 @@ import { brandService } from '@api/services/brandService'
 import { productService } from '@api/services/productService'
 import React, { useEffect, useState } from 'react'
 import Icons from '~/assets/images/icon-sprite.svg'
+import { useBrandStore } from '~/store/useBrandStore'
 
 interface BrandFilterProps {
   onProductsChange: (products: Product[]) => void
@@ -10,18 +11,16 @@ interface BrandFilterProps {
   onResetFilters: () => Promise<void>
   selectedBrands: UUID[]
   onSelectedBrandsChange: (brands: UUID[]) => void
-  setAllBrands?: (brands: Brand[]) => void
-  allBrands: Brand[]
-
 }
-function BrandFilter({ setAllBrands, allBrands, onProductsChange, currentCategoryId, onResetFilters, onSelectedBrandsChange, selectedBrands }: BrandFilterProps) {
+function BrandFilter({ onProductsChange, currentCategoryId, onResetFilters, onSelectedBrandsChange, selectedBrands }: BrandFilterProps) {
   const [search, setSearch] = useState('')
   const [brands, setBrands] = useState<Brand[]>([])
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(1)
-
+  const allBrands = useBrandStore(state => state.allBrands)
+  const setAllBrands = useBrandStore(state => state.setAllBrands)
   const pageSize = 10
 
   const fetchBrands = async (pageToLoad: number, searchTerm: string) => {
@@ -48,7 +47,6 @@ function BrandFilter({ setAllBrands, allBrands, onProductsChange, currentCategor
       setLoading(false)
     }
   }
-
   useEffect(() => {
     setPage(1)
     setHasMore(true)
@@ -132,20 +130,23 @@ function BrandFilter({ setAllBrands, allBrands, onProductsChange, currentCategor
           </label>
 
         ))}
-        <div onClick={loadMore} className="cursor-pointer flex w-full justify-between">
-          <p className="text-sm font-light text-[var(--baseColorText)]">
-            {' '}
-            {isOpen ? 'Свернути' : 'Показати ще'}
-          </p>
-          <svg
-            className={`w-[11px] h-[7px] fill-current text-[var(--baseColorText)] m-[7px] transition-transform duration-300 ${
-              isOpen ? 'rotate-180' : ''
-            }`}
-          >
-            <use href={`${Icons}#header_arrow-open`} />
-          </svg>
+        {!search && (
 
-        </div>
+          <div onClick={loadMore} className="cursor-pointer flex w-full justify-between">
+            <p className="text-sm font-light text-[var(--baseColorText)]">
+              {' '}
+              {isOpen ? 'Свернути' : 'Показати ще'}
+            </p>
+            <svg
+              className={`w-[11px] h-[7px] fill-current text-[var(--baseColorText)] m-[7px] transition-transform duration-300 ${
+                isOpen ? 'rotate-180' : ''
+              }`}
+            >
+              <use href={`${Icons}#header_arrow-open`} />
+            </svg>
+
+          </div>
+        )}
       </div>
 
     </div>

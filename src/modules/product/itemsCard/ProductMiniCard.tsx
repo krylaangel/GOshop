@@ -4,6 +4,8 @@ import Button from '~/shared/components/Button/Button'
 
 import getImageURL from '~/shared/utils/imageUtils'
 import { useCartStore } from '~/store/useCartStore'
+import {useState} from "react";
+import {Success} from "@shared/components/modalWindows/Success";
 
 interface ProductMiniCardProps {
   brandName: string
@@ -11,7 +13,12 @@ interface ProductMiniCardProps {
 export default function ProductMiniCard({ brandName }: ProductMiniCardProps) {
   const { product, isFavorite } = useProductContext()
   const addToCart = useCartStore(state => state.addToCart)
-
+  const [successMessage, setSuccessMessage] = useState('')
+  const handleAddToCart = () => {
+    addToCart(product)
+    setSuccessMessage("✅ Товар додано до корзини\n")
+    setTimeout(() => setSuccessMessage(''), 3000)
+  }
   const defaultImage = getImageURL('default-product-card.png')
   let imageUrls = product.images?.map(img => img.imageUrl)
   if (!imageUrls || imageUrls.length === 0) {
@@ -24,6 +31,7 @@ export default function ProductMiniCard({ brandName }: ProductMiniCardProps) {
 
   return (
     <div className="hidden w-[336px] h-[224px] md:flex flex-col p-4 border border-[var(--hoverBorder)] rounded-[12px]">
+      <Success successMessage={successMessage}/>
       <div className="w-full h-full flex">
         {imageUrls.length > 0 && (
           <div className="w-[92px] h-[136px]">
@@ -63,7 +71,7 @@ export default function ProductMiniCard({ brandName }: ProductMiniCardProps) {
       </div>
 
       <div className="w-full flex pt-4 gap-x-2">
-        <Button onClick={() => addToCart(product)} className="w-[240px] px-11 button">Купити</Button>
+        <Button onClick={handleAddToCart} className="w-[240px] px-11 button">Купити</Button>
         <Button className="w-[56px] justify-self-end">
           {isFavorite
             ? (

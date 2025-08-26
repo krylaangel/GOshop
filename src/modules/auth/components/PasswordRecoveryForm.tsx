@@ -2,7 +2,7 @@ import Button from '@shared/components/Button/Button'
 import InputField from '@shared/components/InputField'
 import { validateEmail } from '@shared/utils/validators'
 import { useState } from 'react'
-import { useAuth } from '../../../../temp/useAuth'
+import {useAuthStore} from "~/store/useAuth";
 
 function PasswordRecoveryForm({
   onNavigate,
@@ -13,7 +13,7 @@ function PasswordRecoveryForm({
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const { passwordRecovery } = useAuth()
+  const { passwordRecovery } = useAuthStore()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

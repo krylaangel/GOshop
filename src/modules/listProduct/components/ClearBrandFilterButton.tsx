@@ -1,6 +1,6 @@
 import type { UUID } from '@api/types'
+import { ClearFiltersButton } from '@modules/listProduct/components/ClearFiltersButton'
 import Button from '@shared/components/Button/Button'
-import {ClearFiltersButton} from "@modules/listProduct/components/ClearFiltersButton";
 
 interface ClearBrandFilterButtonProps {
   selectedBrands: Brand[]
@@ -20,8 +20,8 @@ export function ClearBrandFilterButton({ hasActiveFilters, onClear, selectedBran
   return (
     <div className="flex flex-wrap gap-4">
       <ClearFiltersButton
-          onClear={onClear}
-          hasActiveFilters={hasActiveFilters}
+        onClear={onClear}
+        hasActiveFilters={hasActiveFilters}
       />
       {selectedBrands.map(brand => (
         <Button

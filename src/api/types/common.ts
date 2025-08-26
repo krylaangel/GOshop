@@ -25,6 +25,7 @@ export interface Brand {
   description: string
   logoUrl: string
 }
+
 export interface Category {
   id: UUID
   name: string

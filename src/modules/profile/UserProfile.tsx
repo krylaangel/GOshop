@@ -3,8 +3,9 @@ import { useState } from 'react'
 import { useAuthStore } from '~/store/useAuth'
 
 export function UserProfile() {
-  const { user, userData } = useAuthStore()
+  const { userData } = useAuthStore()
   const [activeTab, setActiveTab] = useState<'data' | 'addresses' | 'orders'>('data')
+
   return (
     <div className="clamp grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-x-2 py-4">
       <div className="space-y-2">
@@ -24,9 +25,22 @@ export function UserProfile() {
 
           <div className="flex flex-col gap-3">
             <h2 className="w-full bg-[var(--hoverBorder)] rounded-lg p-3">Особисті данні:</h2>
-            <div className="border-[var(--hoverBorder)] border rounded-lg p-3">{userData?.firstName}</div>
-            <div className="border-[var(--hoverBorder)] border rounded-lg p-3">{userData?.lastName}</div>
-            <div className="border-[var(--hoverBorder)] border rounded-lg p-3">{userData?.email}</div>
+            <input
+              className="border rounded-lg px-3 py-2 w-full input-field input-field-styles"
+              value={userData?.firstName ?? ''}
+            />
+            <input
+              className="border rounded-lg px-3 py-2 input-field input-field-styles"
+              value={userData?.lastName ?? ''}
+            />
+            <input
+              className="border rounded-lg px-3 py-2 input-field input-field-styles"
+              value={userData?.phoneNumber}
+            />
+            <input
+              className="border rounded-lg px-3 py-2 input-field input-field-styles"
+              value={userData?.email ?? ''}
+            />
           </div>
         )}
         {activeTab === 'addresses' && (<div></div>)}

@@ -10,7 +10,7 @@ interface CartState {
   addToCart: (product: Product) => void
   removeFromCart: (id: string) => void
   updateQuantity: (id: string, quantity: number) => void
-
+    clearCart: () => void
 }
 
 export const useCartStore = create<CartState>(set => ({
@@ -45,4 +45,8 @@ export const useCartStore = create<CartState>(set => ({
       ),
     }))
   },
+    clearCart: () => {
+        localStorage.removeItem('cart')
+        set({ cart: [] })
+    }
 }))

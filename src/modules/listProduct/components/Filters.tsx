@@ -1,7 +1,7 @@
-import type { Brand, Product, UUID } from '@api/types'
+import type { Product, UUID } from '@api/types'
 import BrandFilter from '@modules/listProduct/components/BrandFilter'
 import PriceFilter from '@modules/listProduct/components/PriceFilter'
-import { forwardRef, useEffect, useImperativeHandle } from 'react'
+import { forwardRef, useImperativeHandle } from 'react'
 
 interface FiltersProps {
   onProductsChange: (products: Product[]) => void
@@ -9,11 +9,8 @@ interface FiltersProps {
   onResetFilters: () => Promise<void>
   selectedBrands: UUID[]
   onSelectedBrandsChange: (brands: UUID[]) => void
-  setAllBrands?: (brands: Brand[]) => void
-  allBrands: Brand[]
-
 }
-export const Filters = forwardRef(({ setAllBrands, allBrands, onProductsChange, currentCategoryId, onResetFilters, selectedBrands, onSelectedBrandsChange }: FiltersProps, ref) => {
+export const Filters = forwardRef(({ onProductsChange, currentCategoryId, onResetFilters, selectedBrands, onSelectedBrandsChange }: FiltersProps, ref) => {
   const resetFilters = () => {
     onSelectedBrandsChange([])
     onResetFilters()
@@ -33,8 +30,6 @@ export const Filters = forwardRef(({ setAllBrands, allBrands, onProductsChange, 
           onProductsChange={onProductsChange}
           currentCategoryId={currentCategoryId}
           onResetFilters={onResetFilters}
-          allBrands={allBrands}
-          setAllBrands={setAllBrands}
         />
       )}
     </div>

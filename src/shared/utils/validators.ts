@@ -21,7 +21,7 @@ export function validatePassword(password: string) {
 
   return ''
 }
-
+export const validatePhone = (phoneNumber: string) => !/^8\d{9}$/.test(phoneNumber) ? 'Телефон повинен бути в форматі 8066666666' : ''
 export const validateName = (name: string) => name.length < 3 ? 'Ім’я повинно містити хоча б 3 символи' : ''
 export const validateSurname = (surname: string) => surname.length < 3 ? 'Прізвище повинно містити хоча б 3 символи' : ''
 export const validateConfirmPassword = (password: string, confirmPassword: string) => password === confirmPassword ? '' : 'Паролі не співпадають'

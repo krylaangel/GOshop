@@ -1,4 +1,4 @@
-import type { Brand, Product, UUID } from '@api/types'
+import type { Product, UUID } from '@api/types'
 import { categoryService } from '@api/services/categoryService'
 import { extractProductsFromTree } from '@home/components/categoryTree'
 import { useWindowsSize } from '@layout/components/Navigation/hooks/useWindowsSize'
@@ -12,6 +12,7 @@ import { ERROR_MESSAGES } from '@shared/constants/errors'
 import getImageURL from '@shared/utils/imageUtils'
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useBrandStore } from '~/store/useBrandStore'
 
 type ProductWithCategoryTree = Product & { categoryTree?: string[] }
 
@@ -23,14 +24,14 @@ export default function CategoryPage() {
   const [isFiltered, setIsFiltered] = useState(false)
   const [filteredProducts, setFilteredProducts] = useState<ProductWithCategoryTree[]>([])
   const [products, setProducts] = useState<ProductWithCategoryTree[]>([])
-  const [allBrands, setAllBrands] = useState<Brand[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const filtersRef = useRef<any>(null)
   const { width } = useWindowsSize()
   const isDesktop = width >= 768
   const [open, setOpen] = useState(false)
-
+  const allBrands = useBrandStore(state => state.allBrands)
+  const setAllBrands = useBrandStore(state => state.setAllBrands)
   const isFavorite = () => {
     return Boolean(Math.random() > 0.5)
   }
@@ -91,11 +92,12 @@ export default function CategoryPage() {
 
   useEffect(() => {
     if (open && !isDesktop) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = 'hidden'
     }
-  }, [open, isDesktop]);
+    else {
+      document.body.style.overflow = ''
+    }
+  }, [open, isDesktop])
 
   const productCountToShow = isFiltered ? filteredProducts.length : (productCountFromApi ?? 0)
 
@@ -127,7 +129,7 @@ export default function CategoryPage() {
       filtersRef.current.resetFilters()
     }
     setSelectedBrands([])
-    setOpen(false);
+    setOpen(false)
     await fetchAllProductsInCategory()
   }
 
@@ -142,7 +144,7 @@ export default function CategoryPage() {
       {!loading && products.length === 0 && <p>Немає продуктів у цій категорії.</p>}
 
       <div className="w-full">
-        {!isDesktop && (<Button onClick={()=>setOpen(true)} className="px-6 py-2">Фільтри</Button>
+        {!isDesktop && (<Button onClick={() => setOpen(true)} className="px-6 py-2 my-2">Фільтри</Button>
         )}
       </div>
 
@@ -151,9 +153,9 @@ export default function CategoryPage() {
           {getProductCountLabel(productCountToShow)}
         </div>
         <div className="flex items-center flex-wrap">
-                  <ClearBrandFilterButton
-              onClear={handleReset}
-              hasActiveFilters={hasActiveFilters}
+          <ClearBrandFilterButton
+            onClear={handleReset}
+            hasActiveFilters={hasActiveFilters}
             selectedBrands={selectedBrandsWithNames}
             onRemoveBrand={(id) => {
               setSelectedBrands(prev => prev.filter(bid => bid !== id))
@@ -162,40 +164,45 @@ export default function CategoryPage() {
         </div>
       </div>
       <div className={`grid ${isDesktop ? 'grid-cols-[248px_1fr]' : 'grid-cols-1'} gap-4 relative`}>
-        {(isDesktop || open) &&(
-            <div
-                className={`
-        ${isDesktop ? 'static w-[248px]' : `
+        {(isDesktop || open) && (
+          <div
+            className={`
+        ${isDesktop
+            ? 'static w-[248px]'
+            : `
           fixed top-0 left-0 px-4 h-full w-3/4 max-w-xs z-50 bg-white shadow-lg 
           transform transition-transform duration-300 ease-in-out 
           ${open ? 'translate-x-0' : '-translate-x-full'}`}  overflow-y-auto
       `}
-            >
-              <div className="w-full justify-end flex">
-                <button onClick={() => setOpen(false)}
-                        className="w-4! h-4 text-[var(--inputField)] cursor-pointer md:hidden">X
-                </button>
-              </div>
-              <Filters
-                  key={categoryUUID}
-                  onProductsChange={handleFilterChange}
-                  currentCategoryId={categoryUUID}
-                  ref={filtersRef}
-                  selectedBrands={selectedBrands}
-                  onSelectedBrandsChange={setSelectedBrands}
-                  setAllBrands={setAllBrands}
-                  allBrands={allBrands}
-                  onResetFilters={() => fetchAllProductsInCategory().then(() => {})}
-        /></div>)}
-        {!isDesktop && open && (
-            <div
-                className="fixed inset-0 bg-black bg-opacity-50 z-40 overflow-y-auto"
+          >
+            <div className="w-full justify-end flex">
+              <button
                 onClick={() => setOpen(false)}
+                className="w-4! h-4 text-[var(--inputField)] cursor-pointer md:hidden"
+              >
+                X
+              </button>
+            </div>
+            <Filters
+              key={categoryUUID}
+              onProductsChange={handleFilterChange}
+              currentCategoryId={categoryUUID}
+              ref={filtersRef}
+              selectedBrands={selectedBrands}
+              onSelectedBrandsChange={setSelectedBrands}
+              onResetFilters={() => fetchAllProductsInCategory().then(() => {})}
             />
+          </div>
+        )}
+        {!isDesktop && open && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-40 overflow-y-auto"
+            onClick={() => setOpen(false)}
+          />
         )}
         <div className={`${(isDesktop || open) ? '' : 'pl-0'} grid grid-cols-2 xl:grid-cols-3 gap-x-4`}>
           {filteredProducts.map((product, index) => (
-              <div key={product.id} className="w-full">
+            <div key={product.id} className="w-full">
               <ProductCardComponent
                 id={product.id}
                 imageUrl={product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png')}
