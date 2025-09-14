@@ -46,10 +46,10 @@ async function resolveErrorDetails(
       const apiError = await error.response.json() as ServerApiError
       errorCode = apiError.errorCode ?? ''
       errorMessage
-        = (errorCode && ERROR_MESSAGES[errorCode])
-          ?? ERROR_MESSAGES[status.toString()]
-          ?? apiError.message
-          ?? ERROR_MESSAGES.DEFAULT
+          = (errorCode && ERROR_MESSAGES[errorCode])
+            ?? ERROR_MESSAGES[status.toString()]
+            ?? apiError.message
+            ?? ERROR_MESSAGES.DEFAULT
     }
     catch {
       errorMessage = ERROR_MESSAGES[status.toString()] ?? ERROR_MESSAGES.DEFAULT
@@ -85,9 +85,9 @@ export async function handleResponse<T>(
     const response = await retry(
       async () => {
         const body
-          = options.body && typeof options.body === 'object'
-            ? JSON.stringify(options.body)
-            : options.body
+              = options.body && typeof options.body === 'object'
+                ? JSON.stringify(options.body)
+                : options.body
 
         const res = await fetch(`${API_CONFIG.BASE_URL}${url}`, {
           method: options.method,
@@ -96,9 +96,6 @@ export async function handleResponse<T>(
           mode: options.mode,
           signal: options.signal,
         })
-        if (!res.ok) {
-          throw new ApiError(`HTTP ${res.status}`, { status: res.status, response: res })
-        }
         return res
       },
       {
@@ -114,22 +111,48 @@ export async function handleResponse<T>(
       },
     )
 
-    const responseJson = await response.json()
-    if (responseJson.error) {
-      throw new ApiError(responseJson.error.message, {
+    // --- Безопасное чтение ответа ---
+    let responseData: any = null
+    const contentType = response.headers.get('content-type') ?? ''
+
+    try {
+      if (contentType.includes('application/json')) {
+        responseData = await response.json()
+      }
+      else {
+        responseData = await response.text()
+      }
+    }
+    catch (parseError) {
+      console.warn('Failed to parse response body', parseError)
+      responseData = null
+    }
+
+    // --- Ошибки по статусу ---
+    if (!response.ok) {
+      throw new ApiError(`HTTP ${response.status}`, {
         status: response.status,
         response,
-        errorCode: responseJson.error.code,
+        errorCode: typeof responseData === 'object' ? responseData?.error?.code : undefined,
       })
     }
-    else {
-      const data = responseJson.data as T || responseJson as T
-      return {
-        isError: false,
-        data,
-        errorMessage: '',
+
+    // --- Ошибки по формату ответа ---
+    if (typeof responseData === 'object' && responseData?.error) {
+      throw new ApiError(responseData.error.message, {
         status: response.status,
-      }
+        response,
+        errorCode: responseData.error.code,
+      })
+    }
+
+    // --- Успех ---
+    const data = (responseData?.data as T) ?? (responseData as T)
+    return {
+      isError: false,
+      data,
+      errorMessage: '',
+      status: response.status,
     }
   }
   catch (error: unknown) {

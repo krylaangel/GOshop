@@ -1,22 +1,35 @@
+import type { ColorsOption } from '@shared/constants/colors'
+import type { SizesOption } from '@shared/constants/sizes'
 import { useProductContext } from '@product/ProductContext'
+
+import { Success } from '@shared/components/modalWindows/Success'
+import { useState } from 'react'
 import Icons from '~/assets/images/icon-sprite.svg'
 import Button from '~/shared/components/Button/Button'
-
 import getImageURL from '~/shared/utils/imageUtils'
 import { useCartStore } from '~/store/useCartStore'
-import {useState} from "react";
-import {Success} from "@shared/components/modalWindows/Success";
 
 interface ProductMiniCardProps {
   brandName: string
+  selectedSize: SizesOption | null
+  selectedColor: ColorsOption | null
+  setSelectedSize: (size: SizesOption | null) => void
+  setSelectedColor: (color: ColorsOption | null) => void
+
 }
-export default function ProductMiniCard({ brandName }: ProductMiniCardProps) {
+export default function ProductMiniCard({ brandName, selectedSize, selectedColor, setSelectedSize, setSelectedColor }: ProductMiniCardProps) {
   const { product, isFavorite } = useProductContext()
   const addToCart = useCartStore(state => state.addToCart)
   const [successMessage, setSuccessMessage] = useState('')
   const handleAddToCart = () => {
-    addToCart(product)
-    setSuccessMessage("✅ Товар додано до корзини\n")
+    if (!selectedSize || !selectedColor)
+      return
+    addToCart({ product, size: selectedSize, color: selectedColor })
+
+    setSuccessMessage('✅ Товар додано до корзини\n')
+    setSelectedColor(null)
+    setSelectedSize(null)
+
     setTimeout(() => setSuccessMessage(''), 3000)
   }
   const defaultImage = getImageURL('default-product-card.png')
@@ -31,7 +44,9 @@ export default function ProductMiniCard({ brandName }: ProductMiniCardProps) {
 
   return (
     <div className="hidden w-[336px] h-[224px] md:flex flex-col p-4 border border-[var(--hoverBorder)] rounded-[12px]">
-      <Success successMessage={successMessage}/>
+      {successMessage && (
+        <Success successMessage={successMessage} />
+      )}
       <div className="w-full h-full flex">
         {imageUrls.length > 0 && (
           <div className="w-[92px] h-[136px]">
@@ -71,7 +86,8 @@ export default function ProductMiniCard({ brandName }: ProductMiniCardProps) {
       </div>
 
       <div className="w-full flex pt-4 gap-x-2">
-        <Button onClick={handleAddToCart} className="w-[240px] px-11 button">Купити</Button>
+        <Button         disabled={!selectedSize || !selectedColor}
+                        onClick={handleAddToCart} className="w-[240px] px-11 button">Купити</Button>
         <Button className="w-[56px] justify-self-end">
           {isFavorite
             ? (

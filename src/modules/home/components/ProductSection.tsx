@@ -5,6 +5,12 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import Button from '~/shared/components/Button/Button'
 import ProductCardComponent from '~/shared/components/ProductCardComponent'
 import 'swiper/css'
+import type { UUID } from '~/api/types'
+import { categoryService } from '@api/services/categoryService'
+import { extractProductsFromTree } from '@home/components/categoryTree'
+import { useEffect } from 'react'
+import getImageURL from '~/shared/utils/imageUtils'
+import {ProductCardSkeleton} from "@shared/skeleton/ProductCardSkeleton";
 
 enum Category {
   WOMEN = 'ДЛЯ НЕЇ',
@@ -28,13 +34,6 @@ interface ProductSectionProps {
   forHimId: UUID
   accessoriesId: UUID
 }
-
-import type { UUID } from '~/api/types'
-import { categoryService } from '@api/services/categoryService'
-import { extractProductsFromTree } from '@home/components/categoryTree'
-import { useEffect } from 'react'
-import getImageURL from '~/shared/utils/imageUtils'
-
 function ProductSectionComponent({
   title,
   forHerId,
@@ -45,66 +44,73 @@ function ProductSectionComponent({
     Category.WOMEN,
   )
   const [categories, setCategories] = useState<Categories>(initialCategories)
-  const fetchProducts = useCallback(async () => {
-    const womenResponse = await categoryService.getProductByCategoryId(forHerId)
-    const menResponse = await categoryService.getProductByCategoryId(forHimId)
+    const [loading, setLoading] = useState(true)
 
-    const accessoriesResponse
-        = await categoryService.getProductByCategoryId(accessoriesId)
+    const fetchProducts = useCallback(async () => {
+        try {
+            const womenResponse = await categoryService.getProductByCategoryId(forHerId)
+            const menResponse = await categoryService.getProductByCategoryId(forHimId)
 
-    const womenProducts = extractProductsFromTree(womenResponse.data)
-    const menProducts = extractProductsFromTree(menResponse.data)
-    const accessoriesProducts = extractProductsFromTree(accessoriesResponse.data)
+            const accessoriesResponse
+                = await categoryService.getProductByCategoryId(accessoriesId)
 
-    const isFavorite = () => {
-      return Boolean(Math.random() > 0.5)
-    }
+            const womenProducts = extractProductsFromTree(womenResponse.data)
+            const menProducts = extractProductsFromTree(menResponse.data)
+            const accessoriesProducts = extractProductsFromTree(accessoriesResponse.data)
 
-    setCategories(prev => ({
-      ...prev,
-      [Category.WOMEN]: womenProducts.map(({ product }) => {
-        return {
-          id: product.id,
-          imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
-          brandName: product.name ?? '',
-          price: product.price,
-          salePrice: product.salePrice,
-          averageRating: product.averageRating,
-          isFavorite: isFavorite(),
-          name: product.name ?? '',
-          categoryId: product.categoryId ?? '',
-          product,
+            const isFavorite = () => {
+                return Boolean(Math.random() > 0.5)
+            }
 
+            setCategories(prev => ({
+                ...prev,
+                [Category.WOMEN]: womenProducts.map(({ product }) => {
+                    return {
+                        id: product.id,
+                        imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
+                        brandName: product.name ?? '',
+                        price: product.price,
+                        salePrice: product.salePrice,
+                        averageRating: product.averageRating,
+                        isFavorite: isFavorite(),
+                        name: product.name ?? '',
+                        categoryId: product.categoryId ?? '',
+                        product,
+
+                    }
+                }),
+                [Category.MEN]: menProducts.map(({ product }) => ({
+                    id: product.id,
+                    imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
+                    brandName: product.name ?? '',
+                    price: product.price,
+                    salePrice: product.salePrice,
+                    averageRating: product.averageRating,
+                    isFavorite: isFavorite(),
+                    name: product.name ?? '',
+                    categoryId: product.categoryId ?? '',
+                    product,
+
+                })),
+                [Category.ACCESSORIES]: accessoriesProducts.map(
+                    ({ product }) => ({
+                        id: product.id,
+                        imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
+                        brandName: product.name ?? '',
+                        price: product.price,
+                        salePrice: product.salePrice,
+                        averageRating: product.averageRating,
+                        isFavorite: isFavorite(),
+                        name: product.name ?? '',
+                        categoryId: product.categoryId ?? '',
+                        product,
+                    }),
+                ),
+            }))
+        }finally {
+            setLoading(false)
         }
-      }),
-      [Category.MEN]: menProducts.map(({ product }) => ({
-        id: product.id,
-        imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
-        brandName: product.name ?? '',
-        price: product.price,
-        salePrice: product.salePrice,
-        averageRating: product.averageRating,
-        isFavorite: isFavorite(),
-        name: product.name ?? '',
-        categoryId: product.categoryId ?? '',
-        product,
 
-      })),
-      [Category.ACCESSORIES]: accessoriesProducts.map(
-        ({ product }) => ({
-          id: product.id,
-          imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
-          brandName: product.name ?? '',
-          price: product.price,
-          salePrice: product.salePrice,
-          averageRating: product.averageRating,
-          isFavorite: isFavorite(),
-          name: product.name ?? '',
-          categoryId: product.categoryId ?? '',
-          product,
-        }),
-      ),
-    }))
     // #TODO handle isFavorite
   }, [forHerId, forHimId, accessoriesId])
 
@@ -139,11 +145,17 @@ function ProductSectionComponent({
         }}
         className="w-full"
       >
-        {categories[activeCategory].map(product => (
-          <SwiperSlide key={product.id} className="">
-            <ProductCardComponent {...product} />
-          </SwiperSlide>
-        ))}
+          {loading
+              ? Array.from({ length: 4 }).map((_, index) => (
+                  <SwiperSlide key={index}>
+                      <ProductCardSkeleton />
+                  </SwiperSlide>
+              ))
+              : categories[activeCategory].map(product => (
+                  <SwiperSlide key={product.id}>
+                      <ProductCardComponent {...product} />
+                  </SwiperSlide>
+              ))}
       </Swiper>
       <div className="flex justify-end w-full">
         <Button className="w-full sm:w-1/2 sm:w-1/4 ">

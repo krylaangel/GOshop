@@ -1,19 +1,17 @@
-import { useState } from 'react'
-
 interface Addresses {
-    city: string
-    street: string
-    numberBuilding: string
-    flat: string
-    flor: string
-    frontDoor: string
+  city: string
+  street: string
+  numberBuilding: string
+  flat: string
+  flor: string
+  frontDoor: string
 }
 
 interface DeliveryProps {
-    selected: string
-    setSelected: (method: string) => void
-    addresses: Addresses
-    setAddresses: (addresses: Addresses) => void
+  selected: string
+  setSelected: (method: string) => void
+  addresses: Addresses
+  setAddresses: (addresses: Addresses) => void
 }
 export function Delivery({ selected, setSelected, addresses, setAddresses }: DeliveryProps) {
   const deliveryMethod = ['Самовивіз', 'Відділення Нова Пошта', 'Кур\'єр Нова Пошта', 'Поштомат Нова Пошта']
@@ -24,7 +22,7 @@ export function Delivery({ selected, setSelected, addresses, setAddresses }: Del
         className="border rounded-lg px-3 py-2 w-full input-field input-field-styles"
         value={addresses.city}
         placeholder="Місто"
-        onChange={e => setAddresses({...addresses, city: e.target.value})}
+        onChange={e => setAddresses({ ...addresses, city: e.target.value })}
       />
       <div className="flex gap-4 flex-wrap justify-between">
         {deliveryMethod.map(num => (
@@ -71,22 +69,21 @@ export function Delivery({ selected, setSelected, addresses, setAddresses }: Del
               className="border rounded-lg px-3 py-2 w-full input-field input-field-styles"
               value={addresses.street}
               placeholder="Вулиця*"
-              onChange={e => setAddresses({...addresses, street: e.target.value})}
-
+              onChange={e => setAddresses({ ...addresses, street: e.target.value })}
 
             />
             <div className="flex gap-6">
               <input
                 className="border rounded-lg px-3 py-2 input-field input-field-styles"
                 value={addresses.numberBuilding}
-                onChange={e => setAddresses({...addresses, numberBuilding: e.target.value})}
+                onChange={e => setAddresses({ ...addresses, numberBuilding: e.target.value })}
 
                 placeholder="Номер будинку*"
               />
               <input
                 className="border rounded-lg px-3 py-2 input-field input-field-styles"
                 value={addresses.flat}
-                onChange={e => setAddresses({...addresses, flat: e.target.value})}
+                onChange={e => setAddresses({ ...addresses, flat: e.target.value })}
 
                 placeholder="Номер квартири"
               />
@@ -96,7 +93,7 @@ export function Delivery({ selected, setSelected, addresses, setAddresses }: Del
                 className="border rounded-lg px-3 py-2 input-field input-field-styles"
                 value={addresses.frontDoor}
                 placeholder="Під'їзд"
-                onChange={e => setAddresses({...addresses, frontDoor: e.target.value})}
+                onChange={e => setAddresses({ ...addresses, frontDoor: e.target.value })}
 
               />
 
@@ -104,7 +101,7 @@ export function Delivery({ selected, setSelected, addresses, setAddresses }: Del
                 className="border rounded-lg px-3 py-2 input-field input-field-styles"
                 value={addresses.flor}
                 placeholder="Поверх"
-                onChange={e => setAddresses({...addresses, flor: e.target.value})}
+                onChange={e => setAddresses({ ...addresses, flor: e.target.value })}
 
               />
             </div>
@@ -117,8 +114,7 @@ export function Delivery({ selected, setSelected, addresses, setAddresses }: Del
               className="border rounded-lg px-3 py-2 w-full input-field input-field-styles"
               value={addresses.street}
               placeholder="Виберіть відповідне відділення"
-              onChange={e => setAddresses({...addresses, street: e.target.value})}
-
+              onChange={e => setAddresses({ ...addresses, street: e.target.value })}
 
             />
           </div>
@@ -129,7 +125,7 @@ export function Delivery({ selected, setSelected, addresses, setAddresses }: Del
               className="border rounded-lg px-3 py-2 w-full input-field input-field-styles"
               value={addresses.street}
               placeholder="Виберіть відповідний поштомат"
-              onChange={e => setAddresses({...addresses, street: e.target.value})}
+              onChange={e => setAddresses({ ...addresses, street: e.target.value })}
 
             />
           </div>

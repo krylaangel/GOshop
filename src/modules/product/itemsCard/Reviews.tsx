@@ -1,6 +1,9 @@
+import type { ColorsOption } from '@shared/constants/colors'
+import type { SizesOption } from '@shared/constants/sizes'
 import { useAnimatedHeight } from '@layout/components/Navigation/hooks/useAnimatedHeight'
+import { SentReview } from '@product/itemsCard/SentReview'
 import { useProductContext } from '@product/ProductContext'
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { animated } from 'react-spring'
 import Icons from '~/assets/images/icon-sprite.svg'
 import Button from '~/shared/components/Button/Button'
@@ -9,9 +12,12 @@ import ReviewsCard from './ReviewsCard'
 
 interface ReviewsProps {
   brandName: string
-
+  selectedSize: SizesOption | null
+  selectedColor: ColorsOption | null
+  setSelectedColor: (color: ColorsOption | null) => void
+  setSelectedSize: (size: SizesOption | null) => void
 }
-export default function Reviews({ brandName }: ReviewsProps) {
+export default function Reviews({ brandName, selectedSize, selectedColor, setSelectedSize, setSelectedColor }: ReviewsProps) {
   const { product } = useProductContext()
   const reviews = product.reviews || []
   const [showAll, setShowAll] = useState(false)
@@ -22,8 +28,13 @@ export default function Reviews({ brandName }: ReviewsProps) {
   const styles = useAnimatedHeight({ ref, open: showAll, deps: [reviews] })
 
   return (
-    <div className="flex justify-between gap-x-6 lg:gap-x-[100px] pt-6 w-full">
+    <div className="flex justify-between gap-x-6 lg:gap-x-[100px] pt-4 w-full">
+
       <div className="flex flex-col gap-y-4 w-full">
+        <SentReview />
+        {reviews.length===0&&(
+            <div className="text-base md:text-l font-normal">На цей товар поки що не залишили відгуки :(</div>
+        )}
         {reviewPreview.map(review => (
           <ReviewsCard
             review={review}
@@ -55,7 +66,13 @@ export default function Reviews({ brandName }: ReviewsProps) {
         )}
 
       </div>
-      <ProductMiniCard brandName={brandName} />
+      <ProductMiniCard
+        brandName={brandName}
+        selectedSize={selectedSize}
+        selectedColor={selectedColor}
+        setSelectedSize={setSelectedSize}
+        setSelectedColor={setSelectedColor}
+      />
     </div>
   )
 }

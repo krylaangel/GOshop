@@ -142,7 +142,7 @@
 }
 
 .input-field {
-  @apply text-[var(--inputField)] rounded-xl w-full;
+  @apply text-[var(--inputField)] rounded-xl w-full border-[var(--inputField)] border h-full;
 }
 
 input:-webkit-autofill {
@@ -206,6 +206,14 @@ input:-webkit-autofill {
 /*=================================================*/
 .benefits-item{
   @apply flex-col p-5 flex text-center justify-center items-center
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
 }
 
 :root {

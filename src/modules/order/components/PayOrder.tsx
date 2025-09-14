@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
+
 interface PayOrderProps {
-    selected: string
-    setSelected: (method: string) => void
+  selected: string
+  setSelected: (method: string) => void
 }
 
 export function PayOrder({ selected, setSelected }: PayOrderProps) {

@@ -148,8 +148,8 @@ export default function CategoryPage() {
         )}
       </div>
 
-      <div className="grid grid-cols-[248px_1fr] w-full">
-        <div className="text-xs flex-center font-normal text-[var(--baseColorText)] ">
+      <div className="grid grid-cols-1 sm:grid-cols-[248px_1fr] w-full pb-4">
+        <div className="text-xs justify-start md:text-center sm:justify-center items-center font-normal text-[var(--baseColorText)] ">
           {getProductCountLabel(productCountToShow)}
         </div>
         <div className="flex items-center flex-wrap">

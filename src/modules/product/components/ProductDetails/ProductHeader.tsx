@@ -22,7 +22,6 @@ export default function ProductHeader({ brandName }: ProductHeaderProps) {
         <RatingStars
           average={averageRating}
           reviews={reviewCount}
-          interactive
           onRate={r => console.warn('#Todo: Оцінка', r)}
         />
         <p className="pt-1 font-light text-[14px] leading-[140%] items-center tracking-normal text-[var(--baseColorText)] whitespace-nowrap">

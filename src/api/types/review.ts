@@ -15,6 +15,7 @@ export interface CreateReview {
   productId: UUID
   rating: number
   comment?: string
+  userId: UUID
 }
 
 export interface UpdateReview extends CreateReview {

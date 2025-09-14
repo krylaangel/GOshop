@@ -16,11 +16,11 @@ export const reviewService = {
   },
   add: async (reviewData: CreateReview): Promise<ApiResponse<Review>> => {
     return handleResponse<Review>(
-      '/Review/Add',
+      '/Review/AddReview',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: reviewData,
+        body: JSON.stringify(reviewData),
       },
     )
   },

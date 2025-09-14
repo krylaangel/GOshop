@@ -1,17 +1,27 @@
+import type { SizesOption } from '@shared/constants/sizes'
+import { SIZE_OPTIONS } from '@shared/constants/sizes'
 import { useState } from 'react'
 import Icons from '~/assets/images/icon-sprite.svg'
 import Button from '~/shared/components/Button/Button'
 import SizeGuide from '../modalWindows/SizeGuide'
 
 interface ProductSizesProps {
-  sizeOptions?: string[]
+  sizeOptions?: readonly SizesOption[]
+  selectedSize: SizesOption | null
+  setSelectedSize: (size: SizesOption | null) => void
 }
 
 export default function ProductSizes({
-  sizeOptions = ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+  sizeOptions = SIZE_OPTIONS,
+  setSelectedSize,
+  selectedSize,
+
 }: ProductSizesProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedSize, setSelectedSize] = useState<string | null>(null)
+
+  const handleSelectSize = (size: SizesOption) => {
+    setSelectedSize(selectedSize === size ? null : size)
+  }
 
   return (
     <div className="col-span-1 flex flex-col gap-y-2">
@@ -23,7 +33,7 @@ export default function ProductSizes({
           {sizeOptions.map(size => (
             <Button
               key={size}
-              onClick={() => setSelectedSize(size)}
+              onClick={() => handleSelectSize(size)}
               variant="secondary"
               state={selectedSize === size ? 'selected' : ''}
               className="product-items product-items__text"

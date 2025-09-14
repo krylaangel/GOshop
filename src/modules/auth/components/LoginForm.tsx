@@ -23,7 +23,6 @@ function LoginForm({
     e.preventDefault()
     try {
       await signIn(formData.email, formData.password)
-      navigate('/')
     }
     catch (err: any) {
       setError(err.message)

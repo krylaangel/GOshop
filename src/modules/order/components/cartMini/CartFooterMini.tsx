@@ -1,10 +1,10 @@
 import Button from '@shared/components/Button/Button'
 import { useNavigate } from 'react-router-dom'
-import { useCartStore } from '~/store/useCartStore'
+
 export interface CartMiniProps {
   totalSum: number
 }
-export function CartFooterMini({totalSum}:CartMiniProps) {
+export function CartFooterMini({ totalSum }: CartMiniProps) {
   const navigate = useNavigate()
   const sale = 0
   const finishResult = totalSum - sale

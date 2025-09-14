@@ -1,13 +1,10 @@
-import { BasketPage } from '@cart/BasketPage'
-
+import { ModalRoot } from '@cart/ModalRoot'
 import { ChooseSize } from '@layout/components/Footer/ChooseSize'
 import CategoryPage from '@modules/listProduct/CategoryPage'
-import { OrderPage } from '@modules/order/OrderPage'
 import { UserProfile } from '@modules/profile/UserProfile'
 import { RequireAuth } from '@shared/utils/RequireAuth'
 import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import AuthPage from '~/modules/auth/AuthPage'
 import HomePage from '~/modules/home/HomePage'
 import FooterComponent from '~/modules/layout/components/Footer'
 import About from '~/modules/layout/components/Footer/About'
@@ -39,7 +36,6 @@ function RootComponent() {
         <Route path="/:categoryId" element={<CategoryPage />} />
         <Route path="*" element={<NotFoundPage />} />
         <Route path={ROUTES.HOMEPAGE_ROUTE} element={<HomePage />} />
-        <Route path={ROUTES.AUTH_ROUTE} element={<AuthPage />} />
         <Route path={ROUTES.PRODUCT_ROUTE} element={<ProductPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/returnOfGoods" element={<ReturnOfGoods />} />
@@ -48,10 +44,9 @@ function RootComponent() {
         <Route path="/userAgreement" element={<UserAgreement />} />
         <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
         <Route path="/profile" element={<RequireAuth><UserProfile /></RequireAuth>} />
-        <Route path="/cart" element={<BasketPage />} />
-        <Route path="/order" element={<RequireAuth><OrderPage /></RequireAuth>} />
 
       </Routes>
+      <ModalRoot />
       <FooterComponent />
     </BrowserRouter>
   )

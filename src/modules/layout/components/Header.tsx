@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icons from '~/assets/images/icon-sprite.svg'
 import { useAuthStore } from '~/store/useAuth'
+import { useModalStore } from '~/store/useModalStore'
 import NavigationComponent from './Navigation/Navigation'
 
 function HeaderComponent() {
   const [isNavOpen, setIsNavOpen] = useState(false)
   const isAuthenticated = useAuthStore(state => state.isAuthenticated)
   const navigate = useNavigate()
+  const { open } = useModalStore()
+
   useEffect(() => {
     if (isNavOpen) {
       document.body.classList.add('overflow-hidden')
@@ -21,10 +24,15 @@ function HeaderComponent() {
   }, [isNavOpen])
 
   const handleProfileClick = () => {
-    navigate(isAuthenticated ? '/profile' : '/auth')
+    if (isAuthenticated) {
+      navigate('/profile')
+    }
+    else {
+      open('auth')
+    }
   }
   const handleCartClick = () => {
-    navigate('/cart')
+    open('basket')
   }
   return (
     <header className="h-[68px] sm:h-[136px] items-center clamp relative flex justify-between">

@@ -35,7 +35,9 @@
 .secondary:hover {
   @apply bg-[var(--hoverColor)] border-white border-[1px] text-white;
 }
-
+.secondary_selected {
+  @apply bg-[var(--stateActive)] border-white border-[1px] text-white! ;
+}
 .secondary:active {
   @apply bg-[var(--stateActive)] border-white border-[1px] text-white;
 }

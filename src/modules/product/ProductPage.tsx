@@ -1,5 +1,7 @@
+import type { ColorsOption } from '@shared/constants/colors'
+import type { SizesOption } from '@shared/constants/sizes'
 import { ProductContext } from '@product/ProductContext'
-import SkeletonProduct from '@product/skeleton/SkeletonProduct'
+import SkeletonProduct from '@shared/skeleton/SkeletonProduct'
 import Breadcrumbs from '@shared/components/Breadcrumbs'
 import { useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -24,7 +26,10 @@ function ProductPage() {
     error,
     brandName,
     similarProducts,
-  } = useProductView(true, true, true)
+  } = useProductView(true, true)
+  const [selectedSize, setSelectedSize] = useState<SizesOption | null>(null)
+  const [selectedColor, setSelectedColor] = useState<ColorsOption | null>(null)
+
   const [activeCategory, setActiveCategory] = useState<Category>(Category.ABOUT)
   const [isFavorite] = useState(() => Boolean(Math.random()))
 
@@ -49,7 +54,7 @@ function ProductPage() {
   }
 
   return (
-    <div className="clamp mt-2">
+    <div className="clamp mt-5">
       {product.categoryId && <Breadcrumbs categoryId={product.categoryId} productName={product.name ?? undefined} />}
       <div className="h-15 items-center flex">
         <div className="text-black font-light flex justify-start gap-x-2 sm:gap-x-4 md:gap-x-6">
@@ -66,15 +71,33 @@ function ProductPage() {
       </div>
       <ProductContext.Provider value={{ product, isFavorite, reviewCount }}>
         {activeCategory === Category.ABOUT && (
-          <ProductAbout brandName={brandName} />
+          <ProductAbout
+            brandName={brandName}
+            selectedSize={selectedSize}
+            setSelectedSize={setSelectedSize}
+            selectedColor={selectedColor}
+            setSelectedColor={setSelectedColor}
+          />
         )}
 
         {activeCategory === Category.CHARACTERISTICS && (
-          <Characteristics brandName={brandName} />
+          <Characteristics
+            selectedColor={selectedColor}
+            brandName={brandName}
+            selectedSize={selectedSize}
+            setSelectedSize={setSelectedSize}
+            setSelectedColor={setSelectedColor}
+          />
         )}
 
         {activeCategory === Category.REVIEWS && (
-          <Reviews brandName={brandName} />
+          <Reviews
+            selectedColor={selectedColor}
+            brandName={brandName}
+            selectedSize={selectedSize}
+            setSelectedSize={setSelectedSize}
+            setSelectedColor={setSelectedColor}
+          />
         )}
       </ProductContext.Provider>
       <h2 className="font-medium text-[36px] leading-[140%] tracking-[0.1em] text-center pt-10">

@@ -1,5 +1,5 @@
 import type { Review } from '~/api/types'
-import SkeletonUserName from '@product/skeleton/SkeletonUserName'
+import SkeletonUserName from '@shared/skeleton/SkeletonUserName'
 import { useEffect, useState } from 'react'
 import { authService } from '~/api/services/authService'
 import RatingStars from '~/shared/components/RatingStars'

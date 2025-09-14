@@ -1,25 +1,45 @@
+import type { ColorsOption } from '@shared/constants/colors'
+import type { SizesOption } from '@shared/constants/sizes'
 import { useProductContext } from '@product/ProductContext'
+import { Success } from '@shared/components/modalWindows/Success'
+import { useState } from 'react'
 import Icons from '~/assets/images/icon-sprite.svg'
 import Button from '~/shared/components/Button/Button'
 import { useCartStore } from '~/store/useCartStore'
-import {useState} from "react";
-import {Success} from "@shared/components/modalWindows/Success";
 
-export default function ProductActions() {
+interface ProductActionsProps {
+  selectedSize: SizesOption | null
+  setSelectedSize: (size: SizesOption | null) => void
+  selectedColor: ColorsOption | null
+  setSelectedColor: (color: ColorsOption | null) => void
+
+}
+export default function ProductActions({ selectedSize, setSelectedSize, selectedColor, setSelectedColor }: ProductActionsProps) {
   const { product, isFavorite } = useProductContext()
   const addToCart = useCartStore(state => state.addToCart)
-    const [successMessage, setSuccessMessage] = useState('')
-    const handleAddToCart = () => {
-        addToCart(product)
-        setSuccessMessage("✅ Товар додано до корзини\n")
-        setTimeout(() => setSuccessMessage(''), 3000)
-    }
-    return (
+  const [successMessage, setSuccessMessage] = useState('')
+
+  const handleAddToCart = () => {
+    if (!selectedSize || !selectedColor)
+      return
+    addToCart({ product, size: selectedSize, color: selectedColor })
+
+    setSuccessMessage('✅ Товар додано до корзини\n')
+    setSelectedColor(null)
+    setSelectedSize(null)
+
+    setTimeout(() => setSuccessMessage(''), 3000)
+  }
+
+  return (
     <div className="flex gap-x-4">
-        <Success successMessage={successMessage}/>
+      {successMessage && (
+        <Success successMessage={successMessage} />
+      )}
       <Button
         onClick={handleAddToCart}
         className="w-full px-11 button"
+        disabled={!selectedSize || !selectedColor}
       >
         Купити
       </Button>

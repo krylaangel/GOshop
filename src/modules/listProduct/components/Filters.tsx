@@ -21,7 +21,7 @@ export const Filters = forwardRef(({ onProductsChange, currentCategoryId, onRese
   }))
 
   return (
-    <div className="pr-4">
+    <div className="pr-4 pb-4">
       <PriceFilter />
       {currentCategoryId && (
         <BrandFilter

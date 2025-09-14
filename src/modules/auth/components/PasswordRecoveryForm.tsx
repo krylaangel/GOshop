@@ -2,7 +2,7 @@ import Button from '@shared/components/Button/Button'
 import InputField from '@shared/components/InputField'
 import { validateEmail } from '@shared/utils/validators'
 import { useState } from 'react'
-import {useAuthStore} from "~/store/useAuth";
+import { useAuthStore } from '~/store/useAuth'
 
 function PasswordRecoveryForm({
   onNavigate,

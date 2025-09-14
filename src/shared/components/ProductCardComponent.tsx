@@ -1,11 +1,8 @@
 import type { Product, UUID } from '~/api/types'
 import { useNavigate } from 'react-router-dom'
 import Icons from '~/assets/images/icon-sprite.svg'
-import { useCartStore } from '~/store/useCartStore'
 import Button from './Button/Button'
 import RatingStars from './RatingStars'
-import {useState} from "react";
-import {Success} from "@shared/components/modalWindows/Success";
 
 export interface ProductCardProps {
   id: UUID
@@ -27,27 +24,18 @@ function ProductCardComponent({
   salePrice,
   averageRating,
   isFavorite,
-  product,
 }: ProductCardProps) {
-  const [successMessage, setSuccessMessage] = useState('')
   const hasDiscount = salePrice !== price
   const navigate = useNavigate()
   const handleBuyClick = () => {
     navigate(`/product/${id}`)
   }
-  const addToCart = useCartStore(state => state.addToCart)
-  const handleAddToCart = () => {
-    addToCart(product)
-    setSuccessMessage("✅ Товар додано до корзини\n")
-    setTimeout(() => setSuccessMessage(''), 3000)
-  }
+
   return (
     <div className="h-full w-full flex flex-col align-middle justify-center gap-y-[10px] sm:gap-y-4">
-      {successMessage && (
-          <Success successMessage={successMessage}/>
-      )}
-      <div className="h-[369px]">
-        <img className="h-full w-full object-cover rounded-[10px]" src={imageUrl} alt={brandName} />
+
+      <div className="h-[369px] cursor-pointer">
+        <img onClick={handleBuyClick} className="h-full w-full object-cover rounded-[10px]" src={imageUrl} alt={brandName} />
       </div>
       <p onClick={handleBuyClick} className="cursor-pointer border-b border-transparent hover:border-black  font-medium text-left text-sm sm:text-base leading-[22.4px] w-full tracking-normal overflow-hidden text-ellipsis whitespace-nowrap pb-5 h-5">
         {brandName}
@@ -56,8 +44,8 @@ function ProductCardComponent({
         <div className="justify-start sm:justify-end flex items-start pb-[10px]">
           <RatingStars
             average={averageRating}
-            interactive
-            onRate={r => console.warn('#TODO Оцінка на товар:', r)}
+
+            onRate={r => console.warn('#Todo: Оцінка', r)}
           />
         </div>
         <div className="font-bold text-sm sm:text-xl leading-[28px] tracking-normal flex whitespace-nowrap h-7 gap-x-1 ">
@@ -81,7 +69,7 @@ function ProductCardComponent({
               )}
         </div>
         <div className="flex justify-between col-span-2 gap-x-1 md:gap-x-2 w-full py-[10px] sm:py-4">
-          <Button onClick={handleAddToCart} className="w-3/4 px-11 button">
+          <Button onClick={handleBuyClick} className="w-3/4 px-11 button">
             Купити
           </Button>
           <Button className="w-1/4 justify-self-end">

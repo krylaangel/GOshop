@@ -6,50 +6,50 @@ export const menuData = [
       {
         heading: 'ВЗУТТЯ',
         submenu: [
-          { label: 'Черевики', href: '/forher/zhinochi-boots' },
-          { label: 'Кеди', href: '/forher/zhinochi-kedi' },
-          { label: 'Кросівки', href: '/forher/zhinochi-krosivki' },
+          { label: 'Черевики', href: '/forher/zhinochyi-cherevyky' },
+          { label: 'Кеди', href: '/forher/zhinochyi-kedi' },
+          { label: 'Кросівки', href: '/forher/zhinochyi-krosivky' },
         ],
       },
       {
         heading: 'ОДЯГ',
         submenu: [
-          { label: 'Топи', href: '#' },
+          { label: 'Топи', href: '/forher/zhinochyi-topy' },
           {
             label: 'Футболки',
-            href: '#',
+            href: '/forher/zhinochyi-futbolky',
           },
           {
             label: 'Шорти',
-            href: '#',
+            href: '/forher/zhinochyi-shorty',
           },
           {
             label: 'Штани',
-            href: '#',
+            href: '/forher/zhinochyi-shtany',
           },
           {
             label: 'Лосини',
-            href: '#',
+            href: '/forher/zhinochyi-losyny',
           },
           {
             label: 'Світшоти',
-            href: '#',
+            href: '/forher/zhinochyi-svitshoty',
           },
           {
             label: 'Вітровки',
-            href: '#',
+            href: '/forher/zhinochyi-vitrovky',
           },
           {
             label: 'Жилети',
-            href: '#',
+            href: '/forher/',
           },
           {
             label: 'Куртки',
-            href: '#',
+            href: '/forher/',
           },
           {
             label: 'Пуховики',
-            href: '#',
+            href: '/forher/',
           },
         ],
       },

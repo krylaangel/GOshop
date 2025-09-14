@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "../../../node_modules/tailwindcss";
 @tailwind utilities;
 .skeletonProduct{
     @apply bg-gray-200 rounded animate-pulse;

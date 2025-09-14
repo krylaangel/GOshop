@@ -22,7 +22,7 @@ interface ProductAttributeState {
 }
 
 function useProductView(
-  isFetchProductAttributes = false,
+  // isFetchProductAttributes = false,
   isFetchBrandName = false,
   isFetchSimilarProducts = false,
 ) {
@@ -67,9 +67,9 @@ function useProductView(
           error: null,
         })
 
-        if (isFetchProductAttributes) {
-          fetchProductAttributes(product.id)
-        }
+        // if (isFetchProductAttributes) {
+        //   fetchProductAttributes(product.id)
+        // }
 
         if (isFetchBrandName) {
           getBrandName(product.brandId)
