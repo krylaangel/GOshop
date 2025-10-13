@@ -7,7 +7,7 @@ export function CartItemMini() {
 
   return (
     <div className="flex flex-col">
-      {cart.map((item) => {
+      {cart.map((item, index) => {
         const price = item.price
         const salePrice = item.salePrice
         const hasDiscount = salePrice < price
@@ -20,8 +20,8 @@ export function CartItemMini() {
         }
         return (
           <div
-            key={item.id}
-            className="py-6 px-4 h-[184px] w-full border-b border-[var(--colorQuantityInput)] justify-between flex flex-col gap-x-10"
+            key={`${item.id}-${index}`}
+            className="py-6 md:px-4 h-[184px] w-full border-b border-[var(--colorQuantityInput)] justify-between flex flex-col gap-x-10"
           >
             <div className="flex gap-3 full">
               <div className="w-[104px]">
@@ -36,7 +36,7 @@ export function CartItemMini() {
                   <div className="flex items-end flex-col gap-[6px]">
                     <p className="text-xs font-normal text-[var(--secondaryColorText)]">Ціна</p>
                     <p
-                      className="whitespace-nowrap font-bold text-xl leading-[140%] tracking-normal flex justify-center items-end flex-col"
+                      className="whitespace-nowrap font-bold text:sm sm:text-xl leading-[140%] tracking-normal flex justify-center items-end flex-col"
                     >
                       {hasDiscount
                         ? (
@@ -60,9 +60,9 @@ export function CartItemMini() {
                           )}
                     </p>
                   </div>
-                  <div className="flex items-end flex-col gap-[6px] w-[81px]">
+                  <div className="flex items-center md:items-end flex-col gap-[6px] w-[81px]">
                     <p className="text-xs font-normal text-[var(--secondaryColorText)]">Кількість</p>
-                    <p className="flex text-xl font-normal">{item.quantity}</p>
+                    <p className="flex text:sm sm:text-xl font-normal">{item.quantity}</p>
                   </div>
                   <div className="flex items-end flex-col gap-[6px]">
                     <p
@@ -70,7 +70,7 @@ export function CartItemMini() {
                     >
                       Сума
                     </p>
-                    <p className="whitespace-nowrap font-bold text-xl leading-[140%] tracking-normal flex justify-center items-end flex-col">
+                    <p className="whitespace-nowrap font-bold text:sm sm:text-xl leading-[140%] tracking-normal flex justify-center items-end flex-col">
                       {total}
                     </p>
                   </div>

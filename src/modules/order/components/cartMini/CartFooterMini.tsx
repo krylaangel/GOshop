@@ -1,16 +1,19 @@
 import Button from '@shared/components/Button/Button'
-import { useNavigate } from 'react-router-dom'
+import { useModalStore } from '~/store/useModalStore'
 
 export interface CartMiniProps {
   totalSum: number
 }
 export function CartFooterMini({ totalSum }: CartMiniProps) {
-  const navigate = useNavigate()
+  const { open } = useModalStore()
   const sale = 0
   const finishResult = totalSum - sale
+  const refactorCart = () => {
+    open('basket')
+  }
   return (
-    <div className="mt-6 w-full flex flex-col justify-between items-end">
-      <Button variant="tertiary_dark" onClick={() => navigate('/cart')} className="px-2 py-4 text-sm">Редагувати</Button>
+    <div className="my-2 md:my-6 w-full flex flex-col justify-between items-end">
+      <Button variant="tertiary_dark" onClick={refactorCart} className="px-2 py-2 md:py-4 text-sm">Редагувати</Button>
       <div className="flex justify-between w-full">
         <p className="text-base font-medium flex flex-wrap w-[71px]">Вартість доставки</p>
         <p className="text-sm font-light flex flex-wrap w-[87px]">за тарифами перевізника</p>

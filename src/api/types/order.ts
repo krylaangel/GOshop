@@ -2,7 +2,6 @@ import type { UUID } from '@api/types/index'
 
 export interface OrderItem {
   productId: UUID
-  productVariantId: UUID
   quantity: number
   price: number
   totalPrice: number
@@ -20,5 +19,9 @@ export interface Order {
   notes: string
   couponId?: UUID
   discountAmount: number
-  items: OrderItem[]
+  orderItems: OrderItem[]
+}
+export interface GetOrder extends Order {
+  createdAt: string
+  updatedAt: string
 }

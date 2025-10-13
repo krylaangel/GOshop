@@ -5,6 +5,7 @@ import { create } from 'zustand'
 interface AuthState {
   user: User | null
   userData: UserData | null
+  setUserData: (data: Partial<UserData>) => void
   isLoading: boolean
   isAuthenticated: boolean
   checkAuth: () => Promise<void>
@@ -19,7 +20,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   userData: null,
   isLoading: true,
   isAuthenticated: false,
-
+  setUserData: (data: Partial<Omit<UserData, 'id'>>) => set(state => ({
+    userData: { ...state.userData!, ...data },
+  })),
   checkAuth: async () => {
     const storedUser = JSON.parse(localStorage.getItem('user') || 'null')
     if (!storedUser?.token) {

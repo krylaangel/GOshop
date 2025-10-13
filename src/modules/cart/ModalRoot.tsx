@@ -1,5 +1,6 @@
 import AuthPage from '@auth/AuthPage'
 import { BasketPage } from '@cart/BasketPage'
+import { OrderSuccessModal } from '@modules/order/modalWindows/OrderSuccessModal'
 import { OrderPage } from '@modules/order/OrderPage'
 import { useEffect } from 'react'
 import { useAuthStore } from '~/store/useAuth'
@@ -22,6 +23,8 @@ export function ModalRoot() {
       return <AuthPage isOpen={true} onClose={close} />
     case 'order':
       return <OrderPage isOpen={true} onClose={close} />
+    case 'order-success':
+      return <OrderSuccessModal onClose={close} />
     default: return null
   }
 }

@@ -1,7 +1,6 @@
 import Button from '@shared/components/Button/Button'
 import InputField from '@shared/components/InputField'
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '~/store/useAuth'
 
 function LoginForm({
@@ -12,7 +11,6 @@ function LoginForm({
   const [formData, setFormData] = useState({ email: '', password: '' })
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const navigate = useNavigate()
   const { signIn, isLoading } = useAuthStore()
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -21,11 +19,15 @@ function LoginForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsSubmitting(true)
     try {
       await signIn(formData.email, formData.password)
     }
     catch (err: any) {
       setError(err.message)
+    }
+    finally {
+      setIsSubmitting(false)
     }
   }
 

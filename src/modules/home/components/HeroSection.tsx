@@ -1,4 +1,5 @@
 import type { JSX } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Button from '~/shared/components/Button/Button'
 import getImageURL from '~/shared/utils/imageUtils'
 
@@ -13,6 +14,7 @@ function HeroSection({
   mainImage,
   mainImageClassName,
 }: HeroProps) {
+  const navigate = useNavigate()
   return (
     <section
       style={{
@@ -37,7 +39,7 @@ function HeroSection({
           <Button
             variant="primary"
             className="button px-22 py-2.5 font-medium text-[14px] leading-[19.6px]"
-            onClick={() => (window.location.href = '#')}
+            onClick={() => navigate('/allProducts')}
           >
             До каталогу
           </Button>

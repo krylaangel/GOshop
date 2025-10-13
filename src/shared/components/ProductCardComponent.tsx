@@ -1,6 +1,9 @@
 import type { Product, UUID } from '~/api/types'
 import { useNavigate } from 'react-router-dom'
 import Icons from '~/assets/images/icon-sprite.svg'
+import { useAuthStore } from '~/store/useAuth'
+import { useFavoriteStore } from '~/store/useFavoriteStore'
+import { useModalStore } from '~/store/useModalStore'
 import Button from './Button/Button'
 import RatingStars from './RatingStars'
 
@@ -11,7 +14,6 @@ export interface ProductCardProps {
   price: number
   salePrice: number
   averageRating: number
-  isFavorite: boolean
   name: string
   product: Product
 }
@@ -23,12 +25,26 @@ function ProductCardComponent({
   price,
   salePrice,
   averageRating,
-  isFavorite,
+  product,
+  name,
 }: ProductCardProps) {
+  const isFavorite = useFavoriteStore(state => state.isFavorite(id))
+  const toggleFavorite = useFavoriteStore(state => state.toggleFavorite)
+  const { isAuthenticated } = useAuthStore()
+
   const hasDiscount = salePrice !== price
   const navigate = useNavigate()
   const handleBuyClick = () => {
     navigate(`/product/${id}`)
+  }
+  const { open } = useModalStore()
+
+  const handleIsFavorite = () => {
+    if (!isAuthenticated) {
+      open('auth')
+      return
+    }
+    toggleFavorite({ id, imageUrl, brandName, price, salePrice, averageRating, product, name })
   }
 
   return (
@@ -72,7 +88,7 @@ function ProductCardComponent({
           <Button onClick={handleBuyClick} className="w-3/4 px-11 button">
             Купити
           </Button>
-          <Button className="w-1/4 justify-self-end">
+          <Button onClick={handleIsFavorite} className="w-1/4 justify-self-end">
             {isFavorite
               ? (
                   <svg className="w-5 h-5">

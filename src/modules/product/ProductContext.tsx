@@ -3,7 +3,6 @@ import { createContext, useContext } from 'react'
 
 interface ProductContextProps {
   product: Product
-  isFavorite: boolean
   reviewCount: number
 
 }

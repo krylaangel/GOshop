@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-type ModalType = 'basket' | 'order' | 'auth' | null
+type ModalType = 'basket' | 'order' | 'auth' | 'order-success' | null
 
 interface ModalState {
   current: ModalType

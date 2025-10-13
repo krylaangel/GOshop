@@ -1,9 +1,10 @@
 import type { ColorsOption } from '@shared/constants/colors'
 import type { SizesOption } from '@shared/constants/sizes'
 import { ProductContext } from '@product/ProductContext'
-import SkeletonProduct from '@shared/skeleton/SkeletonProduct'
 import Breadcrumbs from '@shared/components/Breadcrumbs'
+import SkeletonProduct from '@shared/skeleton/SkeletonProduct'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import Button from '~/shared/components/Button/Button'
 import ProductCardComponent from '~/shared/components/ProductCardComponent'
@@ -31,7 +32,7 @@ function ProductPage() {
   const [selectedColor, setSelectedColor] = useState<ColorsOption | null>(null)
 
   const [activeCategory, setActiveCategory] = useState<Category>(Category.ABOUT)
-  const [isFavorite] = useState(() => Boolean(Math.random()))
+  const navigate = useNavigate()
 
   if (isLoading)
     return <SkeletonProduct />
@@ -69,7 +70,7 @@ function ProductPage() {
           ))}
         </div>
       </div>
-      <ProductContext.Provider value={{ product, isFavorite, reviewCount }}>
+      <ProductContext.Provider value={{ product, reviewCount }}>
         {activeCategory === Category.ABOUT && (
           <ProductAbout
             brandName={brandName}
@@ -122,7 +123,6 @@ function ProductPage() {
               price={similar.price}
               salePrice={similar.salePrice}
               averageRating={similar.averageRating}
-              isFavorite={isFavorite}
               product={product}
               name={similar.name ?? ''}
             />
@@ -131,7 +131,7 @@ function ProductPage() {
       </Swiper>
 
       <div className="flex justify-end w-full mb-10">
-        <Button className="w-full sm:w-1/4 mt-2 md:mt-6">
+        <Button className="w-full sm:w-1/4 mt-2 md:mt-6" onClick={() => navigate('/allProducts')}>
           Переглянути всі
         </Button>
       </div>

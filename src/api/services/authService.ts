@@ -1,4 +1,13 @@
-import type { ApiResponse, AuthCredentials, AuthResponse, ForgotPassword, RegisterUser, ResetPassword, UserProfile } from '../types'
+import type {
+  ApiResponse,
+  AuthCredentials,
+  AuthResponse,
+  ForgotPassword,
+  RegisterUser,
+  ResetPassword,
+  UserProfile,
+  UserUpdateProfile,
+} from '../types'
 import { handleResponse } from '.'
 
 export const authService = {
@@ -19,6 +28,17 @@ export const authService = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: credentials,
+      },
+    )
+  },
+  updatePublicUserInfo: async (payload: { id: string, firstName: string, lastName: string, phoneNumber: string }, token: string): Promise<ApiResponse<UserUpdateProfile>> => {
+    return handleResponse<UserUpdateProfile>(
+      '/Auth/UpdatePublicUserInfo',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
       },
     )
   },

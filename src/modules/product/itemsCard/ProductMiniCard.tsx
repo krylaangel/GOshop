@@ -7,7 +7,9 @@ import { useState } from 'react'
 import Icons from '~/assets/images/icon-sprite.svg'
 import Button from '~/shared/components/Button/Button'
 import getImageURL from '~/shared/utils/imageUtils'
+import { useAuthStore } from '~/store/useAuth'
 import { useCartStore } from '~/store/useCartStore'
+import { useFavoriteStore } from '~/store/useFavoriteStore'
 
 interface ProductMiniCardProps {
   brandName: string
@@ -18,7 +20,10 @@ interface ProductMiniCardProps {
 
 }
 export default function ProductMiniCard({ brandName, selectedSize, selectedColor, setSelectedSize, setSelectedColor }: ProductMiniCardProps) {
-  const { product, isFavorite } = useProductContext()
+  const { product } = useProductContext()
+  const isFavorite = useFavoriteStore(state => state.isFavorite(product.id))
+  const toggleFavorite = useFavoriteStore(state => state.toggleFavorite)
+  const { isAuthenticated } = useAuthStore()
   const addToCart = useCartStore(state => state.addToCart)
   const [successMessage, setSuccessMessage] = useState('')
   const handleAddToCart = () => {
@@ -41,6 +46,23 @@ export default function ProductMiniCard({ brandName, selectedSize, selectedColor
   const price = product.price
   const salePrice = product.salePrice
   const hasDiscount = salePrice < price
+
+  const handleIsFavorite = () => {
+    if (!isAuthenticated) {
+      open('auth')
+      return
+    }
+    toggleFavorite({
+      id: product.id,
+      imageUrl: product.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png'),
+      brandName: product.name ?? '',
+      price: product.price,
+      salePrice: product.salePrice,
+      averageRating: product.averageRating ?? 0,
+      name: product.name ?? '',
+      product,
+    })
+  }
 
   return (
     <div className="hidden w-[336px] h-[224px] md:flex flex-col p-4 border border-[var(--hoverBorder)] rounded-[12px]">
@@ -86,9 +108,14 @@ export default function ProductMiniCard({ brandName, selectedSize, selectedColor
       </div>
 
       <div className="w-full flex pt-4 gap-x-2">
-        <Button         disabled={!selectedSize || !selectedColor}
-                        onClick={handleAddToCart} className="w-[240px] px-11 button">Купити</Button>
-        <Button className="w-[56px] justify-self-end">
+        <Button
+          disabled={!selectedSize || !selectedColor}
+          onClick={handleAddToCart}
+          className="w-[240px] px-11 button"
+        >
+          Купити
+        </Button>
+        <Button onClick={handleIsFavorite} className="w-[56px] justify-self-end">
           {isFavorite
             ? (
                 <svg className="w-[20px] h-[18px] fill-current stroke-current">

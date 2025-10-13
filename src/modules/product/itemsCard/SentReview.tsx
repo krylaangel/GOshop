@@ -23,7 +23,6 @@ export function SentReview() {
       return
     }
     if (!userData) {
-      console.log('No user found')
       return
     }
     try {

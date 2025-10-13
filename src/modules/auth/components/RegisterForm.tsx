@@ -1,5 +1,5 @@
 import InputField from '@shared/components/InputField'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Button from '~/shared/components/Button/Button'
 import {
@@ -56,7 +56,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onNavigate }) => {
     const newErrors = {
       email: validateEmail(formData.email),
       name: validateName(formData.name),
-      surname: validateSurname(formData.surname),
+      surname: validateSurname(formData.surname, formData.name),
       password: validatePassword(formData.password),
       phoneNumber: validatePhone(formData.phoneNumber),
       confirmPassword: validateConfirmPassword(formData.password, formData.confirmPassword),

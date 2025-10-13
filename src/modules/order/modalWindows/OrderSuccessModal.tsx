@@ -1,17 +1,8 @@
-import type { JSX } from 'react'
 import Button from '@shared/components/Button/Button'
 import getImageURL from '@shared/utils/imageUtils'
 import { useNavigate } from 'react-router-dom'
 
-interface OrderSuccessModalProps {
-  isOpen: boolean
-  onClose: () => void
-}
-
-export function OrderSuccessModal({ isOpen, onClose }: OrderSuccessModalProps): JSX.Element | null {
-  if (!isOpen)
-    return null
-
+export function OrderSuccessModal({ onClose }: { onClose: () => void }) {
   const navigate = useNavigate()
 
   return (

@@ -32,8 +32,8 @@ export default function Reviews({ brandName, selectedSize, selectedColor, setSel
 
       <div className="flex flex-col gap-y-4 w-full">
         <SentReview />
-        {reviews.length===0&&(
-            <div className="text-base md:text-l font-normal">На цей товар поки що не залишили відгуки :(</div>
+        {reviews.length === 0 && (
+          <div className="text-base md:text-l font-normal">На цей товар поки що не залишили відгуки :(</div>
         )}
         {reviewPreview.map(review => (
           <ReviewsCard

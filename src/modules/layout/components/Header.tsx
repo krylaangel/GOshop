@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Icons from '~/assets/images/icon-sprite.svg'
 import { useAuthStore } from '~/store/useAuth'
+import { useCartStore } from '~/store/useCartStore'
+import { useFavoriteStore } from '~/store/useFavoriteStore'
 import { useModalStore } from '~/store/useModalStore'
 import NavigationComponent from './Navigation/Navigation'
 
@@ -10,7 +12,10 @@ function HeaderComponent() {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated)
   const navigate = useNavigate()
   const { open } = useModalStore()
-
+  const cartCount = useCartStore(state =>
+    state.cart.reduce((sum, item) => sum + item.quantity, 0),
+  )
+  const favoriteCount = useFavoriteStore(state => state.favorites.length)
   useEffect(() => {
     if (isNavOpen) {
       document.body.classList.add('overflow-hidden')
@@ -25,7 +30,7 @@ function HeaderComponent() {
 
   const handleProfileClick = () => {
     if (isAuthenticated) {
-      navigate('/profile')
+      navigate('/profile', { state: { tab: 'data' } })
     }
     else {
       open('auth')
@@ -33,6 +38,16 @@ function HeaderComponent() {
   }
   const handleCartClick = () => {
     open('basket')
+  }
+  const handleFavoriteClick = () => {
+    if (!isAuthenticated) {
+      open('auth')
+      return
+    }
+    navigate('/profile', { state: { tab: 'favoritesProducts' } })
+  }
+  const handleProductFind = () => {
+    navigate('allProducts')
   }
   return (
     <header className="h-[68px] sm:h-[136px] items-center clamp relative flex justify-between">
@@ -64,20 +79,36 @@ function HeaderComponent() {
         className={`py-1 gap-2 whitespace-nowrap
         ${isNavOpen ? 'hidden lg:flex' : 'flex'}`}
       >
-        <button>
+        <button onClick={handleProductFind}>
           <svg className="icons__states header__icons">
             <use href={`${Icons}#header_search`} />
           </svg>
         </button>
-        <button onClick={handleCartClick}>
+        <button onClick={handleCartClick} className="relative">
           <svg className="icons__states header__icons">
             <use href={`${Icons}#header_cart`} />
           </svg>
+          {cartCount > 0 && (
+            <span
+              className="absolute -top-1 -right-1 bg-[var(--colorItemBlue)] text-white text-xs font-bold
+                 rounded-full w-5 h-5 flex items-center justify-center"
+            >
+              {cartCount}
+            </span>
+          )}
         </button>
-        <button>
+        <button onClick={handleFavoriteClick} className="relative">
           <svg className="icons__states header__icons">
             <use href={`${Icons}#header_heart`} />
           </svg>
+          {favoriteCount > 0 && (
+            <span
+              className="absolute -top-1 -right-1 bg-[var(--colorItemBlue)] text-white text-xs font-bold
+                 rounded-full w-5 h-5 flex items-center justify-center"
+            >
+              {favoriteCount}
+            </span>
+          )}
         </button>
         <button onClick={handleProfileClick}>
           <svg className="icons__states header__icons">

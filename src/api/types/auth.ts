@@ -40,5 +40,11 @@ export interface UserProfile {
   lastName?: string
   createdAt?: string
 }
-
+export interface UserUpdateProfile {
+  id: UUID
+  firstName?: string
+  lastName?: string
+  email?: string
+  phoneNumber?: string
+}
 export interface UserData extends UserProfile {}

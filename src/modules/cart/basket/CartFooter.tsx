@@ -6,8 +6,11 @@ import { useModalStore } from '~/store/useModalStore'
 
 export function CartFooter() {
   const navigate = useNavigate()
-  const { open } = useModalStore()
-
+  const { open, close } = useModalStore()
+  const handleContinue = () => {
+    navigate('/')
+    close()
+  }
   const isAuthenticated = useAuthStore(state => state.isAuthenticated)
   const cart = useCartStore(state => state.cart)
   const totalSum = cart.reduce((acc, item) => {
@@ -26,7 +29,7 @@ export function CartFooter() {
   }
   return (
     <div className="mt-6 h-[78px] w-full grid grid-cols-1 md:grid-cols-[1fr_minmax(305px,424px)] gap-4 items-center">
-      <div className="md:flex flex justify-end sm:justify-start hidden "><Button variant="secondary" onClick={() => navigate('/')} className="w-[174px] py-4">Продовжити покупки</Button></div>
+      <div className="md:flex flex justify-end sm:justify-start hidden "><Button variant="secondary" onClick={handleContinue} className="w-[174px] py-4">Продовжити покупки</Button></div>
       <div className="bg-[var(--hoverBorder)] h-full rounded-[10px] py-3 px-6 flex items-center gap-5 justify-center sm:justify-between flex-wrap sm:flex-nowrap">
         <div className="flex md:flex-col gap-x-1 items-center md:items-end justify-between w-full">
           <p className="font-medium text-base text-[var(--colorMenu)] whitespace-nowrap">До сплати</p>

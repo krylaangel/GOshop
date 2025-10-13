@@ -1,5 +1,6 @@
 import { ModalRoot } from '@cart/ModalRoot'
 import { ChooseSize } from '@layout/components/Footer/ChooseSize'
+import { AllProductsPage } from '@modules/allProducts/allProductsPage'
 import CategoryPage from '@modules/listProduct/CategoryPage'
 import { UserProfile } from '@modules/profile/UserProfile'
 import { RequireAuth } from '@shared/utils/RequireAuth'
@@ -43,6 +44,7 @@ function RootComponent() {
         <Route path="/chooseSize" element={<ChooseSize />} />
         <Route path="/userAgreement" element={<UserAgreement />} />
         <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
+        <Route path="/allProducts" element={<AllProductsPage />} />
         <Route path="/profile" element={<RequireAuth><UserProfile /></RequireAuth>} />
 
       </Routes>

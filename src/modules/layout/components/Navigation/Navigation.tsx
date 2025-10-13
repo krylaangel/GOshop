@@ -65,7 +65,6 @@ const NavigationComponent: React.FC<NavigationProps> = ({ isOpen, onCloseMenu })
               onMouseEnter={() => isDesktop && setActiveIndex(index)}
               onMouseLeave={() => isDesktop && setActiveIndex(null)}
               toggleMobileMenu={() => onCloseMenu()}
-
             />
           )
         })}

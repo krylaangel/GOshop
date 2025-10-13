@@ -1,43 +1,41 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Range } from 'react-range'
 
 const MIN = 0
 const MAX = 50000
 const STEP = 100
 
-function PriceFilter() {
-  const [values, setValues] = useState([MIN, MAX])
-  const [inputMin, setInputMin] = useState(String(MIN))
-  const [inputMax, setInputMax] = useState(String(MAX))
+interface PriceFilterProps {
+  priceRange: [number, number]
+  onPriceChange: (range: [number, number]) => void
+}
 
-  const onRangeChange = (vals: number[]) => {
+function PriceFilter({ priceRange, onPriceChange }: PriceFilterProps) {
+  const [values, setValues] = useState<[number, number]>(priceRange)
+  const [inputMin, setInputMin] = useState(String(priceRange[0]))
+  const [inputMax, setInputMax] = useState(String(priceRange[1]))
+
+  useEffect(() => {
+    setValues(priceRange)
+    setInputMin(String(priceRange[0]))
+    setInputMax(String(priceRange[1]))
+  }, [priceRange])
+
+  const updateRange = (vals: [number, number]) => {
     setValues(vals)
     setInputMin(String(vals[0]))
     setInputMax(String(vals[1]))
+    onPriceChange(vals)
   }
 
   const onMinBlur = () => {
-    let val = Number(inputMin)
-    if (Number.isNaN(val))
-      val = MIN
-    if (val < MIN)
-      val = MIN
-    if (val > values[1])
-      val = values[1]
-    setValues([val, values[1]])
-    setInputMin(String(val))
+    const val = Math.max(MIN, Math.min(Number(inputMin) || MIN, values[1]))
+    updateRange([val, values[1]])
   }
 
   const onMaxBlur = () => {
-    let val = Number(inputMax)
-    if (Number.isNaN(val))
-      val = MAX
-    if (val > MAX)
-      val = MAX
-    if (val < values[0])
-      val = values[0]
-    setValues([values[0], val])
-    setInputMax(String(val))
+    const val = Math.min(MAX, Math.max(Number(inputMax) || MAX, values[0]))
+    updateRange([values[0], val])
   }
 
   return (
@@ -47,8 +45,6 @@ function PriceFilter() {
         <input
           type="number"
           value={inputMin}
-          min={MIN}
-          max={MAX}
           onChange={e => setInputMin(e.target.value)}
           onBlur={onMinBlur}
           placeholder="від"
@@ -58,8 +54,6 @@ function PriceFilter() {
         <input
           type="number"
           value={inputMax}
-          min={MIN}
-          max={MAX}
           onChange={e => setInputMax(e.target.value)}
           onBlur={onMaxBlur}
           placeholder="до"
@@ -73,23 +67,15 @@ function PriceFilter() {
         min={MIN}
         max={MAX}
         values={values}
-        onChange={onRangeChange}
-        renderTrack={({ props, children }) => {
-          const { ...rest } = props
-          return (
-            <div
-              {...rest}
-              className="h-[3px] bg-[var(--hoverBorder)] my-4 cursor-pointer! outline-none mx-4
-"
-            >
-              {children}
-            </div>
-          )
-        }}
-        renderThumb={({ props }) => {
-          const { key, ...rest } = props
-          return <div key={key} {...rest} className="w-[30px] h-[30px] rounded-full bg-[var(--hoverBorder)] cursor-pointer! outline-none" />
-        }}
+        onChange={vals => updateRange(vals as [number, number])}
+        renderTrack={({ props, children }) => (
+          <div {...props} className="h-[3px] bg-[var(--hoverBorder)] my-4 cursor-pointer! outline-none mx-4">
+            {children}
+          </div>
+        )}
+        renderThumb={({ props }) => (
+          <div {...props} className="w-[30px] h-[30px] rounded-full bg-[var(--hoverBorder)]" />
+        )}
       />
     </div>
   )

@@ -6,10 +6,8 @@ import { Delivery } from '@modules/order/components/Delivery'
 import { OtherReceiver } from '@modules/order/components/OtherReceiver'
 import { PayOrder } from '@modules/order/components/PayOrder'
 import { PersonalData } from '@modules/order/components/PersonalData'
-import { OrderSuccessModal } from '@modules/order/modalWindows/OrderSuccessModal'
 import Button from '@shared/components/Button/Button'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Icons from '~/assets/images/icon-sprite.svg'
 import { useAuthStore } from '~/store/useAuth'
 import { useCartStore } from '~/store/useCartStore'
@@ -18,14 +16,13 @@ import { useModalStore } from '~/store/useModalStore'
 export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
   if (!isOpen)
     return null
+  const { open } = useModalStore()
 
-  const navigate = useNavigate()
   const cart = useCartStore(state => state.cart)
   const clearCart = useCartStore(state => state.clearCart)
   const { userData } = useAuthStore()
   const [selectedPayMethod, setSelectedPayMethod] = useState('Оплата при отриманні')
-  const [deliveryMethod, setDeliveryMethod] = useState('')
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [deliveryMethod, setDeliveryMethod] = useState('Самовивіз')
   const [otherReceiver, setOtherReceiver] = useState({ firstName: '', lastName: '', fatherName: '', phoneNumber: '', note: '' })
   const [addresses, setAddresses] = useState({
     city: '',
@@ -35,13 +32,83 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
     flor: '',
     frontDoor: '',
   })
+  const [errors, setErrors] = useState({
+    deliveryMethod: '',
+    addresses: {
+      city: '',
+      street: '',
+      numberBuilding: '',
+      flat: '',
+      flor: '',
+      frontDoor: '',
+    },
+    otherReceiver: {
+      firstName: '',
+      lastName: '',
+      fatherName: '',
+      phoneNumber: '',
+    },
+  })
+  const validateForm = () => {
+    const newErrors = {
+      deliveryMethod: !deliveryMethod ? 'Оберіть спосіб доставки' : '',
+      addresses: {
+        city: addresses.city.trim() ? '' : 'Введіть місто',
+        street: ['Кур\'єр Нова Пошта', 'Відділення Нова Пошта', 'Поштомат Нова Пошта'].includes(deliveryMethod)
+          ? (addresses.street.trim() ? '' : 'Введіть вулицю')
+          : '',
+        numberBuilding: deliveryMethod === 'Кур\'єр Нова Пошта'
+          ? (addresses.numberBuilding.trim() ? '' : 'Введіть номер будинку')
+          : '',
+        flat: deliveryMethod === 'Кур\'єр Нова Пошта'
+          ? (addresses.flat.trim() ? '' : 'Введіть номер квартири')
+          : '',
+        flor: deliveryMethod === 'Кур\'єр Нова Пошта'
+          ? (addresses.flor.trim() ? '' : 'Введіть поверх')
+          : '',
+        frontDoor: deliveryMethod === 'Кур\'єр Нова Пошта'
+          ? (addresses.frontDoor.trim() ? '' : 'Введіть під\'їзд')
+          : '',
+      },
+      otherReceiver: {
+        firstName: otherReceiver.firstName || otherReceiver.lastName || otherReceiver.fatherName || otherReceiver.phoneNumber
+          ? (otherReceiver.firstName.trim() ? '' : 'Введіть ім’я')
+          : '',
+        lastName: otherReceiver.firstName || otherReceiver.lastName || otherReceiver.fatherName || otherReceiver.phoneNumber
+          ? (otherReceiver.lastName.trim() ? '' : 'Введіть прізвище')
+          : '',
+        fatherName: '',
+        phoneNumber: otherReceiver.firstName || otherReceiver.lastName || otherReceiver.fatherName || otherReceiver.phoneNumber
+          ? (otherReceiver.phoneNumber.trim() ? '' : 'Введіть телефон')
+          : '',
+      },
+    }
+    setErrors(newErrors)
+    const hasErrors = Object.values(newErrors).some((section) => {
+      if (typeof section === 'string')
+        return section !== ''
+      return Object.values(section).some(e => e !== '')
+    })
+
+    return !hasErrors
+  }
 
   const handleSubmitOrder = async () => {
     if (!userData?.id) {
       console.error('Користувач не існує')
       return
     }
+    if (!validateForm())
+      return
 
+    const items = cart.map(item => ({
+      productId: item.id as UUID,
+      quantity: item.quantity,
+      price: item.price,
+      totalPrice: item.price * item.quantity,
+    }))
+    console.log('Cart перед отправкой:', cart)
+    console.log('Items перед отправкой:', items)
     const order = {
       userId: userData.id,
       status: 'new',
@@ -55,13 +122,7 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
       notes: otherReceiver.note,
       couponId: undefined,
       discountAmount: 0,
-      items: cart.map(item => ({
-        productId: item.id as UUID,
-        productVariantId: item.id as UUID,
-        quantity: item.quantity,
-        price: item.price,
-        totalPrice: item.price * item.quantity,
-      })),
+      orderItems: items,
 
     }
     try {
@@ -85,9 +146,7 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
         flor: '',
         frontDoor: '',
       })
-      setIsModalOpen(true)
-      onClose()
-      setTimeout(() => navigate('/'), 3000)
+      open('order-success')
     }
     catch (error) {
       console.error('Помилка відправки замовлення', error)
@@ -128,12 +187,8 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
             </svg>
           </button>
         </div>
-        <div className="py-8 grid grid-cols-1 md:grid-cols-2">
-          <OrderSuccessModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-          />
-          <div className="flex flex-col pr-[50px]">
+        <div className="py-8 grid grid-cols-1 lg:grid-cols-2 w-full">
+          <div className="flex flex-col lg:pr-[50px]">
             <h1 className="text-xl font-bold mb-6">Оформлення замовлення</h1>
             <PersonalData />
             <Delivery
@@ -141,18 +196,25 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
               setSelected={setDeliveryMethod}
               addresses={addresses}
               setAddresses={setAddresses}
+              errors={errors.addresses}
             />
-            <PayOrder selected={selectedPayMethod} setSelected={setSelectedPayMethod} />
-            <OtherReceiver receiver={otherReceiver} setReceiver={setOtherReceiver} />
-            <div className="px-8">
+            <PayOrder
+              selected={selectedPayMethod}
+              setSelected={setSelectedPayMethod}
+            />
+            <OtherReceiver
+              receiver={otherReceiver}
+              setReceiver={setOtherReceiver}
+              errors={errors.otherReceiver}
+            />
+            <div className="px-8 mb-6">
               <Button onClick={handleSubmitOrder} className="w-full py-2 px-4">
-                Підтверджую
-                замовлення
+                Підтверджую замовлення
               </Button>
             </div>
 
           </div>
-          <div className="flex flex-col border border-[var(--hoverBorder)] rounded-lg p-6 h-fit">
+          <div className="flex flex-col border border-[var(--hoverBorder)] rounded-lg p-1 md:p-6 h-fit">
             <CartItemMini />
             <CartFooterMini totalSum={totalSum} />
 

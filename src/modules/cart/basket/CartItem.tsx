@@ -1,13 +1,14 @@
 import Button from '@shared/components/Button/Button'
 import getImageURL from '@shared/utils/imageUtils'
-import Icons from '~/assets/images/icon-sprite.svg'
 import { useCartStore } from '~/store/useCartStore'
+import { useFavoriteStore } from '~/store/useFavoriteStore'
 
 export function CartItem() {
   const removeFromCart = useCartStore(state => state.removeFromCart)
   const updateQuantity = useCartStore(state => state.updateQuantity)
   const defaultImage = getImageURL('default-product-card.png')
   const cart = useCartStore(state => state.cart)
+  const isFavorite = useFavoriteStore(state => state.isFavorite)
 
   return (
     <div className="flex flex-col mt-[30px]">
@@ -17,6 +18,9 @@ export function CartItem() {
         const hasDiscount = salePrice < price
         const currentPrice = hasDiscount ? salePrice : price
         const total = currentPrice * item.quantity
+        const favorite = isFavorite(item.id)
+        console.log(item.id, favorite)
+
         return (
           <div
             key={`${item.id}-${item.selectedSize}-${item.selectedColor}`}
@@ -114,11 +118,22 @@ export function CartItem() {
                 </p>
               </div>
               <div className="flex gap-2">
-                <button className=" py-4 hidden sm:flex items-end flex-col gap-[6px]">
-                  <svg className="icons__states w-9 h-9">
-                    <use href={`${Icons}#header_heart`} />
+                <button
+                  className={`py-4 hidden sm:flex items-end flex-col gap-[6px] `}
+                >
+                  <svg
+                    viewBox="0 0 36 36"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-9 h-9"
+                  >
+                    <path
+                      d="M18 30.49L16.3444 29.0016C13.8579 26.7459 11.8016 24.8075 10.1756 23.1865C8.54962 21.5652 7.26113 20.1224 6.31013 18.8579C5.35913 17.5936 4.69475 16.4402 4.317 15.3977C3.939 14.3555 3.75 13.2979 3.75 12.2249C3.75 10.0961 4.46775 8.31385 5.90325 6.8781C7.339 5.4426 9.12125 4.72485 11.25 4.72485C12.5595 4.72485 13.797 5.0311 14.9625 5.6436C16.128 6.2561 17.1405 7.13448 18 8.27873C18.8595 7.13448 19.872 6.2561 21.0375 5.6436C22.203 5.0311 23.4405 4.72485 24.75 4.72485C26.8787 4.72485 28.661 5.4426 30.0968 6.8781C31.5323 8.31385 32.25 10.0961 32.25 12.2249C32.25 13.2979 32.061 14.3555 31.683 15.3977C31.3053 16.4402 30.6409 17.5936 29.6899 18.8579C28.7389 20.1224 27.4528 21.5652 25.8315 23.1865C24.2105 24.8075 22.1519 26.7459 19.6556 29.0016L18 30.49ZM18 27.4499C20.4 25.2904 22.375 23.4394 23.925 21.8969C25.475 20.3546 26.7 19.0147 27.6 17.8772C28.5 16.7397 29.125 15.7296 29.475 14.8469C29.825 13.9644 30 13.0904 30 12.2249C30 10.7249 29.5 9.47485 28.5 8.47485C27.5 7.47485 26.25 6.97485 24.75 6.97485C23.5655 6.97485 22.4708 7.31085 21.4657 7.98285C20.461 8.6551 19.6654 9.59023 19.0789 10.7882H16.9211C16.3249 9.58048 15.5268 8.64298 14.5268 7.97573C13.5268 7.30848 12.4345 6.97485 11.25 6.97485C9.7595 6.97485 8.51188 7.47485 7.50712 8.47485C6.50237 9.47485 6 10.7249 6 12.2249C6 13.0904 6.175 13.9644 6.525 14.8469C6.875 15.7296 7.5 16.7397 8.4 17.8772C9.3 19.0147 10.525 20.3522 12.075 21.8897C13.625 23.4272 15.6 25.2806 18 27.4499Z"
+                      fill={favorite ? 'var(--hoverColor)' : 'var(--baseColorText)'}
+                    />
                   </svg>
+
                 </button>
+
                 <button
                   className="py-5 flex items-end flex-col  cursor-pointer"
                   onClick={() => removeFromCart(item.id, item.selectedSize, item.selectedColor)}

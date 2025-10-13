@@ -4,11 +4,13 @@ import { extractProductsFromTree } from '@home/components/categoryTree'
 import { useWindowsSize } from '@layout/components/Navigation/hooks/useWindowsSize'
 import { ClearBrandFilterButton } from '@modules/listProduct/components/ClearBrandFilterButton'
 import { Filters } from '@modules/listProduct/components/Filters'
+import { SubcategoriesComponent } from '@modules/listProduct/components/SubcategoriesComponent'
 import Breadcrumbs from '@shared/components/Breadcrumbs'
 import Button from '@shared/components/Button/Button'
 import ProductCardComponent from '@shared/components/ProductCardComponent'
 import { categoryUUIDMap } from '@shared/constants/categoryUUIDMap'
 import { ERROR_MESSAGES } from '@shared/constants/errors'
+import { CategoryPageSkeleton } from '@shared/skeleton/CategoryPageSkeleton'
 import getImageURL from '@shared/utils/imageUtils'
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -31,10 +33,6 @@ export default function CategoryPage() {
   const isDesktop = width >= 768
   const [open, setOpen] = useState(false)
   const allBrands = useBrandStore(state => state.allBrands)
-  const setAllBrands = useBrandStore(state => state.setAllBrands)
-  const isFavorite = () => {
-    return Boolean(Math.random() > 0.5)
-  }
   const fetchAllProductsInCategory = async () => {
     if (!categoryUUID)
       return []
@@ -135,20 +133,31 @@ export default function CategoryPage() {
 
   const selectedBrandsWithNames = allBrands.filter(brand => selectedBrands.includes(brand.id))
 
+  const mainCategories = new Set([
+    categoryUUIDMap.forher,
+    categoryUUIDMap.forhim,
+    categoryUUIDMap.accessories,
+  ])
+
+  const isTopLevelCategory = categoryUUID ? mainCategories.has(categoryUUID) : false
+
   return (
     <div className="clamp">
       {categoryUUID && <Breadcrumbs categoryId={categoryUUID} />}
 
-      {loading && <p>Завантаження...</p>}
       {error && <p className="text-red-500">{error}</p>}
-      {!loading && products.length === 0 && <p>Немає продуктів у цій категорії.</p>}
+      {!loading && products.length === 0 && <p className="text-lg font-light text-[var(--colorMenu)] my-2">Немає продуктів у цій категорії.</p>}
 
       <div className="w-full">
-        {!isDesktop && (<Button onClick={() => setOpen(true)} className="px-6 py-2 my-2">Фільтри</Button>
+        {!isDesktop && (
+          <Button onClick={() => setOpen(true)} className="px-6 py-2 my-2">
+            {' '}
+            {isTopLevelCategory ? 'Каталог' : 'Фільтри'}
+          </Button>
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-[248px_1fr] w-full pb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-[248px_1fr] pb-4">
         <div className="text-xs justify-start md:text-center sm:justify-center items-center font-normal text-[var(--baseColorText)] ">
           {getProductCountLabel(productCountToShow)}
         </div>
@@ -164,43 +173,62 @@ export default function CategoryPage() {
         </div>
       </div>
       <div className={`grid ${isDesktop ? 'grid-cols-[248px_1fr]' : 'grid-cols-1'} gap-4 relative`}>
-        {(isDesktop || open) && (
-          <div
-            className={`
+        <div className={`${isDesktop || open ? '' : 'pl-0'} grid grid-cols-1 sm:grid-cols-[248px_1fr] gap-4 relative`}>
+          {(isDesktop || open) && (
+            <div
+              className={`
         ${isDesktop
-            ? 'static w-[248px]'
-            : `
+              ? 'static w-[248px]'
+              : `
           fixed top-0 left-0 px-4 h-full w-3/4 max-w-xs z-50 bg-white shadow-lg 
           transform transition-transform duration-300 ease-in-out 
-          ${open ? 'translate-x-0' : '-translate-x-full'}`}  overflow-y-auto
+          ${open ? 'translate-x-0' : '-translate-x-full'}`}  
+        overflow-y-auto
       `}
-          >
-            <div className="w-full justify-end flex">
-              <button
-                onClick={() => setOpen(false)}
-                className="w-4! h-4 text-[var(--inputField)] cursor-pointer md:hidden"
-              >
-                X
-              </button>
+            >
+              <div className="w-full justify-end flex">
+                {!isDesktop && (
+                  <button
+                    onClick={() => setOpen(false)}
+                    className="w-4! h-4 text-[var(--inputField)] cursor-pointer md:hidden mt-2"
+                  >
+                    X
+                  </button>
+                )}
+              </div>
+
+              {isTopLevelCategory
+                ? (
+                    <SubcategoriesComponent parentCategoryId={categoryUUID} />
+                  )
+                : (
+                    <Filters
+                      key={categoryUUID}
+                      onProductsChange={handleFilterChange}
+                      currentCategoryId={categoryUUID}
+                      ref={filtersRef}
+                      selectedBrands={selectedBrands}
+                      onSelectedBrandsChange={setSelectedBrands}
+                      products={products}
+                      filteredProducts={filteredProducts}
+                      onResetFilters={() => fetchAllProductsInCategory().then(() => {
+                      })}
+                    />
+                  )}
             </div>
-            <Filters
-              key={categoryUUID}
-              onProductsChange={handleFilterChange}
-              currentCategoryId={categoryUUID}
-              ref={filtersRef}
-              selectedBrands={selectedBrands}
-              onSelectedBrandsChange={setSelectedBrands}
-              onResetFilters={() => fetchAllProductsInCategory().then(() => {})}
-            />
-          </div>
-        )}
+          )}
+        </div>
+
+        {loading && <CategoryPageSkeleton isDesktop={isDesktop} />}
         {!isDesktop && open && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 overflow-y-auto"
+            className="fixed inset-0 bg-gray-200 bg-opacity-50 z-40 overflow-y-auto"
             onClick={() => setOpen(false)}
           />
         )}
-        <div className={`${(isDesktop || open) ? '' : 'pl-0'} grid grid-cols-2 xl:grid-cols-3 gap-x-4`}>
+        <div
+          className={`${(isDesktop || open) ? '' : 'pl-0'} grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-4 w-full`}
+        >
           {filteredProducts.map((product, index) => (
             <div key={product.id} className="w-full">
               <ProductCardComponent
@@ -210,7 +238,6 @@ export default function CategoryPage() {
                 price={product.price}
                 salePrice={product.salePrice}
                 averageRating={product.averageRating}
-                isFavorite={isFavorite()}
                 name={product.name ?? ''}
                 product={product}
               />
