@@ -88,7 +88,7 @@ export function CartItem() {
                 <p className="text-xs font-normal text-[var(--secondaryColorText)]">Кількість</p>
                 <div className="border-[var(--colorQuantityInput)] border flex">
                   <button
-                    onClick={() => updateQuantity(item.id, item.quantity + 1, item.selectedSize, item.selectedColor)}
+                    onClick={() => updateQuantity(item.id, item.quantity - 1, item.selectedSize, item.selectedColor)}
                     className="px-2 py-1 disabled:opacity-50 text-[var(--inputField)] text-xs"
                     disabled={item.quantity <= 1}
                   >

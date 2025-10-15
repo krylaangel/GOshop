@@ -36,6 +36,7 @@ export function PayOrder({ selected, setSelected }: PayOrderProps) {
         <input
           type="checkbox"
           checked={checkedTel}
+          onChange={() => setCheckedTel(!checkedTel)}
           className="rounded-[2px] border
                    mr-[10px] w-4 h-4 border-[var(--hoverBorder)!]"
         />
