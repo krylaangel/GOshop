@@ -54,7 +54,7 @@ export const categoryUUIDMap: Record<string, UUID> = {
   'holovni-ubory': '9fcb2796-1eff-4e22-8f92-b31db776858f' as UUID,
   'ustilky': 'eff495f4-2e47-4ce9-aea8-bd5b4bec2bbf' as UUID,
   'sumky': 'd2839d6b-9b33-48a6-9188-d4fccde7da3e' as UUID,
-  'termosy': '8dad40f8-af15-4478-a60e-22f6ffc6717e' as UUID,
+  'termosy': '7a41c54c-fbcc-4553-86dc-74d0448c81dd' as UUID,
 }
 export const categorySlugMap: Record<UUID, string> = Object.entries(categoryUUIDMap).reduce(
   (acc, [slug, uuid]) => {

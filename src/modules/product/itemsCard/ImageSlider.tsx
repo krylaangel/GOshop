@@ -30,7 +30,7 @@ export default function ImageSlider({ brandName }: ImageSliderProps) {
       >
         <Swiper
           spaceBetween={10}
-          navigation={true}
+          navigation={imageUrls.length > 1}
           thumbs={{ swiper: thumbsSwiper }}
           modules={[FreeMode, Navigation, Thumbs]}
           className="w-full h-[clamp(429px,100vh,762px)] mySwiper"

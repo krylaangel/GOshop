@@ -115,7 +115,7 @@ function ProductPage() {
         className="w-full mt-5"
       >
         {similarProducts.map(similar => (
-          <SwiperSlide key={similar.id} className="">
+          <SwiperSlide key={similar.id} className="mr-2">
             <ProductCardComponent
               id={similar.id}
               imageUrl={similar.images?.[0]?.imageUrl ?? getImageURL('default-product-card.png')}

@@ -8,48 +8,42 @@ interface BreadcrumbProps {
   categoryId: string
   productName?: string
 }
+
 function Breadcrumbs({ categoryId, productName }: BreadcrumbProps) {
   const categorySlug = categorySlugMap[categoryId as UUID]
-  const breadcrumbs = findBreadcrumbPath(categorySlug) ?? []
+  const breadcrumbs = (findBreadcrumbPath(categorySlug) ?? []).filter(
+      (crumb) => crumb?.label && crumb?.href
+  )
 
   const capitalizeFirst = (text: string) =>
-    text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
+      text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
 
   return (
-    <nav aria-label="breadcrumb">
-      <ol className="flex flex-wrap h-[25px] gap-x-2 leading-[140%] text-sm font-light text-[var(--baseColorText)]">
-        <li>
-          <Link to="/">Головна</Link>
-          {(breadcrumbs.length > 0 || productName) && ' / '}
-        </li>
-
-        {breadcrumbs.map((crumb, index) => {
-          const isLast = index === breadcrumbs.length - 1 && !productName
-          return (
-            <li key={crumb.href}>
-              {isLast
-                ? (
-                    <span>{capitalizeFirst(crumb.label)}</span>
-                  )
-                : (
-                    <>
-                      <Link to={crumb.href}>{capitalizeFirst(crumb.label)}</Link>
-                      {' '}
-                      {' '}
-                      /
-                      {' '}
-                    </>
-                  )}
-            </li>
-          )
-        })}
-        {productName && (
+      <nav aria-label="breadcrumb">
+        <ol className="flex flex-wrap h-[25px] gap-x-1 leading-[140%] text-sm font-light text-[var(--baseColorText)]">
           <li>
-            <span>{productName}</span>
+            <Link to="/">Головна</Link>
           </li>
-        )}
-      </ol>
-    </nav>
+
+          {breadcrumbs.map((crumb) => (
+              <React.Fragment key={crumb.href}>
+                <li>/</li>
+                <li>
+                  <Link to={crumb.href}>{capitalizeFirst(crumb.label)}</Link>
+                </li>
+              </React.Fragment>
+          ))}
+
+          {productName && (
+              <>
+                <li>/</li>
+                <li>
+                  <span>{productName}</span>
+                </li>
+              </>
+          )}
+        </ol>
+      </nav>
   )
 }
 

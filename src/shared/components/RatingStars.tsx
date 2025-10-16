@@ -43,7 +43,7 @@ export default function RatingStars({
       {/* Зірки */}
       <div className="flex items-center gap-x-[2px]">
         {Array.from({ length: 5 }).map((_, idx) => {
-          const star = idx + 1 // <-- теперь звёздочки считаются с 1 до 5
+          const star = idx
           return (
             <svg
               key={star}

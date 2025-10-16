@@ -1,20 +1,30 @@
+import { useEffect, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
+import { useModalStore } from '~/store/useModalStore'
+import { useAuthStore } from '~/store/useAuth'
 import AuthPage from '@auth/AuthPage'
 import { BasketPage } from '@cart/BasketPage'
-import { OrderSuccessModal } from '@modules/order/modalWindows/OrderSuccessModal'
 import { OrderPage } from '@modules/order/OrderPage'
-import { useEffect } from 'react'
-import { useAuthStore } from '~/store/useAuth'
-import { useModalStore } from '~/store/useModalStore'
+import { OrderSuccessModal } from '@modules/order/modalWindows/OrderSuccessModal'
 
 export function ModalRoot() {
   const { current, close } = useModalStore()
   const { userData } = useAuthStore()
+  const location = useLocation()
 
   useEffect(() => {
     if (current === 'auth' && userData) {
       close()
     }
   }, [current, userData, close])
+
+  useEffect(() => {
+    const policyPaths = ['/privacyPolicy', '/userAgreement']
+
+    if (current && policyPaths.includes(location.pathname)) {
+      close()
+    }
+  }, [location.pathname])
 
   switch (current) {
     case 'basket':
@@ -25,6 +35,7 @@ export function ModalRoot() {
       return <OrderPage isOpen={true} onClose={close} />
     case 'order-success':
       return <OrderSuccessModal onClose={close} />
-    default: return null
+    default:
+      return null
   }
 }
