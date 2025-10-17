@@ -13,4 +13,3 @@ export const useModalStore = create<ModalState>(set => ({
   open: modal => set({ current: modal }),
   close: () => set({ current: null }),
 }))
-

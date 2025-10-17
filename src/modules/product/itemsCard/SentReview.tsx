@@ -1,3 +1,4 @@
+import type { Review } from '@api/types'
 import { reviewService } from '@api/services/reviewService'
 import { useProductContext } from '@product/ProductContext'
 import Button from '@shared/components/Button/Button'
@@ -7,7 +8,10 @@ import React, { useState } from 'react'
 import { useAuthStore } from '~/store/useAuth'
 import { useModalStore } from '~/store/useModalStore'
 
-export function SentReview() {
+interface SentReviewProps {
+  onAddReview?: (review: Review) => void
+}
+export function SentReview({ onAddReview }: SentReviewProps) {
   const [comment, setComment] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showForm, setShowForm] = useState(false)
@@ -27,12 +31,15 @@ export function SentReview() {
     }
     try {
       setIsSubmitting(true)
-      await reviewService.add({
+      const response = await reviewService.add({
         userId: userData.id,
         productId: product.id,
         rating,
         comment,
       })
+      if (onAddReview && response.data) {
+        onAddReview(response.data)
+      }
       setComment('')
       setRating(0)
       setShowForm(false)
@@ -79,10 +86,11 @@ export function SentReview() {
           <p className="pb-6 text-[var(--secondarColorMenu)] font-light text-sm">Оцініть товар від 1 до 5</p>
           <div className="h-[94px] mb-5">
             <InputField
-              type="text"
+              rows={5}
               name="comment"
               placeholder="Ваш відгук про товар"
               value={comment}
+              multiline={true}
               onChange={e => setComment(e.target.value)}
             />
           </div>

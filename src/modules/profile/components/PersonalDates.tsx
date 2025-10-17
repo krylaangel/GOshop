@@ -23,13 +23,19 @@ export function PersonalDates() {
     surname: '',
     phoneNumber: '',
   })
+  const [formData, setFormData] = useState({
+    firstName: userData?.firstName ?? '',
+    lastName: userData?.lastName ?? '',
+    phoneNumber: userData?.phoneNumber ?? '',
+  })
+
   if (!userData)
     return null
   const handleSave = async () => {
     const newErrors: Errors = {
-      name: validateName(userData.firstName ?? ''),
-      surname: validateSurname(userData.lastName ?? '', userData.firstName ?? ''),
-      phoneNumber: validatePhone(userData.phoneNumber ?? ''),
+      name: validateName(formData.firstName),
+      surname: validateSurname(formData.lastName, formData.firstName),
+      phoneNumber: validatePhone(formData.phoneNumber),
     }
     setErrors(newErrors)
 
@@ -40,9 +46,9 @@ export function PersonalDates() {
     try {
       const response = await authService.updatePublicUserInfo({
         id: userData.id,
-        firstName: userData.firstName ?? '',
-        lastName: userData.lastName ?? '',
-        phoneNumber: userData.phoneNumber ?? '',
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phoneNumber: formData.phoneNumber,
       }, user?.token ?? '')
 
       if (!response.isError && response.data) {
@@ -53,7 +59,7 @@ export function PersonalDates() {
         })
       }
       else {
-        console.error('Ошибка при обновлении данных', response.errorMessage)
+        console.error('Помилка при оновленні даних', response.errorMessage)
       }
     }
     catch (err) {
@@ -78,24 +84,24 @@ export function PersonalDates() {
           name="name"
           type="text"
           placeholder="Ім'я*"
-          value={userData.firstName ?? ''}
-          onChange={e => setUserData({ firstName: e.target.value })}
+          value={formData.firstName ?? ''}
+          onChange={e => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
           error={errors.name}
         />
         <InputField
           name="surname"
           type="text"
           placeholder="Прізвище*"
-          value={userData.lastName ?? ''}
-          onChange={e => setUserData({ lastName: e.target.value })}
+          value={formData.lastName ?? ''}
+          onChange={e => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
           error={errors.surname}
         />
         <InputField
           name="phoneNumber"
           type="text"
           placeholder="Телефон*"
-          value={userData.phoneNumber ?? ''}
-          onChange={e => setUserData({ phoneNumber: e.target.value })}
+          value={formData.phoneNumber ?? ''}
+          onChange={e => setFormData(prev => ({ ...prev, phoneNumber: e.target.value }))}
           error={errors.phoneNumber}
         />
         <div
@@ -110,7 +116,7 @@ export function PersonalDates() {
           className="bg-blue-500 text-white rounded px-4 py-2 mt-2"
           disabled={isSaving}
         >
-          {isSaving ? 'Сохраняем...' : 'Сохранить'}
+          {isSaving ? 'Зберігаємо...' : 'Зберегти'}
         </Button>
       </form>
 

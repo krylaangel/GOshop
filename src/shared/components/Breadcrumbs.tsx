@@ -12,38 +12,38 @@ interface BreadcrumbProps {
 function Breadcrumbs({ categoryId, productName }: BreadcrumbProps) {
   const categorySlug = categorySlugMap[categoryId as UUID]
   const breadcrumbs = (findBreadcrumbPath(categorySlug) ?? []).filter(
-      (crumb) => crumb?.label && crumb?.href
+    crumb => crumb?.label && crumb?.href,
   )
 
   const capitalizeFirst = (text: string) =>
-      text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
+    text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
 
   return (
-      <nav aria-label="breadcrumb">
-        <ol className="flex flex-wrap h-[25px] gap-x-1 leading-[140%] text-sm font-light text-[var(--baseColorText)]">
-          <li>
-            <Link to="/">Головна</Link>
-          </li>
+    <nav aria-label="breadcrumb">
+      <ol className="flex flex-wrap h-[25px] gap-x-1 leading-[140%] text-sm font-light text-[var(--baseColorText)]">
+        <li>
+          <Link to="/">Головна</Link>
+        </li>
 
-          {breadcrumbs.map((crumb) => (
-              <React.Fragment key={crumb.href}>
-                <li>/</li>
-                <li>
-                  <Link to={crumb.href}>{capitalizeFirst(crumb.label)}</Link>
-                </li>
-              </React.Fragment>
-          ))}
+        {breadcrumbs.map(crumb => (
+          <React.Fragment key={crumb.href}>
+            <li>/</li>
+            <li>
+              <Link to={crumb.href}>{capitalizeFirst(crumb.label)}</Link>
+            </li>
+          </React.Fragment>
+        ))}
 
-          {productName && (
-              <>
-                <li>/</li>
-                <li>
-                  <span>{productName}</span>
-                </li>
-              </>
-          )}
-        </ol>
-      </nav>
+        {productName && (
+          <>
+            <li>/</li>
+            <li>
+              <span>{productName}</span>
+            </li>
+          </>
+        )}
+      </ol>
+    </nav>
   )
 }
 

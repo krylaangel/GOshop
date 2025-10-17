@@ -3,7 +3,7 @@ import type { SizesOption } from '@shared/constants/sizes'
 import { ProductContext } from '@product/ProductContext'
 import Breadcrumbs from '@shared/components/Breadcrumbs'
 import SkeletonProduct from '@shared/skeleton/SkeletonProduct'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import Button from '~/shared/components/Button/Button'
@@ -30,6 +30,16 @@ function ProductPage() {
   } = useProductView(true, true)
   const [selectedSize, setSelectedSize] = useState<SizesOption | null>(null)
   const [selectedColor, setSelectedColor] = useState<ColorsOption | null>(null)
+  const [reviews, setReviews] = useState(product?.reviews || [])
+
+  useEffect(() => {
+    if (product?.reviews) {
+      const sorted = [...product.reviews].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )
+      setReviews(sorted)
+    }
+  }, [product])
 
   const [activeCategory, setActiveCategory] = useState<Category>(Category.ABOUT)
   const navigate = useNavigate()
@@ -46,12 +56,13 @@ function ProductPage() {
   }
   if (!product)
     return <div>Product not found</div>
-  const reviewCount = product.reviews?.length ?? 0
+  const reviewCount = reviews.length ?? 0
 
   const tabLabels = {
     [Category.ABOUT]: 'Усе про товар',
     [Category.CHARACTERISTICS]: 'Характеристики',
     [Category.REVIEWS]: `Відгуки${reviewCount > 0 ? ` (${reviewCount})` : ''}`,
+
   }
 
   return (
@@ -98,6 +109,8 @@ function ProductPage() {
             selectedSize={selectedSize}
             setSelectedSize={setSelectedSize}
             setSelectedColor={setSelectedColor}
+            reviews={reviews}
+            onAddReview={newReview => setReviews([newReview, ...reviews])}
           />
         )}
       </ProductContext.Provider>
@@ -122,7 +135,7 @@ function ProductPage() {
               brandName={similar.name ?? ''}
               price={similar.price}
               salePrice={similar.salePrice}
-              averageRating={similar.averageRating}
+              averageRating={similar.averageRating ?? 0}
               product={product}
               name={similar.name ?? ''}
             />

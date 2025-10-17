@@ -50,7 +50,6 @@ export function OtherReceiver({ receiver, setReceiver, errors }: OtherReceiverPr
               onChange={e =>
                 setReceiver({ ...receiver, fatherName: e.target.value })}
             />
-            {errors?.fatherName && <p className="error__auth py-2">{errors.fatherName}</p>}
           </div>
           <div className="flex flex-col">
             <input
@@ -66,12 +65,13 @@ export function OtherReceiver({ receiver, setReceiver, errors }: OtherReceiverPr
         </div>
       </div>
       <h2>Додати коментар до замовлення</h2>
-      <input
-        className="border rounded-lg px-3 py-2 w-full input-field input-field-styles h-[94px] text-sm!"
+      <textarea
+        className="border rounded-lg px-3 py-2 w-full input-field input-field-styles h-[94px] text-sm! resize-none"
         value={receiver.note}
         placeholder="Введіть Ваш текст"
         onChange={e =>
           setReceiver({ ...receiver, note: e.target.value })}
+        rows={4}
       />
     </div>
   )

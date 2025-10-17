@@ -57,7 +57,7 @@ export default function ProductActions({ selectedSize, setSelectedSize, selected
   return (
     <div className="flex gap-x-4">
       {successMessage && (
-        <Success successMessage={successMessage} />
+        <Success successMessage={successMessage} onClose={() => setSuccessMessage('')} />
       )}
       <Button
         onClick={handleAddToCart}

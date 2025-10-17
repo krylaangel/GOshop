@@ -1,11 +1,11 @@
-import { useEffect, useRef } from 'react'
-import { useLocation } from 'react-router-dom'
-import { useModalStore } from '~/store/useModalStore'
-import { useAuthStore } from '~/store/useAuth'
 import AuthPage from '@auth/AuthPage'
 import { BasketPage } from '@cart/BasketPage'
-import { OrderPage } from '@modules/order/OrderPage'
 import { OrderSuccessModal } from '@modules/order/modalWindows/OrderSuccessModal'
+import { OrderPage } from '@modules/order/OrderPage'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import { useAuthStore } from '~/store/useAuth'
+import { useModalStore } from '~/store/useModalStore'
 
 export function ModalRoot() {
   const { current, close } = useModalStore()

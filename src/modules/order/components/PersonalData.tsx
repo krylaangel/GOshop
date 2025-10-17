@@ -6,22 +6,26 @@ export function PersonalData() {
   return (
     <div className="flex gap-6 flex-col">
       <h2 className="w-full bg-[var(--hoverBorder)] rounded-lg p-3 ">1. Особисті данні:</h2>
-      <input
+      <p
         className="border rounded-lg px-3 py-2 w-full input-field input-field-styles"
-        value={userData?.firstName ?? ''}
-      />
-      <input
+      >
+        {userData?.firstName ?? ''}
+      </p>
+      <p
         className="border rounded-lg px-3 py-2 input-field input-field-styles"
-        value={userData?.lastName ?? ''}
-      />
-      <input
+      >
+        {userData?.lastName ?? ''}
+      </p>
+      <p
         className="border rounded-lg px-3 py-2 input-field input-field-styles"
-        value={userData?.phoneNumber}
-      />
-      <input
+      >
+        {userData?.phoneNumber}
+      </p>
+      <p
         className="border rounded-lg px-3 py-2 input-field input-field-styles"
-        value={userData?.email ?? ''}
-      />
+      >
+        {userData?.email ?? ''}
+      </p>
     </div>
   )
 }

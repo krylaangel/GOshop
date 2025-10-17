@@ -26,15 +26,19 @@ export default function ProductMiniCard({ brandName, selectedSize, selectedColor
   const { isAuthenticated } = useAuthStore()
   const addToCart = useCartStore(state => state.addToCart)
   const [successMessage, setSuccessMessage] = useState('')
-  const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor)
-      return
-    addToCart({ product, size: selectedSize, color: selectedColor })
+  const [warningMessage, setWarningMessage] = useState('')
 
+  const handleAddToCart = () => {
+    if (!selectedSize || !selectedColor) {
+      setWarningMessage('Будь ласка, оберіть розмір та колір перед додаванням у корзину')
+      setTimeout(() => setWarningMessage(''), 3000)
+      return
+    }
+
+    addToCart({ product, size: selectedSize, color: selectedColor })
     setSuccessMessage('✅ Товар додано до корзини\n')
     setSelectedColor(null)
     setSelectedSize(null)
-
     setTimeout(() => setSuccessMessage(''), 3000)
   }
   const defaultImage = getImageURL('default-product-card.png')
@@ -67,7 +71,10 @@ export default function ProductMiniCard({ brandName, selectedSize, selectedColor
   return (
     <div className="hidden w-[336px] h-[224px] md:flex flex-col p-4 border border-[var(--hoverBorder)] rounded-[12px]">
       {successMessage && (
-        <Success successMessage={successMessage} />
+        <Success
+          successMessage={successMessage}
+          onClose={() => setSuccessMessage('')}
+        />
       )}
       <div className="w-full h-full flex">
         {imageUrls.length > 0 && (
@@ -109,12 +116,19 @@ export default function ProductMiniCard({ brandName, selectedSize, selectedColor
 
       <div className="w-full flex pt-4 gap-x-2">
         <Button
-          disabled={!selectedSize || !selectedColor}
           onClick={handleAddToCart}
           className="w-[240px] px-11 button"
         >
           Купити
         </Button>
+        {warningMessage && (
+          <Success
+            successMessage={warningMessage}
+            onClose={() => setWarningMessage('')}
+          />
+
+        )}
+
         <Button onClick={handleIsFavorite} className="w-[56px] justify-self-end">
           {isFavorite
             ? (

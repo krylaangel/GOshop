@@ -19,9 +19,6 @@ export const categoryUUIDMap: Record<string, UUID> = {
   'zhinochyi-kurtky': '73f9bbb6-1e37-41bf-93fb-5244fd70c874' as UUID,
   'zhinochyi-pukhovyky': '8e01c3e5-5abc-41ac-88ef-740741cf3829' as UUID,
 
-
-
-
   'forhim': 'c209f70d-3d66-4a79-8724-7309726eba25' as UUID,
   'cholovichyi-odyag': 'a829fece-13bb-462a-b610-8cf0324dbd5d' as UUID,
   'cholovichi-maiky': 'a3e09447-02b5-4172-9d9a-1a6acd87d54c' as UUID,
@@ -39,8 +36,6 @@ export const categoryUUIDMap: Record<string, UUID> = {
   'lehinsy-cholovichi': '5652e154-365b-4477-a17e-cee75b8157d7' as UUID,
   'vitrovky-cholovichi': '64e06e57-119f-427a-a854-f06e89a7f192' as UUID,
   'ustilky2': '5218c850-c11a-4f1f-9879-9fed97849717' as UUID,
-
-
 
   'accessories': '8dad40f8-af15-4478-a60e-22f6ffc6717e' as UUID,
   'riukzaky': '9f15c23e-be7b-4c03-b8c0-1b33f4db8734' as UUID,

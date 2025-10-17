@@ -1,8 +1,8 @@
+import type { Review } from '@api/types'
 import type { ColorsOption } from '@shared/constants/colors'
 import type { SizesOption } from '@shared/constants/sizes'
 import { useAnimatedHeight } from '@layout/components/Navigation/hooks/useAnimatedHeight'
 import { SentReview } from '@product/itemsCard/SentReview'
-import { useProductContext } from '@product/ProductContext'
 import React, { useRef, useState } from 'react'
 import { animated } from 'react-spring'
 import Icons from '~/assets/images/icon-sprite.svg'
@@ -16,10 +16,10 @@ interface ReviewsProps {
   selectedColor: ColorsOption | null
   setSelectedColor: (color: ColorsOption | null) => void
   setSelectedSize: (size: SizesOption | null) => void
+  reviews: Review[]
+  onAddReview: (newReview: Review) => void
 }
-export default function Reviews({ brandName, selectedSize, selectedColor, setSelectedSize, setSelectedColor }: ReviewsProps) {
-  const { product } = useProductContext()
-  const reviews = product.reviews || []
+export default function Reviews({ reviews, onAddReview, brandName, selectedSize, selectedColor, setSelectedSize, setSelectedColor }: ReviewsProps) {
   const [showAll, setShowAll] = useState(false)
   const reviewPreview = reviews.slice(0, 3)
   const shouldShowButton = reviews.length > 3
@@ -31,7 +31,7 @@ export default function Reviews({ brandName, selectedSize, selectedColor, setSel
     <div className="flex justify-between gap-x-6 lg:gap-x-[100px] pt-4 w-full">
 
       <div className="flex flex-col gap-y-4 w-full">
-        <SentReview />
+        <SentReview onAddReview={onAddReview} />
         {reviews.length === 0 && (
           <div className="text-base md:text-l font-normal">На цей товар поки що не залишили відгуки :(</div>
         )}

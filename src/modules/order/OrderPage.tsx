@@ -31,6 +31,7 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
     flat: '',
     flor: '',
     frontDoor: '',
+    numberDelivery: '',
   })
   const [errors, setErrors] = useState({
     deliveryMethod: '',
@@ -38,9 +39,7 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
       city: '',
       street: '',
       numberBuilding: '',
-      flat: '',
-      flor: '',
-      frontDoor: '',
+      numberDelivery: '',
     },
     otherReceiver: {
       firstName: '',
@@ -54,20 +53,19 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
       deliveryMethod: !deliveryMethod ? 'Оберіть спосіб доставки' : '',
       addresses: {
         city: addresses.city.trim() ? '' : 'Введіть місто',
-        street: ['Кур\'єр Нова Пошта', 'Відділення Нова Пошта', 'Поштомат Нова Пошта'].includes(deliveryMethod)
+        street: deliveryMethod === 'Кур\'єр Нова Пошта'
           ? (addresses.street.trim() ? '' : 'Введіть вулицю')
           : '',
+        numberDelivery:
+            ['Відділення Нова Пошта', 'Поштомат Нова Пошта'].includes(deliveryMethod)
+              ? (addresses.numberDelivery.trim()
+                  ? ''
+                  : deliveryMethod === 'Відділення Нова Пошта'
+                    ? 'Введіть відділення Нова Пошта'
+                    : 'Введіть поштомат')
+              : '',
         numberBuilding: deliveryMethod === 'Кур\'єр Нова Пошта'
           ? (addresses.numberBuilding.trim() ? '' : 'Введіть номер будинку')
-          : '',
-        flat: deliveryMethod === 'Кур\'єр Нова Пошта'
-          ? (addresses.flat.trim() ? '' : 'Введіть номер квартири')
-          : '',
-        flor: deliveryMethod === 'Кур\'єр Нова Пошта'
-          ? (addresses.flor.trim() ? '' : 'Введіть поверх')
-          : '',
-        frontDoor: deliveryMethod === 'Кур\'єр Нова Пошта'
-          ? (addresses.frontDoor.trim() ? '' : 'Введіть під\'їзд')
           : '',
       },
       otherReceiver: {
@@ -107,12 +105,10 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
       price: item.price,
       totalPrice: item.price * item.quantity,
     }))
-    console.log('Cart перед отправкой:', cart)
-    console.log('Items перед отправкой:', items)
     const order = {
       userId: userData.id,
       status: 'new',
-      totalAmount: totalSum,
+      totalAmount: totalWithoutDiscount,
       orderNumber: `ORD-${Date.now()}`,
       shippingAddress: `${addresses.city}, ${addresses.street} ${addresses.numberBuilding}, кв. ${addresses.flat}`,
       billingAddress: `${userData?.firstName} ${userData?.lastName}, ${userData?.email}`,
@@ -145,6 +141,7 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
         flat: '',
         flor: '',
         frontDoor: '',
+        numberDelivery: '',
       })
       open('order-success')
     }
@@ -152,12 +149,22 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
       console.error('Помилка відправки замовлення', error)
     }
   }
-  const totalSum = cart.reduce((acc, item) => {
-    const price = item.price
-    const salePrice = item.salePrice
-    const currentPrice = salePrice < price ? salePrice : price
-    return acc + currentPrice * item.quantity
-  }, 0)
+  const { totalWithoutDiscount, totalDiscount } = cart.reduce(
+    (acc, item) => {
+      const price = item.price
+      const salePrice = item.salePrice
+      const quantity = item.quantity
+
+      acc.totalWithoutDiscount += price * quantity
+
+      if (salePrice < price) {
+        acc.totalDiscount += (price - salePrice) * quantity
+      }
+
+      return acc
+    },
+    { totalWithoutDiscount: 0, totalDiscount: 0 },
+  )
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -173,6 +180,21 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
   if (!userData) {
     useModalStore.getState().open('auth')
     return null
+  }
+  const handleSetDeliveryMethod = (method: string) => {
+    setDeliveryMethod(method)
+
+    // сбрасываем ошибки, связанные с адресами
+    setErrors(prev => ({
+      ...prev,
+      deliveryMethod: '',
+      addresses: {
+        city: '',
+        street: '',
+        numberBuilding: '',
+        numberDelivery: '',
+      },
+    }))
   }
   return (
     <div className="fixed inset-0 z-50 bg-black/70 w-full h-screen flex items-center justify-center">
@@ -193,7 +215,7 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
             <PersonalData />
             <Delivery
               selected={deliveryMethod}
-              setSelected={setDeliveryMethod}
+              setSelected={handleSetDeliveryMethod}
               addresses={addresses}
               setAddresses={setAddresses}
               errors={errors.addresses}
@@ -216,7 +238,7 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
           </div>
           <div className="flex flex-col border border-[var(--hoverBorder)] rounded-lg p-1 md:p-6 h-fit">
             <CartItemMini />
-            <CartFooterMini totalSum={totalSum} />
+            <CartFooterMini totalSum={totalWithoutDiscount} totalDiscount={totalDiscount} />
 
           </div>
         </div>

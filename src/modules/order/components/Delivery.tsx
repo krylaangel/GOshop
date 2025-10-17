@@ -5,6 +5,7 @@ interface Addresses {
   flat: string
   flor: string
   frontDoor: string
+  numberDelivery: string
 }
 
 interface DeliveryProps {
@@ -22,15 +23,17 @@ export function Delivery({ selected, setSelected, addresses, setAddresses, error
       <h2 className="w-full bg-[var(--hoverBorder)] rounded-lg p-3 ">2. Доставка:</h2>
 
       {/* Город */}
-      <div className="flex flex-col gap-1">
-        <input
-          className="border rounded-lg px-3 py-2 w-full input-field input-field-styles"
-          value={addresses.city}
-          placeholder="Місто*"
-          onChange={e => setAddresses({ ...addresses, city: e.target.value })}
-        />
-        {errors?.city && <p className="error__auth py-4">{errors.city}</p>}
-      </div>
+      {selected !== 'Самовивіз' && (
+        <div className="flex flex-col gap-1">
+          <input
+            className="border rounded-lg px-3 py-2 w-full input-field input-field-styles"
+            value={addresses.city}
+            placeholder="Місто*"
+            onChange={e => setAddresses({ ...addresses, city: e.target.value })}
+          />
+          {errors?.city && <p className="error__auth py-4">{errors.city}</p>}
+        </div>
+      )}
 
       {/* Выбор метода доставки */}
       <div className="flex gap-4 flex-wrap justify-between">
@@ -83,12 +86,11 @@ export function Delivery({ selected, setSelected, addresses, setAddresses, error
 
             <div className="flex flex-col gap-1 flex-1">
               <input
+                onChange={e => setAddresses({ ...addresses, flat: e.target.value })}
                 className="border rounded-lg px-3 py-2 input-field input-field-styles"
                 value={addresses.flat}
                 placeholder="Номер квартири"
-                onChange={e => setAddresses({ ...addresses, flat: e.target.value })}
               />
-              {errors?.flat && <p className="error__auth py-4">{errors.flat}</p>}
             </div>
           </div>
 
@@ -100,7 +102,6 @@ export function Delivery({ selected, setSelected, addresses, setAddresses, error
                 placeholder="Під'їзд"
                 onChange={e => setAddresses({ ...addresses, frontDoor: e.target.value })}
               />
-              {errors?.frontDoor && <p className="error__auth py-4">{errors.frontDoor}</p>}
             </div>
 
             <div className="flex flex-col gap-1 flex-1">
@@ -110,7 +111,6 @@ export function Delivery({ selected, setSelected, addresses, setAddresses, error
                 placeholder="Поверх"
                 onChange={e => setAddresses({ ...addresses, flor: e.target.value })}
               />
-              {errors?.flor && <p className="error__auth py-4">{errors.flor}</p>}
             </div>
           </div>
         </div>
@@ -121,11 +121,11 @@ export function Delivery({ selected, setSelected, addresses, setAddresses, error
         <div className="flex flex-col gap-1 mt-4">
           <input
             className="border rounded-lg px-3 py-2 w-full input-field input-field-styles"
-            value={addresses.street}
+            value={addresses.numberDelivery}
             placeholder={selected === 'Відділення Нова Пошта' ? 'Виберіть відділення' : 'Виберіть поштомат'}
-            onChange={e => setAddresses({ ...addresses, street: e.target.value })}
+            onChange={e => setAddresses({ ...addresses, numberDelivery: e.target.value })}
           />
-          {errors?.street && <p className="error__auth py-4">{errors.street}</p>}
+          {errors?.numberDelivery && <p className="error__auth py-4">{errors.numberDelivery}</p>}
         </div>
       )}
     </div>

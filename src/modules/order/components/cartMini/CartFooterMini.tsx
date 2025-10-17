@@ -3,11 +3,11 @@ import { useModalStore } from '~/store/useModalStore'
 
 export interface CartMiniProps {
   totalSum: number
+  totalDiscount: number
 }
-export function CartFooterMini({ totalSum }: CartMiniProps) {
+export function CartFooterMini({ totalDiscount, totalSum }: CartMiniProps) {
   const { open } = useModalStore()
-  const sale = 0
-  const finishResult = totalSum - sale
+  const finishResult = totalSum - totalDiscount
   const refactorCart = () => {
     open('basket')
   }
@@ -30,7 +30,7 @@ export function CartFooterMini({ totalSum }: CartMiniProps) {
         <div className="flex justify-between w-full border-b border-[var(--hoverColor)] pb-[6px]">
           <p className="font-medium text-base text-[var(--colorMenu)]">Знижка</p>
           <p className="font-bold text-lg text-[var(--colorMenu)]">
-            {sale}
+            {totalDiscount}
             {' '}
             грн
           </p>
