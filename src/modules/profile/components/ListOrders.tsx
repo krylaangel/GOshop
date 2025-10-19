@@ -3,18 +3,23 @@ import { orderService } from '@api/services/orderService'
 import { productService } from '@api/services/productService'
 import Button from '@shared/components/Button/Button'
 import { SkeletonText } from '@shared/skeleton/SkeletonText'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAuthStore } from '~/store/useAuth'
 
 export function ListOrders() {
   const [loading, setLoading] = useState(false)
   const [orders, setOrders] = useState<GetOrder[]>([])
   const [page, setPage] = useState(1)
-  const pageSize = 10
+  const pageSize = 5
   const { userData } = useAuthStore()
   const [productNames, setProductNames] = useState<Record<string, string>>({})
+  const isFetching = useRef(false)
+  const [hasMore, setHasMore] = useState(true)
 
   const fetchOrders = async () => {
+    if (isFetching.current || !userData?.id)
+      return
+
     if (!userData?.id || loading)
       return
     setLoading(true)
@@ -24,8 +29,14 @@ export function ListOrders() {
         console.error('Не вдалось завантажити замовлення:', response.errorMessage)
         return
       }
+      setHasMore(response.data.length === pageSize)
 
-      setOrders(prev => [...prev, ...response.data])
+      setOrders((prev) => {
+        const existingIds = new Set(prev.map(o => o.orderNumber))
+        const newOrders = response.data.filter(o => !existingIds.has(o.orderNumber))
+        return [...prev, ...newOrders]
+      })
+
       const names: Record<string, string> = {}
       await Promise.all(
         response.data.flatMap(order =>
@@ -97,50 +108,60 @@ export function ListOrders() {
                     грн
                   </p>
                 </div>
-                <div className="text-gray-600 mt-2 w-full">
+                <div className="text-gray-600 mt-2 w-full flex flex-col gap-2">
                   {order.orderItems.map((item, idx) => (
                     <div
                       key={`${item.productId}-${idx}`}
-                      className="border-[var(--hoverBorder)] border p-3 rounded-lg flex justify-between items-center gap-4 w-full"
+                      className="border-[var(--hoverBorder)] border p-3 rounded-lg flex justify-between items-center gap-4 w-full flex-wrap md:flex-nowrap"
                     >
                       {productNames[item.productId]
                         ? (
-                            <span>{productNames[item.productId]}</span>
+                            <p className="w-full text-sm">{productNames[item.productId]}</p>
                           )
                         : (
                             <SkeletonText width="w-24" />
                           )}
-                      {item.price
-                        ? (
-                            <span>
-                              {item.price}
-                              {' '}
-                              грн
-                            </span>
-                          )
-                        : <SkeletonText width="w-16" />}
-                      {item.quantity ? <span>{item.quantity}</span> : <SkeletonText width="w-10" />}
-                      {item.totalPrice
-                        ? (
-                            <span>
-                              {item.totalPrice}
-                              {' '}
-                              грн
-                            </span>
-                          )
-                        : <SkeletonText width="w-20" />}
+                      <div className="flex justify-between items-center gap-2 w-full">
+                        {item.price
+                          ? (
+                              <p className="whitespace-nowrap text-sm w-1/3">
+                                {item.price}
+                                {' '}
+                                грн
+                              </p>
+                            )
+                          : <SkeletonText width="w-16" />}
+                        {item.quantity ? <p>{item.quantity}</p> : <SkeletonText width="w-10" />}
+                        {item.totalPrice
+                          ? (
+                              <p className="whitespace-nowrap text-sm w-1/3">
+                                {item.totalPrice}
+                                {' '}
+                                грн
+                              </p>
+                            )
+                          : <SkeletonText width="w-20" />}
+                      </div>
                     </div>
                   ))}
                 </div>
               </li>
             ))}
 
-        {!loading && orders.length > 0 && (
+        {orders.length > 0 && (
           <Button
-            onClick={() => setPage(prev => prev + 1)}
+            onClick={() => {
+              if (hasMore) {
+                setPage(prev => prev + 1)
+              }
+              else {
+                setPage(1)
+                setOrders([])
+              }
+            }}
             className="mt-3 bg-blue-500 text-white px-4 py-2 rounded"
           >
-            Завантажити ще
+            {hasMore ? 'Завантажити ще' : 'Згорнути'}
           </Button>
         )}
 

@@ -45,7 +45,6 @@ function PasswordRecoveryForm({
           placeholder="Електронна пошта*"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          required
         />
       </div>
       <Button variant="primary" disabled={isLoading} className="button__auth">

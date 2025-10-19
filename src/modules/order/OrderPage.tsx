@@ -49,6 +49,25 @@ export function OrderPage({ isOpen, onClose }: { isOpen: boolean, onClose: () =>
     },
   })
   const validateForm = () => {
+    if (deliveryMethod === 'Самовивіз') {
+      setErrors({
+        deliveryMethod: '',
+        addresses: {
+          city: '',
+          street: '',
+          numberBuilding: '',
+          numberDelivery: '',
+        },
+        otherReceiver: {
+          firstName: '',
+          lastName: '',
+          fatherName: '',
+          phoneNumber: '',
+        },
+      })
+      return true
+    }
+
     const newErrors = {
       deliveryMethod: !deliveryMethod ? 'Оберіть спосіб доставки' : '',
       addresses: {

@@ -12,7 +12,7 @@ function LoginForm({
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { signIn, isLoading } = useAuthStore()
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }

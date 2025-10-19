@@ -6,7 +6,9 @@ import InputField from '@shared/components/InputField'
 import RatingStars from '@shared/components/RatingStars'
 import React, { useState } from 'react'
 import { useAuthStore } from '~/store/useAuth'
+import { useFavoriteStore } from '~/store/useFavoriteStore'
 import { useModalStore } from '~/store/useModalStore'
+import { useProductStore } from '~/store/useProductStore'
 
 interface SentReviewProps {
   onAddReview?: (review: Review) => void
@@ -19,6 +21,8 @@ export function SentReview({ onAddReview }: SentReviewProps) {
   const { open } = useModalStore()
   const [rating, setRating] = useState<number>(0)
   const { product } = useProductContext()
+  const { syncFavorites } = useFavoriteStore()
+  const { refreshProducts } = useProductStore()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,6 +33,7 @@ export function SentReview({ onAddReview }: SentReviewProps) {
     if (!userData) {
       return
     }
+
     try {
       setIsSubmitting(true)
       const response = await reviewService.add({
@@ -40,6 +45,9 @@ export function SentReview({ onAddReview }: SentReviewProps) {
       if (onAddReview && response.data) {
         onAddReview(response.data)
       }
+      await syncFavorites()
+      await refreshProducts()
+      window.location.reload()
       setComment('')
       setRating(0)
       setShowForm(false)
